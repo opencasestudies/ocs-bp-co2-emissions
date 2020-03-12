@@ -1,0 +1,582 @@
+---
+title: "Environmental_case_study"
+author: "Michael Ontiveros, Carrie Wright, PhD."
+date: "2/27/2020"
+output: 
+    html_document:
+        theme: cosmo 
+        toc: true
+        toc_float: true
+        highlight: tango
+        number_sections: false
+---
+
+# Libraries
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(plotly)
+library(gganimate)
+library(RColorBrewer)
+```
+
+# Wrangling the data
+
+## Global Data
+
+### Yearly CO~2~ Emissions, 1000 Metric Tonnes 
+
+#### Source
+
+[Click here to be redirected to the source from which we obtained this dataset](https://www.gapminder.org/data/)
+
+[Click here to be redirected to the direct source for this dataset](https://cdiac.ess-dive.lbl.gov/)
+
+#### Code
+
+```{r}
+CO2_emissions <- read_excel("yearly_co2_emissions_1000_tonnes.xlsx")
+
+head(CO2_emissions)
+
+CO2_emissions <- CO2_emissions %>%
+  gather(key = Year, value = Emissions, -country) %>%
+  rename(Country=country) %>%
+  mutate(Emissions = Emissions/1000) %>%
+  rename(`CO2 Emissions (Mg)`=Emissions)
+
+sapply(CO2_emissions, class)
+
+CO2_emissions$Year <- as.numeric(CO2_emissions$Year)
+
+summary(CO2_emissions$Year)
+
+ggplot(CO2_emissions, aes(x=Year, y=`CO2 Emissions (Mg)`, group=Country)) +
+  geom_line(alpha=0.2) + 
+  labs(title = expression("Country CO"[2]*" Emissions per Year , 1751-2014"),
+       caption = expression("Limited to reporting countries")) + 
+  ylab("Emissions (1M Metric Tonnes)")
+
+CO2_emissions %>%
+  group_by(Year) %>%
+  summarise(`CO2 Emissions (Mg)` = sum(`CO2 Emissions (Mg)`, na.rm = TRUE)) %>%
+  ggplot(aes(x=Year, y=`CO2 Emissions (Mg)`)) +
+  geom_line() + 
+  labs(title = expression("World CO"[2]*" Emissions per Year , 1751-2014"),
+       caption = expression("Limited to reporting countries")) + 
+  ylab("Emissions (1M Metric Metric Tonnes)")
+```
+
+### Yearly Growth in GDP per Capita
+
+#### Source
+
+[Click here to be redirected to the source from which we obtained this dataset](https://www.gapminder.org/data/)
+
+[Click here to be redirected to the direct source for this dataset](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD.ZG)
+
+#### Code 
+
+**Michael** Need to determine units for this 
+
+```{r}
+gdp_growth <- read_xlsx("gdp_per_capita_yearly_growth.xlsx")
+
+head(gdp_growth)
+
+gdp_growth <- gdp_growth %>%
+  gather(key = Year, value = gdp_growth, -country) %>%
+  rename(Country=country) %>%
+  rename(`GDP Growth/Capita (%)` = gdp_growth) %>%
+  filter(complete.cases(.))
+
+sapply(gdp_growth, class)
+
+gdp_growth$Year <- as.numeric(gdp_growth$Year)
+
+summary(gdp_growth$Year)
+
+ggplot(gdp_growth, aes(x=Year, y=`GDP Growth/Capita (%)`, group=Country)) +
+  geom_line(alpha=0.2) + 
+  labs(title = expression("Country GDP Growth per Capita per Year (Annual %), 1801-2019"),
+       caption = expression("Limited to reporting countries")) + 
+  ylab("GDP Growth per Capita (Annual %)")
+
+gdp_growth %>%
+  group_by(Year) %>%
+  summarise(`GDP Growth/Capita (%)` = mean(`GDP Growth/Capita (%)`, na.rm = TRUE)) %>%
+  ggplot(aes(x=Year, y=`GDP Growth/Capita (%)`)) +
+  geom_line() + 
+  labs(title = expression("Mean Country GDP Growth per Capita per Year (Annual %), 1801-2019"),
+       caption = expression("Limited to reporting countries")) + 
+  ylab("GDP Growth per Capita (Annual %)")
+```
+
+### Energy Use per Person
+
+#### Source
+
+[Click here to be redirected to the source from which we obtained this dataset](https://www.gapminder.org/data/)
+
+[Click here to be redirected to the direct source for this dataset](https://data.worldbank.org/indicator/EG.USE.PCAP.KG.OE)
+
+#### Code
+
+```{r}
+energy_use <- read_xlsx("energy_use_per_person.xlsx")
+
+head(energy_use)
+
+energy_use <- energy_use %>%
+  gather(key = Year, value = energy_use, -country) %>%
+  rename(Country=country) %>%
+  rename(`Energy Use (kg, oil-eq./capita)` = energy_use)
+
+sapply(energy_use, class)
+
+energy_use$Year <- as.numeric(energy_use$Year)
+
+summary(energy_use$Year)
+
+ggplot(energy_use, aes(x=Year, y=`Energy Use (kg, oil-eq./capita)`, group=Country)) +
+  geom_line(alpha=0.2) + 
+  labs(title = expression("Country Energy Use (kg of Oil Equivalent per Capita), 1960-2015",),
+       caption = expression("Limited to reporting countries")) + 
+  ylab("Energy Use (kg of Oil Equivalent per Capita)")
+
+energy_use %>%
+  group_by(Year) %>%
+  summarise(`Energy Use (kg, oil-eq./capita)` = sum(`Energy Use (kg, oil-eq./capita)`, na.rm = TRUE)) %>%
+  ggplot(aes(x=Year, y=`Energy Use (kg, oil-eq./capita)`)) +
+  geom_line() + 
+  labs(title = expression("Worldwide Energy Use (kg of Oil Equivalent per Capita), 1960-2015"),
+       caption = expression("Limited to reporting countries")) + 
+  ylab("Energy Use (kg of Oil Equivalent per Capita)")
+```
+
+### Crude Mortality Rate
+
+#### Source
+
+[Click here to be redirected to the direct source for this dataset](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN)
+
+#### Code
+
+```{r}
+mortality <- read_xls("API_SP.DYN.CDRT.IN_DS2_en_excel_v2_804384.xls")
+
+head(mortality)
+
+colnames(mortality) <- mortality[3,]
+mortality <- mortality[-c(1:3),]
+
+mortality <- mortality %>%
+  select(-`Country Code`,
+         -`Indicator Name`,
+         -`Indicator Code`) %>%
+  rename(Country="Country Name") %>%
+  gather(key = Year, value = `Deaths/1000 People`, -Country)
+
+sapply(mortality, class)
+
+mortality$Year <- as.numeric(mortality$Year)
+mortality$`Deaths/1000 People` <- as.numeric(mortality$`Deaths/1000 People`)
+
+summary(mortality$Year)
+
+ggplot(mortality, aes(x=Year, y=`Deaths/1000 People`, group=Country)) +
+  geom_line(alpha=0.2) + 
+  labs(title = expression("Country Crude Mortality Rate (per 1000 Persons), 1960-2019",),
+       caption = expression("Limited to reporting countries")) + 
+  ylab("Crude Mortality Rate (per 1000 Persons)")
+
+mortality %>%
+  group_by(Year) %>%
+  summarise(`Deaths/1000 People` = mean(`Deaths/1000 People`, na.rm = TRUE)) %>%
+  ggplot(aes(x=Year, y=`Deaths/1000 People`)) +
+  geom_line() + 
+  labs(title = expression("Mean Country Crude Mortality Rate (per 1000 Persons), 1960-2019",),
+       caption = expression("Limited to reporting countries")) + 
+  ylab("Crude Mortality Rate (per 1000 Persons)")
+```
+
+## US-specific Data
+
+### Disasters
+
+#### Source
+
+[Click here to be redirected to the direct source for this dataset](https://www.ncdc.noaa.gov/billions/time-series)
+
+#### Code
+
+```{r}
+us_disaster <- read_csv("time-series-US.csv", skip = 2)
+
+us_disaster <- us_disaster %>%
+  dplyr::select(Year,
+                `Drought Count`,
+                `Flooding Count`,
+                `Freeze Count`,
+                `Severe Storm Count`,
+                `Tropical Cyclone Count`,
+                `Wildfire Count`,
+                `Winter Storm Count`)
+
+sapply(us_disaster, class)
+
+us_disaster <- us_disaster %>%
+  mutate(`Disasters` = rowSums(.[2:dim(.)[2]])) %>%
+  dplyr::select(Year,
+                `Disasters`) %>%
+  mutate(Country="United States") %>%
+  gather(key = Indicator, value = Value, -Country, -Year) %>%
+  mutate(Region="United States",
+         Type="US-specific")
+```
+
+### Temperature
+
+#### Source
+
+[Click here to be redirected to the direct source for this dataset](https://www.ncdc.noaa.gov/cag/national/time-series/)
+
+#### Code
+
+```{r}
+us_temperature <- read_csv("temperature.txt",skip=4,na="-99")
+
+sapply(us_temperature, class)
+
+us_temperature <- us_temperature %>%
+  dplyr::select(-Anomaly) %>%
+  mutate(Date = substr(Date, start = 1, stop = 4)) %>%
+  mutate(Country="United States",
+         Year = Date,
+         Indicator="Temperature (Fahrenheit)",
+         Region="United States",
+         Type="US-specific") %>%
+  dplyr::select(-Date, )
+```
+
+# Analysis dataframe
+
+```{r}
+colnames(CO2_emissions)
+colnames(gdp_growth)
+colnames(energy_use)
+colnames(mortality)
+
+analysis_df_wide <- CO2_emissions %>%
+  full_join(gdp_growth, by=c("Country", "Year")) %>%
+  full_join(energy_use, by=c("Country", "Year")) %>%
+  full_join(mortality, by=c("Country", "Year"))
+
+analysis_df <- analysis_df_wide %>%
+  gather(key=Indicator,value=Value,-Country, -Year) %>%
+  mutate(Region=case_when(Country=="United States" ~ "United States",
+                          Country!="United States" ~ "Rest of the World"),
+         Type="Global")
+
+setequal(sapply(analysis_df, class),sapply(us_disaster, class))
+setequal(sapply(analysis_df, class),sapply(us_temperature, class))
+
+analysis_df <- analysis_df %>%
+  rbind(us_disaster) %>%
+  rbind(us_temperature)
+
+sapply(analysis_df,class)
+
+analysis_df$Year <- as.numeric(analysis_df$Year)
+
+sapply(analysis_df,class)
+
+analysis_df <- analysis_df %>%
+  filter(complete.cases(.))
+```
+
+```{r, eval=FALSE}
+ggplot(analysis_df, aes(x=Year, y=Value, group=Country)) +
+  geom_line(alpha=0.2) + 
+  facet_grid(Indicator~., scales = "free_y") +
+  ylab("Indicator Value") + 
+  labs(title="Distribution of Indicators by Year and Value")
+```
+
+## Subsetting the data
+
+```{r}
+analysis_df %>%
+  filter(Type=="Global") %>%
+  group_by(Year,Indicator) %>%
+  tally() %>%
+  ggplot(aes(x=Year, y=n, color=Indicator)) +
+  geom_vline(xintercept = 1980, linetype=2, color="black") +
+  geom_vline(xintercept = 2010, linetype=2, color="black") +
+  geom_line() +
+  labs(title = "Countries with Complete Data per Year",
+       subtitle = "Global Data") + 
+  ylab("Countries") + 
+  scale_x_continuous(breaks = seq(1750,2020,by=10),
+                     labels = seq(1750,2020,by=10)) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90),
+        axis.title.x = element_blank(),
+        legend.position = "bottom",
+        legend.direction = "horizontal")
+
+analysis_df %>%
+  filter(Region=="United States") %>%
+  group_by(Indicator) %>%
+  summarise(Start=min(Year), End=max(Year)) %>%
+  ggplot(aes(x=Indicator, y=End)) +
+  geom_hline(yintercept = 1980, linetype=2, color="black") +
+  geom_hline(yintercept = 2010, linetype=2, color="black") +
+  geom_segment(aes(x=Indicator,
+                   xend=Indicator,
+                   yend=End,
+                   y=Start)) +
+  geom_point(aes(x=Indicator, y=Start), shape=16, color="black") +
+  geom_point(aes(x=Indicator, y=End), shape=21, fill="white", color="black") + 
+  coord_flip() +
+  labs(title = "Complete Data per Year",
+       subtitle = "US-specific Data") + 
+  ylab("Countries") + 
+  scale_y_continuous(breaks = seq(1750,2020,by=10),
+                     labels = seq(1750,2020,by=10)) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90),
+        axis.title = element_blank())
+```
+
+```{r, Animation_1, warning=FALSE, eval=FALSE}
+animation_1 <- analysis_df %>%
+  filter(Type=="Global") %>%
+  filter(Indicator==`Deaths/1000 People`) %>%
+  filter(Year>=1980) %>%
+  filter(Year<=2010) %>%
+  ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region,alpha=Region)) +
+  geom_point() +
+  scale_color_manual(values = c("Red","Black")) +
+  scale_alpha_manual(values = c(0.1, 1)) +
+  scale_size_manual(values = c(0.25, 2)) +
+  labs(title="Distribution of Indicators by Year and Value, 1980-2010") +
+  theme(axis.text.x = element_text(angle = 90)) + 
+  theme_classic() +
+  ylab("Crude Mortality Rate") +
+  transition_time(as.integer(Year)) +
+  shadow_wake(wake_length = 1, alpha = FALSE)
+
+animate(animation_1, fps = 10, duration = 5)
+```
+
+```{r, Animation_2, warning=FALSE, eval=FALSE}
+animation_2 <- analysis_df %>%
+  filter(Type=="Global") %>%
+  filter(Indicator==`Energy Use (kg, oil-eq./capita)`) %>%
+  filter(Year>=1980) %>%
+  filter(Year<=2010) %>%
+  ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region, alpha=Region)) +
+  geom_point() +
+  scale_color_manual(values = c("Red","Black")) +
+  scale_alpha_manual(values = c(0.1, 1)) +
+  scale_size_manual(values = c(0.25, 2)) +
+  labs(title="Distribution of Indicators by Year and Value, 1980-2010") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90)) + 
+  ylab("Energy Use per Capita") +
+  transition_time(as.integer(Year)) +
+  shadow_wake(wake_length = 1, alpha = FALSE)
+
+animate(animation_2, fps = 10, duration = 5)
+```
+
+```{r, Animation_3, warning=FALSE, eval=FALSE}
+animation_3 <- analysis_df %>%
+  filter(Type=="Global") %>%
+  filter(Indicator==`GDP Growth/Capita (%)`) %>%
+  filter(Year>=1980) %>%
+  filter(Year<=2010) %>%
+  ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region, alpha=Region)) +
+  geom_point() +
+  scale_color_manual(values = c("Red","Black")) +
+  scale_alpha_manual(values = c(0.1, 1)) +
+  scale_size_manual(values = c(0.25, 2)) +
+  labs(title="Distribution of Indicators by Year and Value, 1980-2010") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  ylab("GDP Growth per Capita (%)") +
+  transition_time(as.integer(Year)) +
+  shadow_wake(wake_length = 1, alpha = FALSE)
+
+animate(animation_3, fps = 10, duration = 5)
+```
+
+```{r, Animation_4, warning=FALSE, eval=FALSE}
+animation_4 <- analysis_df %>%
+  filter(Type=="Global") %>%
+  filter(Indicator=="CO2 Emissions (Mg)") %>%
+  filter(Year>=1980) %>%
+  filter(Year<=2010) %>%
+  ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region, alpha=Region)) +
+  geom_point() +
+  scale_color_manual(values = c("Red","Black")) +
+  scale_alpha_manual(values = c(0.1, 1)) +
+  scale_size_manual(values = c(0.25, 2)) +
+  labs(title="Distribution of Indicators by Year and Value, 1980-2010") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  ylab("CO2 Emissions (Mg)") +
+  transition_time(as.integer(Year)) +
+  shadow_wake(wake_length = 1, alpha = FALSE)
+
+animate(animation_4, fps = 10, duration = 5)
+```
+
+# US-specific
+
+```{r}
+analysis_df_us <- analysis_df %>%
+  filter(Country=="United States")
+```
+
+```{r}
+analysis_df_us %>%
+  filter(Year>=1980) %>%
+  filter(Year<=2010) %>%
+  ggplot(aes(x=Year, y=Value)) + 
+  geom_line() + 
+  facet_wrap(Indicator~., ncol=2, nrow=3, scales = "free_y") + 
+  scale_x_continuous(breaks = seq(1980,2010,by=5),
+                     labels = seq(1980,2010,by=5)) +
+  theme_classic() + 
+  theme(axis.text.x = element_text(angle = 90),
+        axis.title.y = element_blank()) + 
+  labs(title = "US-specific Indicators (1980-2010)")
+```
+
+```{r}
+# Approximated derivative function)
+analysis_df_us <- analysis_df_us %>%
+  filter(Year>=1900,
+         Year<=2010) %>%
+  group_by(Indicator) %>%
+  mutate(Slope=Value/lag(Value),
+         Mean=mean(Value),
+         Anomaly=Value-Mean) %>%
+  ungroup() %>%
+  mutate(Anomaly_color=ifelse(Anomaly>0,"Positive",
+                              ifelse(Anomaly<0,"Negative","Zero")),
+         Anomaly_color=factor(Anomaly_color, levels = c("Positive",
+                                                        "Negative",
+                                                        "Zero"),
+                              ordered = TRUE))
+```
+
+```{r}
+analysis_df_us %>%
+  filter(Year>=1980) %>%
+  filter(Year<=2010) %>%
+  ggplot(aes(x=Year, y=Slope, color=Indicator, fill="transparent")) + 
+  geom_hline(yintercept=0.8, linetype=2) +
+  geom_hline(yintercept=1.2, linetype=2) +
+  geom_hline(yintercept = 1, linetype=3) +
+  geom_line(size=0.5) + 
+  scale_x_continuous(breaks = seq(1980,2010,by=5),
+                     labels = seq(1980,2010,by=5)) +
+  scale_y_continuous(breaks = seq(-5,15, by=1),
+                     labels = seq(-5,15, by=1)) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90),
+        axis.title.x  = element_blank(),
+        legend.position = "bottom",
+        legend.direction = "horizontal") + 
+  labs(title = "US-specific Indicators (1980-2010)",
+       subtitle = "Slope Lines")
+
+analysis_df_us %>%
+  filter(Year>=1980) %>%
+  filter(Year<=2010) %>%
+  filter(Indicator=="Temperature (Fahrenheit)"|
+           Indicator=="Energy Use (kg, oil-eq./capita)"|
+           Indicator=="CO2 Emissions (Mg)") %>%
+  ggplot(aes(x=Year, y=Slope, color=Indicator)) + 
+  geom_hline(yintercept=0.8, linetype=2) +
+  geom_hline(yintercept=1.2, linetype=2) +
+  geom_hline(yintercept = 1, linetype=3) +
+  geom_line(size=1) +
+  scale_x_continuous(breaks = seq(1980,2010,by=5),
+                     labels = seq(1980,2010,by=5)) +
+  scale_y_continuous(breaks = seq(0.5,1.5, by=0.05),
+                     labels = seq(0.5,1.5, by=0.05),
+                     limits = c(0.7,1.3)) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90),
+        axis.title.x  = element_blank(),
+        legend.position = "bottom",
+        legend.direction = "horizontal") + 
+  labs(title = "Emissions, Energy Use, and Temperature (1980-2010)",
+       subtitle = "Slope Lines")
+
+analysis_df_us %>%
+  filter(Year>=1980) %>%
+  filter(Year<=2010) %>%
+  filter(Indicator=="Temperature (Fahrenheit)"|
+           Indicator=="Energy Use (kg, oil-eq./capita)"|
+           Indicator=="CO2 Emissions (Mg)") %>%
+  ggplot(aes(x=Year, y=Slope, color=Indicator)) + 
+  geom_hline(yintercept=0.8, linetype=2) +
+  geom_hline(yintercept=1.2, linetype=2) +
+  geom_hline(yintercept = 1, linetype=3) +
+  geom_smooth(size=1, alpha=0.1, aes(fill=Indicator)) +
+  scale_x_continuous(breaks = seq(1980,2010,by=5),
+                     labels = seq(1980,2010,by=5)) +
+  scale_y_continuous(breaks = seq(0.5,1.5, by=0.05),
+                     labels = seq(0.5,1.5, by=0.05),
+                     limits = c(0.7,1.3)) +
+  theme_classic() + 
+  theme(axis.text.x = element_text(angle = 90),
+        axis.title.x  = element_blank(),
+        legend.position = "bottom",
+        legend.direction = "horizontal") + 
+  labs(title = "US Emissions, Energy Use, and Temperatures (1980-2010)",
+       subtitle = "Smoothed Slope Lines")
+```
+
+```{r}
+analysis_df_us %>%
+  filter(Year>=1980) %>%
+  filter(Year<=2010) %>%
+  filter(Indicator=="CO2 Emissions (Mg)"|
+           Indicator=="Temperature (Fahrenheit)") %>%
+  ggplot(aes(x=Year, y=Value)) +
+  geom_line() + 
+  scale_x_continuous(breaks = seq(1980,2010,by=5),
+                     labels = seq(1980,2010,by=5)) + 
+  facet_wrap(Indicator~., scales = "free_y", ncol=1) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90),
+        axis.title = element_blank()) + 
+  labs(title="US Emissions and Temperatures (1980-2010)")
+
+#Zoom out
+analysis_df_us %>%
+  filter(Indicator=="CO2 Emissions (Mg)"|
+           Indicator=="Temperature (Fahrenheit)") %>%
+  ggplot(aes(x=Year, y=Value,color=Anomaly_color)) +
+  geom_vline(xintercept = 1980, linetype=2, color="black") + 
+  geom_vline(xintercept = 2010, linetype=2, color="black") +
+  geom_segment(aes(x=Year, y=Value, xend=Year, yend=Mean), size=1.25) +
+  scale_color_manual(values = c("red","blue","gray")) +
+  geom_hline(aes(yintercept=Mean), linetype=1, color="black") +
+  scale_x_continuous(breaks = seq(1900,2010,by=5),
+                     labels = seq(1900,2010,by=5)) +
+  facet_wrap(Indicator~., scales = "free_y", ncol=1) + 
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90),
+        axis.title = element_blank(),
+        legend.position = "none")  +
+  labs(title = "US Emissions and Temperatures (1900-2010)",
+       subtitle = "Indicator Mean Represented by Solid Black Line")
+```
