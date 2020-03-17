@@ -268,36 +268,38 @@ colnames(gdp_growth)
 colnames(energy_use)
 colnames(mortality)
 
-analysis_df_wide <- CO2_emissions %>%
+df_wide <- CO2_emissions %>%
   full_join(gdp_growth, by=c("Country", "Year")) %>%
   full_join(energy_use, by=c("Country", "Year")) %>%
   full_join(mortality, by=c("Country", "Year"))
 
-analysis_df <- analysis_df_wide %>%
+df_long <- df_wide %>%
   gather(key=Indicator,value=Value,-Country, -Year) %>%
   mutate(Region=case_when(Country=="United States" ~ "United States",
                           Country!="United States" ~ "Rest of the World"),
          Type="Global")
 
-setequal(sapply(analysis_df, class),sapply(us_disaster, class))
-setequal(sapply(analysis_df, class),sapply(us_temperature, class))
+setequal(sapply(df_long, class),sapply(us_disaster, class))
+setequal(sapply(df_long, class),sapply(us_temperature, class))
 
-analysis_df <- analysis_df %>%
+df_long <- df_long %>%
   rbind(us_disaster) %>%
   rbind(us_temperature)
 
-sapply(analysis_df,class)
+sapply(df_long,class)
 
-analysis_df$Year <- as.numeric(analysis_df$Year)
+df_long$Country <- as.factor(df_long$Country)
+df_long$Year <- as.numeric(df_long$Year)
 
-sapply(analysis_df,class)
+sapply(df_long,class)
 
-analysis_df <- analysis_df %>%
-  filter(complete.cases(.))
+df_long <- df_long %>%
+  filter(complete.cases(.)) %>%
+  arrange(Country)
 ```
 
 ```{r, eval=FALSE}
-ggplot(analysis_df, aes(x=Year, y=Value, group=Country)) +
+ggplot(df_long, aes(x=Year, y=Value, group=Country)) +
   geom_line(alpha=0.2) + 
   facet_grid(Indicator~., scales = "free_y") +
   ylab("Indicator Value") + 
@@ -307,7 +309,7 @@ ggplot(analysis_df, aes(x=Year, y=Value, group=Country)) +
 ## Subsetting the data
 
 ```{r}
-analysis_df %>%
+df_long %>%
   filter(Type=="Global") %>%
   group_by(Year,Indicator) %>%
   tally() %>%
@@ -323,10 +325,9 @@ analysis_df %>%
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90),
         axis.title.x = element_blank(),
-        legend.position = "bottom",
-        legend.direction = "horizontal")
+        legend.position = "bottom")
 
-analysis_df %>%
+df_long %>%
   filter(Region=="United States") %>%
   group_by(Indicator) %>%
   summarise(Start=min(Year), End=max(Year)) %>%
@@ -351,9 +352,9 @@ analysis_df %>%
 ```
 
 ```{r, Animation_1, warning=FALSE, eval=FALSE}
-animation_1 <- analysis_df %>%
+animation_1 <- df_long %>%
   filter(Type=="Global") %>%
-  filter(Indicator==`Deaths/1000 People`) %>%
+  filter(Indicator=="Deaths/1000 People") %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region,alpha=Region)) +
@@ -372,9 +373,9 @@ animate(animation_1, fps = 10, duration = 5)
 ```
 
 ```{r, Animation_2, warning=FALSE, eval=FALSE}
-animation_2 <- analysis_df %>%
+animation_2 <- df_long %>%
   filter(Type=="Global") %>%
-  filter(Indicator==`Energy Use (kg, oil-eq./capita)`) %>%
+  filter(Indicator=="Energy Use (kg, oil-eq./capita)") %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region, alpha=Region)) +
@@ -393,9 +394,9 @@ animate(animation_2, fps = 10, duration = 5)
 ```
 
 ```{r, Animation_3, warning=FALSE, eval=FALSE}
-animation_3 <- analysis_df %>%
+animation_3 <- df_long %>%
   filter(Type=="Global") %>%
-  filter(Indicator==`GDP Growth/Capita (%)`) %>%
+  filter(Indicator=="GDP Growth/Capita (%)") %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region, alpha=Region)) +
@@ -414,7 +415,7 @@ animate(animation_3, fps = 10, duration = 5)
 ```
 
 ```{r, Animation_4, warning=FALSE, eval=FALSE}
-animation_4 <- analysis_df %>%
+animation_4 <- df_long %>%
   filter(Type=="Global") %>%
   filter(Indicator=="CO2 Emissions (Mg)") %>%
   filter(Year>=1980) %>%
@@ -434,15 +435,56 @@ animation_4 <- analysis_df %>%
 animate(animation_4, fps = 10, duration = 5)
 ```
 
+```{r}
+df_long %>%
+  filter(Type=="Global") %>%
+  filter(Indicator=="CO2 Emissions (Mg)") %>%
+  filter(Year>=1900) %>%
+  filter(Year<=2010) %>%
+  group_by(Country) %>%
+  mutate(max_val = max(Value)) %>%
+  ungroup() %>%
+  mutate(rank=dense_rank(-max_val)) %>%
+  filter(rank<=10) %>%
+  ggplot(aes(x=Year, y=fct_reorder(Country, Value, max))) +
+  geom_tile(color="transparent", aes(fill=log(Value))) +
+  scale_fill_gradientn(colors = c("yellow","red","black")) +
+  scale_x_continuous(breaks = seq(1900,2010,by=5),
+                     labels = seq(1900,2010,by=5)) + 
+  theme_classic() + 
+  theme(axis.text.x = element_text(angle = 90),
+        axis.title = element_blank(),
+        legend.position = "bottom") + 
+  labs(title = "Top 10 Emissions-producing Countries in 2010 (1900-2010)",
+       subtitle = "Ordered by Emissions Produced in 2010",
+       fill = "Ln(CO2 Emissions (Mg))")
+```
+
 # US-specific
 
 ```{r}
-analysis_df_us <- analysis_df %>%
+df_long_us <- df_long %>%
   filter(Country=="United States")
+
+# Approximated derivative function)
+df_long_us <- df_long_us %>%
+  filter(Year>=1900,
+         Year<=2010) %>%
+  group_by(Indicator) %>%
+  mutate("Change (%)"=((Value/lag(Value))*100)-100,
+         Mean=mean(Value),
+         Anomaly=Value-Mean) %>%
+  ungroup() %>%
+  mutate(Anomaly_color=ifelse(Anomaly>0,"Positive",
+                              ifelse(Anomaly<0,"Negative","Zero")),
+         Anomaly_color=factor(Anomaly_color, levels = c("Positive",
+                                                        "Negative",
+                                                        "Zero"),
+                              ordered = TRUE))
 ```
 
 ```{r}
-analysis_df_us %>%
+df_long_us %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value)) + 
@@ -457,95 +499,77 @@ analysis_df_us %>%
 ```
 
 ```{r}
-# Approximated derivative function)
-analysis_df_us <- analysis_df_us %>%
-  filter(Year>=1900,
-         Year<=2010) %>%
-  group_by(Indicator) %>%
-  mutate(Slope=Value/lag(Value),
-         Mean=mean(Value),
-         Anomaly=Value-Mean) %>%
-  ungroup() %>%
-  mutate(Anomaly_color=ifelse(Anomaly>0,"Positive",
-                              ifelse(Anomaly<0,"Negative","Zero")),
-         Anomaly_color=factor(Anomaly_color, levels = c("Positive",
-                                                        "Negative",
-                                                        "Zero"),
-                              ordered = TRUE))
-```
-
-```{r}
-analysis_df_us %>%
+df_long_us %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
-  ggplot(aes(x=Year, y=Slope, color=Indicator, fill="transparent")) + 
+  ggplot(aes(x=Year, y=`Change (%)`, color=Indicator, fill="transparent")) + 
   geom_hline(yintercept=0.8, linetype=2) +
   geom_hline(yintercept=1.2, linetype=2) +
   geom_hline(yintercept = 1, linetype=3) +
   geom_line(size=0.5) + 
   scale_x_continuous(breaks = seq(1980,2010,by=5),
                      labels = seq(1980,2010,by=5)) +
-  scale_y_continuous(breaks = seq(-5,15, by=1),
-                     labels = seq(-5,15, by=1)) +
+  scale_y_continuous(breaks = seq(-500,1250, by=250),
+                     labels = seq(-500,1250, by=250)) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90),
         axis.title.x  = element_blank(),
         legend.position = "bottom",
         legend.direction = "horizontal") + 
   labs(title = "US-specific Indicators (1980-2010)",
-       subtitle = "Slope Lines")
+       subtitle = "Change (%) Lines")
 
-analysis_df_us %>%
+df_long_us %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
   filter(Indicator=="Temperature (Fahrenheit)"|
            Indicator=="Energy Use (kg, oil-eq./capita)"|
            Indicator=="CO2 Emissions (Mg)") %>%
-  ggplot(aes(x=Year, y=Slope, color=Indicator)) + 
+  ggplot(aes(x=Year, y=`Change (%)`, color=Indicator)) + 
   geom_hline(yintercept=0.8, linetype=2) +
   geom_hline(yintercept=1.2, linetype=2) +
   geom_hline(yintercept = 1, linetype=3) +
   geom_line(size=1) +
   scale_x_continuous(breaks = seq(1980,2010,by=5),
                      labels = seq(1980,2010,by=5)) +
-  scale_y_continuous(breaks = seq(0.5,1.5, by=0.05),
-                     labels = seq(0.5,1.5, by=0.05),
-                     limits = c(0.7,1.3)) +
+  scale_y_continuous(breaks = seq(-10,10, by=1),
+                     labels = seq(-10,10, by=1),
+                     limits = c(-10,10)) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90),
         axis.title.x  = element_blank(),
         legend.position = "bottom",
         legend.direction = "horizontal") + 
   labs(title = "Emissions, Energy Use, and Temperature (1980-2010)",
-       subtitle = "Slope Lines")
+       subtitle = "Change (%) Lines")
 
-analysis_df_us %>%
+df_long_us %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
   filter(Indicator=="Temperature (Fahrenheit)"|
            Indicator=="Energy Use (kg, oil-eq./capita)"|
            Indicator=="CO2 Emissions (Mg)") %>%
-  ggplot(aes(x=Year, y=Slope, color=Indicator)) + 
+  ggplot(aes(x=Year, y=`Change (%)`, color=Indicator)) + 
   geom_hline(yintercept=0.8, linetype=2) +
   geom_hline(yintercept=1.2, linetype=2) +
   geom_hline(yintercept = 1, linetype=3) +
-  geom_smooth(size=1, alpha=0.1, aes(fill=Indicator)) +
+  geom_smooth(size=1, alpha=0.1, aes(fill=Indicator), se=FALSE) +
   scale_x_continuous(breaks = seq(1980,2010,by=5),
                      labels = seq(1980,2010,by=5)) +
-  scale_y_continuous(breaks = seq(0.5,1.5, by=0.05),
-                     labels = seq(0.5,1.5, by=0.05),
-                     limits = c(0.7,1.3)) +
+  scale_y_continuous(breaks = seq(-10,10, by=1),
+                     labels = seq(-10,10, by=1),
+                     limits = c(-10,10)) +
   theme_classic() + 
   theme(axis.text.x = element_text(angle = 90),
         axis.title.x  = element_blank(),
         legend.position = "bottom",
         legend.direction = "horizontal") + 
   labs(title = "US Emissions, Energy Use, and Temperatures (1980-2010)",
-       subtitle = "Smoothed Slope Lines")
+       subtitle = "Smoothed Change (%) Lines")
 ```
 
 ```{r}
-analysis_df_us %>%
+df_long_us %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
   filter(Indicator=="CO2 Emissions (Mg)"|
@@ -560,15 +584,14 @@ analysis_df_us %>%
         axis.title = element_blank()) + 
   labs(title="US Emissions and Temperatures (1980-2010)")
 
-#Zoom out
-analysis_df_us %>%
+df_long_us %>%
   filter(Indicator=="CO2 Emissions (Mg)"|
            Indicator=="Temperature (Fahrenheit)") %>%
-  ggplot(aes(x=Year, y=Value,color=Anomaly_color)) +
+  ggplot(aes(x=Year, y=Value)) +
   geom_vline(xintercept = 1980, linetype=2, color="black") + 
   geom_vline(xintercept = 2010, linetype=2, color="black") +
-  geom_segment(aes(x=Year, y=Value, xend=Year, yend=Mean), size=1.25) +
-  scale_color_manual(values = c("red","blue","gray")) +
+  geom_segment(aes(x=Year, y=Value, xend=Year, yend=Mean,color=Anomaly_color), size=1.25) +
+  scale_color_manual(values = c("red","blue","gray")) + 
   geom_hline(aes(yintercept=Mean), linetype=1, color="black") +
   scale_x_continuous(breaks = seq(1900,2010,by=5),
                      labels = seq(1900,2010,by=5)) +
@@ -579,4 +602,25 @@ analysis_df_us %>%
         legend.position = "none")  +
   labs(title = "US Emissions and Temperatures (1900-2010)",
        subtitle = "Indicator Mean Represented by Solid Black Line")
+```
+
+```{r}
+df_long_us %>%
+  filter(Indicator=="Temperature (Fahrenheit)"|
+           Indicator=="CO2 Emissions (Mg)") %>%
+  ggplot(aes(x=Year, y=`Change (%)`)) +
+  annotate("rect", xmin=-Inf, xmax=Inf, ymin=0, ymax=Inf, alpha=0.25, fill="green") +
+  annotate("rect", xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=0, alpha=0.25, fill="red") +
+  geom_hline(yintercept=0, linetype=1) + 
+  geom_segment(aes(x=Year, y=`Change (%)`, xend=Year, yend=0), size=1.25) +
+  facet_wrap(Indicator~., scales = "free_y", ncol=1) +
+  scale_x_continuous(breaks = seq(1900,2010,by=5),
+                     labels = seq(1900,2010,by=5)) +
+  theme_classic() + 
+  theme(axis.text.x = element_text(angle = 90),
+        axis.title.x  = element_blank(),
+        legend.position = "bottom",
+        legend.direction = "horizontal") + 
+  labs(title = "US Emissions, Energy Use, and Temperatures (1980-2010)",
+       subtitle = "Change (%) Lines")
 ```
