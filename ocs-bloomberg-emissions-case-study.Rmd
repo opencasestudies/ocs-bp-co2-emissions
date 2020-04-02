@@ -36,7 +36,8 @@ library(RColorBrewer)
 #### Code
 
 ```{r}
-CO2_emissions <- read_excel("yearly_co2_emissions_1000_tonnes.xlsx")
+library(here)
+CO2_emissions <- read_excel(here("docs/yearly_co2_emissions_1000_tonnes.xlsx"))
 
 head(CO2_emissions)
 
@@ -81,7 +82,7 @@ CO2_emissions %>%
 **Michael** Need to determine units for this 
 
 ```{r}
-gdp_growth <- read_xlsx("gdp_per_capita_yearly_growth.xlsx")
+gdp_growth <- read_xlsx(here("docs/gdp_per_capita_yearly_growth.xlsx"))
 
 head(gdp_growth)
 
@@ -124,7 +125,7 @@ gdp_growth %>%
 #### Code
 
 ```{r}
-energy_use <- read_xlsx("energy_use_per_person.xlsx")
+energy_use <- read_xlsx(here("docs/energy_use_per_person.xlsx"))
 
 head(energy_use)
 
@@ -164,7 +165,7 @@ energy_use %>%
 #### Code
 
 ```{r}
-mortality <- read_xls("API_SP.DYN.CDRT.IN_DS2_en_excel_v2_804384.xls")
+mortality <- read_xls(here("docs/API_SP.DYN.CDRT.IN_DS2_en_excel_v2_804384.xls"))
 
 head(mortality)
 
@@ -212,7 +213,7 @@ mortality %>%
 #### Code
 
 ```{r}
-us_disaster <- read_csv("time-series-US.csv", skip = 2)
+us_disaster <- read_csv(here("docs/time-series-US.csv"), skip = 2)
 
 us_disaster <- us_disaster %>%
   dplyr::select(Year,
@@ -245,7 +246,7 @@ us_disaster <- us_disaster %>%
 #### Code
 
 ```{r}
-us_temperature <- read_csv("temperature.txt",skip=4,na="-99")
+us_temperature <- read_csv(here("docs/temperature.txt"),skip=4,na="-99")
 
 sapply(us_temperature, class)
 
