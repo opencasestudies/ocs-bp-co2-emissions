@@ -1,19 +1,123 @@
 ---
-title: "Environmental_case_study"
+title: "Open Case Studies : CO2 Emmissions Over Time"
 author: "Michael Ontiveros, Carrie Wright, PhD."
-date: "2/27/2020"
-output: 
-    html_document:
-        theme: cosmo 
-        toc: true
-        toc_float: true
-        highlight: tango
-        number_sections: false
+css: style.css
+output:
+  html_document:
+    self_contained: yes
+    code_download: yes
+    highlight: tango
+    number_sections: no
+    theme: cosmo
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
+  word_document:
+    toc: yes
 ---
 
-# Libraries
+<style>
+#TOC {
+  background: url("https://opencasestudies.github.io/img/logo.jpg");
+  background-size: contain;
+  padding-top: 240px !important;
+  background-repeat: no-repeat;
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(include = TRUE, comment = NA, echo = TRUE,
+                      message = FALSE, warning = FALSE, cache = FALSE,
+                      fig.align = "center", out.width = '90%')
+library(here)
+library(knitr)
+```
+
+#### {.outline }
+```{r, echo = FALSE, out.width = "800 px"}
+knitr::include_graphics(here::here("img", "mainplot.png"))
+```
+
+####
+
+## {.disclaimer_block}
+
+**Disclaimer**: The purpose of the [Open Case Studies](https://opencasestudies.github.io){target="_blank"} project is **to demonstrate the use of various data science methods, tools, and software in the context of messy, real-world data**. A given case study does not cover all aspects of the research process, is not claiming to be the most appropriate way to analyze a given data set, and should not be used in the context of making policy decisions without external consultation from scientific experts. 
+
+## **Motivation**
+*** 
+
+This analysis explores how different countries have contributed to Carbon Dioxide (CO2) emissions over time and how CO2 emission rates may relate to increasing global temperatures and increased rates of natural disaster and storms. This report provides a basis for the motivation: https://www.epa.gov/report-environment/greenhouse-gases.
+
+
+CO2 makes up the largest proportion of greenhouse gas emissions in the United States:
+
+
+```{r, echo = FALSE, out.width="500px"}
+knitr::include_graphics(here::here("img", "emissions.jpg"))
+```
+
+A variety of sources and sectors contribute to greenhouse gas emissions:
+
+
+```{r, echo = FALSE, out.width="600px"}
+knitr::include_graphics(here::here("img", "sector.png"))
+```
+
+So why should we pay attention to greenhouse gases?
+
+According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks): 
+
+> Greenhouse gases absorb infrared radiation, thereby trapping heat in the atmosphere and making the planet warmer. The most important greenhouse gases directly emitted by humans include carbon dioxide (CO2), methane (CH4), nitrous oxide (N2O), and several fluorine-containing halogenated substances. Although CO2, CH4, and N2O occur naturally in the atmosphere, human activities have changed their atmospheric concentrations. From the pre- industrial era (i.e., ending about 1750) to 2018, concentrations of these greenhouse gases have increased globally by 46, 165, and 23 percent, respectively (IPCC 2013; NOAA/ESRL 2019a, 2019b, 2019c).
+
+There are many signs that our planet is experiencing warmer temperatures:
+
+```{r, echo = FALSE, out.width="600px"}
+knitr::include_graphics(here::here("img", "warming.png"))
+```
+
+The connection between greenhouse gas levels and global temperatures and the influence of increased global temperatures on human health are motivated by these reports:
+
+#### {.reference_block}
+
+Melillo, J.M., T.C. Richmond, and G.W. Yohe (eds.). 2014. Climate change impacts in the United States: The third National Climate Assessment. U.S. Global Change Research Program.  
+
+2020. “Inventory of US Greenhouse Gas Emissions and Sinks: 1990--2018.” EPA 430-R-20-002, Tech. Rep. https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks.
+
+
+####
+
+The National Climate Assessment Report states that:
+
+> Heat-trapping gases already in the atmosphere have committed us to a hotter future with more climate-related impacts over the next few decades. The magnitude of climate change beyond the next few decades depends primarily on the amount of heat-trapping gases that human activities emit globally, now and in the future
+
+See [here](https://www.epa.gov/report-environment/greenhouse-gases) and [here](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations) for more information.
+
+## **Main Questions**
+*** 
+
+#### {.main_question_block}
+<b><u> Our main question: </u></b>
+
+1) How have global CO2 emission rates changed over time? In particular for the US, and how does the US compare to other countries? 
+2) Are US CO2 emissions, global temperatures, and US storm rates associated? 
+
+####
+
+## **Learning Objectives** 
+*** 
+
+In this case study, we will explore CO2 emission data from around the world. We will also focus on the US specifically to evaluate patterns of temperatures and storm activity. This case study will particuarly focus on visualizations of patterns over time. We will especially focus on using packages and functions from the [`Tidyverse`](https://www.tidyverse.org/){target="_blank"}, such as `plotly`and `gganimate`. The tidyverse is a library of packages created by RStudio. While some students may be familiar with previous R programming packages, these packages make data science in R especially efficient.
+
+
+*** 
+
+
+We will begin by loading the packages that we will need:
 
 ```{r}
+library(here)
 library(tidyverse)
 library(readxl)
 library(plotly)
@@ -21,9 +125,68 @@ library(gganimate)
 library(RColorBrewer)
 ```
 
-# Wrangling the data
 
-## Global Data
+ Package   | Use                                                                         
+---------- |-------------
+[here](https://github.com/jennybc/here_here){target="_blank"}       | to easily load and save data
+[tidyverse](https://www.tidyverse.org/packages/) | to wrangle the data and create ggplot2 plots
+[readxl](https://readxl.tidyverse.org/) | to import the Excel file data
+[plotyly](https://plotly.com/r/) | to make the visualizations
+[gganimate](https://gganimate.com/) | to make the plots interactive
+[RColorBrewer](https://cran.r-project.org/web/packages/RColorBrewer/index.html) | to have greater control over the color in our plots
+
+The first time we use a function, we will use the `::` to indicate which package we are using. Unless we have overlapping function names, this is not necessary, but we will include it here to be informative about where the functions we will use come from.
+
+
+## **Context**
+*** 
+
+Greenhouse gas emissions are due to both natural processes and antropogenic (human-derived) activities. 
+
+These emissions are one of the contributing factors to rising global temperatures, which can have a great influence on [public health](https://www.epa.gov/climate-indicators/understanding-connections-between-climate-change-and-human-health) as illustrated in the following image:
+
+```{r, echo = FALSE, out.width="800px"}
+knitr::include_graphics(here::here("img", "health.png"))
+```
+
+> Gases in the atmosphere can contribute to climate change both directly and indirectly. Direct effects occur when the gas itself absorbs radiation. Indirect radiative forcing occurs when chemical transformations of the substance produce other greenhouse gases, when a gas influences the atmospheric lifetimes of other gases, and/or when a gas affects atmospheric processes that alter the radiative balance of the earth (e.g., affect cloud formation or albedo). The IPCC developed the Global Warming Potential (GWP) concept to compare the ability of a greenhouse gas to trap heat in the atmosphere relative to another gas.
+The GWP of a greenhouse gas is defined as the ratio of the accumulated radiative forcing within a specific time horizon caused by emitting 1 kilogram of the gas, relative to that of the reference gas CO2 (IPCC 2013). Therefore GWP-weighted emissions are provided in million metric tons of CO2 equivalent (MMT CO2 Eq.)
+
+
+ CO2 is actually the least capable of the greehouse gases for trapping heat:
+
+```{r, echo = FALSE, out.width="800px"}
+knitr::include_graphics(here::here("img", "GWP.png"))
+```
+
+However, because CO2 is so much more abundant and stays in the atmosphere so much longer than the other greenhouse gases, it has been the largest contributor to global warming.
+
+See [here](https://www.ucsusa.org/resources/why-does-co2-get-more-attention-other-gases#:~:text=CO2%20sticks%20around,oxide%20(N2O).)
+for more details.
+
+
+Furthermore, rizing CO2 levels also influence ocean acidity:
+
+```{r, echo = FALSE, out.width="500px"}
+knitr::include_graphics(here::here("img", "oceans.png"))
+```
+
+This makes it difficult for organisms to maintian their shells or skeletons that are made of calcium carbonate, thus making it more difficult for these organisms to survive and impacting their role in the ecosystem and food chain. 
+
+
+Furthermore, greenhouse gas emissions are believed to influence storm rates. 
+
+Indeed events with high levels of precipitation which can induce flooding and property damage are generally increasing around the country:
+
+```{r, echo = FALSE, out.width="500px"}
+knitr::include_graphics(here::here("img", "storms.png"))
+```
+
+https://www.epa.gov/climate-indicators/cherry-blossoms
+
+## Wrangling the data
+
+### Global Data
 
 ### Yearly CO~2~ Emissions, 1000 Metric Tonnes 
 
@@ -59,7 +222,7 @@ ggplot(CO2_emissions, aes(x=Year, y=`CO2 Emissions (Mg)`, group=Country)) +
        caption = expression("Limited to reporting countries")) + 
   ylab("Emissions (1M Metric Tonnes)")
 
-CO2_emissions %>%
+CO2_world<-CO2_emissions %>%
   group_by(Year) %>%
   summarise(`CO2 Emissions (Mg)` = sum(`CO2 Emissions (Mg)`, na.rm = TRUE)) %>%
   ggplot(aes(x=Year, y=`CO2 Emissions (Mg)`)) +
@@ -67,6 +230,7 @@ CO2_emissions %>%
   labs(title = expression("World CO"[2]*" Emissions per Year , 1751-2014"),
        caption = expression("Limited to reporting countries")) + 
   ylab("Emissions (1M Metric Metric Tonnes)")
+CO2_world
 ```
 
 ### Yearly Growth in GDP per Capita
@@ -261,7 +425,7 @@ us_temperature <- us_temperature %>%
   dplyr::select(-Date, )
 ```
 
-# Analysis dataframe
+## Analysis dataframe
 
 ```{r}
 colnames(CO2_emissions)
@@ -437,7 +601,7 @@ animate(animation_4, fps = 10, duration = 5)
 ```
 
 ```{r}
-df_long %>%
+Top10<-df_long %>%
   filter(Type=="Global") %>%
   filter(Indicator=="CO2 Emissions (Mg)") %>%
   filter(Year>=1900) %>%
@@ -459,9 +623,11 @@ df_long %>%
   labs(title = "Top 10 Emissions-producing Countries in 2010 (1900-2010)",
        subtitle = "Ordered by Emissions Produced in 2010",
        fill = "Ln(CO2 Emissions (Mg))")
+
+Top10
 ```
 
-# US-specific
+## US-specific
 
 ```{r}
 df_long_us <- df_long %>%
@@ -485,7 +651,7 @@ df_long_us <- df_long_us %>%
 ```
 
 ```{r}
-df_long_us %>%
+US_Indicators<-df_long_us %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value)) + 
@@ -497,6 +663,7 @@ df_long_us %>%
   theme(axis.text.x = element_text(angle = 90),
         axis.title.y = element_blank()) + 
   labs(title = "US-specific Indicators (1980-2010)")
+US_Indicators
 ```
 
 ```{r}
@@ -625,3 +792,20 @@ df_long_us %>%
   labs(title = "US Emissions, Energy Use, and Temperatures (1980-2010)",
        subtitle = "Change (%) Lines")
 ```
+
+Main plot
+
+```{r}
+
+library(patchwork)
+
+CO2_world + Top10 + US_Indicators +
+  plot_layout(widths = c(1, 2), heights = unit(c(2, 5), c('cm', 'null')))
+
+png(here::here("img", "mainplot.png"), width = 900, height = 700)
+(CO2_world | Top10)/ US_Indicators+
+    plot_layout(widths = c(1, 2), heights = unit(c(4, 5), c('cm', 'null')))
+dev.off()
+```
+
+
