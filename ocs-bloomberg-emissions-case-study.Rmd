@@ -120,8 +120,11 @@ We will begin by loading the packages that we will need:
 
 ```{r}
 library(here)
-library(tidyverse)
 library(readxl)
+library(readr)
+library(dplyr)
+library(magrittr)
+library(tidyverse)
 library(plotly)
 library(gganimate)
 library(RColorBrewer)
@@ -131,11 +134,14 @@ library(RColorBrewer)
  Package   | Use                                                                         
 ---------- |-------------
 [here](https://github.com/jennybc/here_here){target="_blank"}       | to easily load and save data
-[tidyverse](https://www.tidyverse.org/packages/) | to wrangle the data and create ggplot2 plots
-[readxl](https://readxl.tidyverse.org/) | to import the Excel file data
-[plotyly](https://plotly.com/r/) | to make the visualizations
-[gganimate](https://gganimate.com/) | to make the plots interactive
-[RColorBrewer](https://cran.r-project.org/web/packages/RColorBrewer/index.html) | to have greater control over the color in our plots
+[readxl](https://readxl.tidyverse.org/){target="_blank"}  | to import the excel file data
+[readr](https://readr.tidyverse.org/){target="_blank"}  | to import the csv file data
+[dplyr](https://dplyr.tidyverse.org/){target="_blank"}  |  to view and wrangle the data
+[magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use and reassign data objects using the `%<>%`pipe operator
+[tidyverse](https://www.tidyverse.org/packages/){target="_blank"}  | to wrangle the data and create ggplot2 plots
+[plotyly](https://plotly.com/r/){target="_blank"}  | to make the visualizations
+[gganimate](https://gganimate.com/){target="_blank"}  | to make the plots interactive
+[RColorBrewer](https://cran.r-project.org/web/packages/RColorBrewer/index.html){target="_blank"}  | to have greater control over the color in our plots
 
 The first time we use a function, we will use the `::` to indicate which package we are using. Unless we have overlapping function names, this is not necessary, but we will include it here to be informative about where the functions we will use come from.
 
@@ -145,7 +151,7 @@ The first time we use a function, we will use the `::` to indicate which package
 
 Greenhouse gas emissions are due to both natural processes and anthropogenic (human-derived) activities. 
 
-These emissions are one of the contributing factors to rising global temperatures, which can have a great influence on [public health](https://www.epa.gov/climate-indicators/understanding-connections-between-climate-change-and-human-health) as illustrated in the following image:
+These emissions are one of the contributing factors to rising global temperatures, which can have a great influence on [public health](https://www.epa.gov/climate-indicators/understanding-connections-between-climate-change-and-human-health){target="_blank"}  as illustrated in the following image:
 
 ```{r, echo = FALSE, out.width="800px"}
 knitr::include_graphics(here::here("img", "health.png"))
@@ -163,7 +169,7 @@ knitr::include_graphics(here::here("img", "GWP.png"))
 
 However, because CO2 is so much more abundant and stays in the atmosphere so much longer than other greenhouse gases, it has been the largest contributor to global warming.
 
-See [here](https://www.ucsusa.org/resources/why-does-co2-get-more-attention-other-gases#:~:text=CO2%20sticks%20around,oxide%20(N2O).)
+See [here](https://www.ucsusa.org/resources/why-does-co2-get-more-attention-other-gases#:~:text=CO2%20sticks%20around,oxide%20(N2O){target="_blank"}.)
 for more details.
 
 
@@ -184,15 +190,13 @@ Indeed events with high levels of precipitation which can induce flooding and pr
 knitr::include_graphics(here::here("img", "storms.png"))
 ```
 
-https://www.epa.gov/climate-indicators/cherry-blossoms
-
 
 ## **Limitations**
 *** 
 
 There are some important considerations regarding this data analysis to keep in mind: 
 
-1) Limitation 1  
+1) Correlation or association does not imply causation 
 
 2) Limitaiton 2  
 
@@ -204,165 +208,314 @@ There are some important considerations regarding this data analysis to keep in 
 ## **What are the data?**
 *** 
 
-In this case study we will be using data related to CO2 emissions, as well as other data that may influence, be influenced or relate to CO2 emissions. Most of our data was obtained from [Gapminder](https://www.gapminder.org/data/), which is a unique nonprofit that provides a variety of data for free.
+In this case study we will be using data related to CO2 emissions, as well as other data that may influence, be influenced or relate to CO2 emissions. Most of our data was obtained from [Gapminder](https://www.gapminder.org/data/){target="_blank"}, which is a unique nonprofit that provides a variety of data for free.
 
 In their words, Gapminder is...
 
 > Gapminder is an independent Swedish foundation with no political, religious or economic affiliations. Gapminder is a fact tank, not a think tank. Gapminder fights devastating misconceptions about global development. Gapminder produces free teaching resources making the world understandable based on reliable statistics. Gapminder promotes a fact-based worldview everyone can understand.  Gapminder collaborates with universities, UN, public agencies and non-governmental organizations. All Gapminder activities are governed by the board. We do not award grants. Gapminder Foundation is registered at Stockholm County Administration Board. Our constitution can be found [here](https://www.gapminder.org/about-gapminder/constitution/).
 
+The data that we will be using from Gapminder was obtained from the [World Bank](https://www.worldbank.org/en/what-we-do){target="_blank"}.
+
+
+In addition we will use some data that is specific to the United States from the [National Oceanic and Atmospheric Administration (NOAA)] (https://www.noaa.gov/), which is an agency that collects weather and climate data.
+
 
 Data   | Source         | Orginal Source   | Description | Citation                                                                    
 ---------- |-------------|-------------|-------------
-**CO2 emissions**  | [Gapminder](https://www.gapminder.org/data/) | [Carbon Dioxid Information Analysis Center (CDIAC)](https://cdiac.ess-dive.lbl.gov/) |  CO2 emissions in metric tonnes per person | NA
-**GDP per capita, yearly growth**  | [Gapminder](https://www.gapminder.org/data/) | [World Bank](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD.ZG) |  [Growth Domestic Product](https://www.investopedia.com/terms/g/gdp.asp#:~:text=Gross%20Domestic%20Product%20(GDP)%20is%20the%20monetary%20value%20of%20all,expenditures%2C%20production%2C%20or%20incomes.) (which is a measure of economic status) per person | NA
-**Energy use per person**  | [Gapminder](https://www.gapminder.org/data/) | [World Bank](https://data.worldbank.org/indicator/EG.USE.PCAP.KG.OE) |  Use of primary energy before transformation to other end-use fules, by country starting in 1960 | NA
-**Crude Mortality Rate**  | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN) | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN)|  Death rate per 1,000 people from 1960 to 2018 by country| NA 
-**US Natural Disasters**  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/billions/time-series)| [The National Oceanic and Atmospheric Administration (NOAA) ](https://www.ncdc.noaa.gov/billions/time-series)|  Data from 1980 to 2019 including: <br> -- Drought Count <br> -- Flooding Count <br> -- Freeze Count <br> -- Severe Storm Count <br> -- Tropical Cyclone Count <br> -- Wildfire Count <br> -- Winter Storm Count | NOAA National Centers for Environmental Information (NCEI) U.S. Billion-Dollar Weather and Climate Disasters (2020). https://www.ncdc.noaa.gov/billions/, DOI: 10.25921/stkw-7w73
-**Temperature**  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/global/time-series/globe/land_ocean/ytd/5/1880-2020)  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/global/time-series/globe/land_ocean/ytd/5/1880-2020) | National yearly average temperature (in Fahrenheit) from 1980 to 2019 | NOAA National Centers for Environmental Information, State of the Climate: Global Climate Report for March 2020, published online April 2020, retrieved on June 25, 2020 from https://www.ncdc.noaa.gov/sotc/global/202003/supplemental/page-1.
+**CO2 emissions**  | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [Carbon Dioxid Information Analysis Center (CDIAC)](https://cdiac.ess-dive.lbl.gov/){target="_blank"}  |  CO2 emissions in tonnes or metric tons (equivalent to approximately 2,204.6 pounds) per person | NA
+**GDP per capita, yearly growth**  | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD.ZG){target="_blank"}  |  [Growth Domestic Product](https://www.investopedia.com/terms/g/gdp.asp#:~:text=Gross%20Domestic%20Product%20(GDP)%20is%20the%20monetary%20value%20of%20all,expenditures%2C%20production%2C%20or%20incomes.){target="_blank"}  (which is an overall measure of the health of nation's economy) per person | NA
+**Energy use per person**  | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/EG.USE.PCAP.KG.OE){target="_blank"}  |  Use of primary energy before transformation to other end-use fules, by country starting in 1960 | NA
+**Crude Mortality Rate**  | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN){target="_blank"} |  Death rate per 1,000 people from 1960 to 2018 by country| NA 
+**US Natural Disasters**  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}| [The National Oceanic and Atmospheric Administration (NOAA) ](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}|  Data from 1980 to 2019 including: <br> -- Drought Count <br> -- Flooding Count <br> -- Freeze Count <br> -- Severe Storm Count <br> -- Tropical Cyclone Count <br> -- Wildfire Count <br> -- Winter Storm Count | NOAA National Centers for Environmental Information (NCEI) U.S. Billion-Dollar Weather and Climate Disasters (2020). https://www.ncdc.noaa.gov/billions/, DOI: 10.25921/stkw-7w73
+**Temperature**  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/global/time-series/globe/land_ocean/ytd/5/1880-2020){target="_blank"}  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/global/time-series/globe/land_ocean/ytd/5/1880-2020){target="_blank"} | National yearly average temperature (in Fahrenheit) from 1895 to 2019 | NOAA National Centers for Environmental Information, State of the Climate: Global Climate Report for March 2020, published online April 2020, retrieved on June 25, 2020 from https://www.ncdc.noaa.gov/sotc/global/202003/supplemental/page-1.
 
-not quite right... almost...
-https://www.ncdc.noaa.gov/cag/national/time-series/110/tavg/12/5/1895-2020?base_prd=true&begbaseyear=1901&endbaseyear=2000
 
-https://www.ncdc.noaa.gov/cag/national/time-series/110/pcp/12/12/1895-2020?base_prd=true&begbaseyear=1901&endbaseyear=2000
+To obtain the temperature data, annual average temperatures were selected as shown in this image:
+```{r, echo = FALSE, out.width = "800 px"}
+knitr::include_graphics(here::here("img", "temp.png"))
+```
 
-I think this is what michael used: https://www.ncdc.noaa.gov/cag/national/time-series/110/tavg/1/12/1895-2020?base_prd=true&begbaseyear=1901&endbaseyear=2000
-
-No...  not it either...
-
-**variable2**  | Variable info  <br> -- more details <br> -- more detials <br>  **Example**: Content content | source | Description
-
+https://www.ncdc.noaa.gov/cag/national/time-series/
 
 ## **Data Import**
 *** 
 
+To read in the files that were downloaded from the various sources as indicated in the table above, we will use the `read_xlsx()` and `read_xls()` functions of the `readxl` package to import the data from the .xlsx and .xls files respectively and we will use the `read_csv` function of the `readr` package to import the data from the csv files.
+
 ```{r}
+# xlsx files:
+CO2_emissions <- readxl::read_xlsx(here("docs/yearly_co2_emissions_1000_tonnes.xlsx"))
+gdp_growth <- readxl::read_xlsx(here("docs/gdp_per_capita_yearly_growth.xlsx"))
+energy_use <- readxl::read_xlsx(here("docs/energy_use_per_person.xlsx"))
 
-CO2_emissions <- read_excel(here("docs/yearly_co2_emissions_1000_tonnes.xlsx"))
-gdp_growth <- read_xlsx(here("docs/gdp_per_capita_yearly_growth.xlsx"))
-energy_use <- read_xlsx(here("docs/energy_use_per_person.xlsx"))
-mortality <- read_xls(here("docs/API_SP.DYN.CDRT.IN_DS2_en_excel_v2_804384.xls"))
-
-us_disaster <- read_csv(here("docs/time-series-US.csv"), skip = 2)
-us_temperature <- read_csv(here("docs/temperature.txt"),skip=4,na="-99")
+# xls file:
+mortality <- readxl::read_xls(here("docs/API_SP.DYN.CDRT.IN_DS2_en_excel_v2_804384.xls"))
 ```
 
+For our csv data files, there are some lines that we would like to not import - infact, we will get an error if we try to import them because our table structure will be as r expects. We can do so using the `skip =` argument of the `read_csv()` function. 
+
+Here you can see that the first two rows of the data about US Disasters doesn't have the same number of columns as the subsequent rows. So we want to skip these first two lines, we will use `skip = 2` for this.
+
+```{r, echo = FALSE, out.width = "800 px"}
+knitr::include_graphics(here::here("img", "Disasters.png"))
+```
+Now looking at the temperature data, we can see that  the first four lines do not have the same number of columns as the subsequent lines. We will skip importing all 4 lines by using `skip = 4`. We can also specify that `NA` values are encoded as `"-99"`. This will replace all instances of `"-99"` with `NA`. We can do this using the `na = ` argument of the `read_csv()` function. We will do so as: `na = "-99"`. The "-99" needs to be in quotation markes becuase this argument expects characters.
+
+```{r, echo = FALSE, out.width = "800 px"}
+knitr::include_graphics(here::here("img", "tempdata.png"))
+```
+
+```{r}
+#csv files:
+us_disaster <- readr::read_csv(here("docs/time-series-US.csv"), skip = 2)
+us_temperature <- readr::read_csv(here("docs/temperature.txt"), skip = 4, na ="-99")
+```
+
+Great! now we have imported all of the data that we will need.
 
 
 ## **Data Exploration and Wrangling**
 *** 
 
-### Global Data
+Now we will take a look at our data and wrangle it until it is easy to use to allow us to evaluate how CO2 emissions have changed over time and how emissions may relate to energy use, mortality, GDP etc. 
 
-We will also use the `%>%` pipe which can be used to define the input for later sequential steps. This will make more sense when we have multiple sequential steps using the same data object. To use the pipe notation we need to install and load dplyr as well.
+### Yearly CO~2~ Emissions
 
-### Yearly CO~2~ Emissions, 1000 Metric Tonnes 
+First let's take a look at the CO2 data. We can use the base `head()` function to see just the first 6 rows of our data.
 
+We will use the `%>%` pipe which can be used to define the input for later sequential steps. This will make more sense when we have multiple sequential steps using the same data object. To use the pipe notation we need to install and load  the `dplyr` package.
 
 ```{r}
+CO2_emissions %>%
+  head()
+```
+
+OK, we can see that our country data makes of the rows and the yearly data makes up the columns. We also see that we have alot of `NA` values.
+
+
+We can also use the `glimpse()` function of the `dplyr` packge to view our data. This allows us to see more of our data at once. We will see a tiny bit of each variable/column. To do so our data will be displayed with the column names listed on the right.
+
+#### {.scrollable }
+```{r}
+# Scroll through the output!
+CO2_emissions %>%
+dplyr::glimpse()
+```
+####
+
+We can see that we have a large [tibble](https://tibble.tidyverse.org/). A tibble is the tidyverse version of a data frame. It is essentially a table with variable information arranged as columns, and individual observations arranged as rows. We can see that the tibble gives us information about the class of each variable.  For example the `country` variable is made up of character (abbreviated as chr) values. We see that we have 265 different country variables and CO2 emission values for 192 different years (from 1751 to 2014). Recall that the values are emissions in metric tons also called tonnes. We can see that there are fewer `NA` values for later years.
+
+Now we will modify this data to make it more usable for making visualizations. One thing we will use is the `%<>%` opperator which is from the `magrittr` package. This allows us to use our `CO2_emissions` data and reassign it to a modified version at the same time. 
+
+We will use the `pivot_longer()` function of the `dplyr` package to convert our data into what is called long format. This means that we will have more rows and fewer columns than our current format. This is done by collapsing multiple variables into fewer variables.
+
+We want to collapse all of the values for the emission data across the different individual year variables into one new emission variable and we will identify what year they are from using a new `Year` variable.
+
+```{r}
+CO2_emissions  %<>%
+  pivot_longer(cols = -country, names_to = "Year", values_to = "Emissions")
+
 head(CO2_emissions)
+```
 
-CO2_emissions <- CO2_emissions %>%
-  gather(key = Year, value = Emissions, -country) %>%
-  rename(Country=country) %>%
-  mutate(Emissions = Emissions/1000) %>%
-  rename(`CO2 Emissions (Mg)`=Emissions)
+We also want to rename the `country` variable to be capitalized. W We can use the `rename()` function of the `dplyr` package to rename this variable. When renaming variables the new name is listed first before the `=`. We will also modify the `Emissions` data by dividing it by 1000 to make the numbers smaller. To do this we will use the `mutate()` function, which is also part of the `dplyr()` package. This function allows us to create and modify variables. You may also note that the `Year` variable is currently of class type character. We would like to change it to be numeric. This can also be accomplished using the `mutate()` function.
 
-sapply(CO2_emissions, class)
-
-CO2_emissions$Year <- as.numeric(CO2_emissions$Year)
-
-summary(CO2_emissions$Year)
+```{r}
+  
+ CO2_emissions  %<>% 
+   dplyr::rename(Country=country) %>%
+   dplyr::mutate(Emissions = Emissions/1000, 
+          Year = as.numeric(Year)) %>%
+     rename(`CO2 Emissions (Mg)`= Emissions)
 
 ```
 
-### Yearly Growth in GDP per Capita
-
-**Michael** Need to determine units for this 
+Now let's take a look to see how our data has changed:
 
 ```{r}
-head(gdp_growth)
 
-gdp_growth <- gdp_growth %>%
-  gather(key = Year, value = gdp_growth, -country) %>%
+CO2_emissions %>%
+head()
+
+```
+Great, we can see that now the `Year` variable is of class double (abbreviated `dbl`), which is a numeric class.
+
+### Yearly Growth in GDP per Capita
+
+```{r}
+gdp_growth %>%
+  head()
+```
+
+```{r}
+names(gdp_growth)
+```
+
+#### {.scrollable}
+```{r}
+# Scroll through the output!
+gdp_growth %>%
+glimpse()
+```
+####
+
+Again, we will use the `pivot_longer()` to transform the data to long format. We will also again change the `country` variable to be `Country` by using the `rename()` function , and we will make the `Year` varaible numeric using the `mutate()` function. 
+
+We will use the `drop_na()` function of the `tidyr` package to drop all years with missing data.
+
+```{r}
+# gdp_growth %<>%
+#    tidyr::drop_na()
+# 
+# head(gdp_growth)
+```
+
+```{r}
+gdp_growth %<>%
+  pivot_longer(cols = -country, 
+               names_to = "Year", 
+               values_to = "gdp_growth") %>%
   rename(Country=country) %>%
-  rename(`GDP Growth/Capita (%)` = gdp_growth) %>%
-  filter(complete.cases(.))
+  mutate(Year =as.numeric(Year)) %>%
+  #  tidyr::drop_na() %>% # not sure we need this..
+  rename(`GDP Growth/Capita (%)` = gdp_growth)
+```
 
-sapply(gdp_growth, class)
+Now let's see how this data has changed:
 
-gdp_growth$Year <- as.numeric(gdp_growth$Year)
+```{r}
+gdp_growth %>%
+  head()
 
-summary(gdp_growth$Year)
+gdp_growth %>%
+  count(Year)
 ```
 
 ### Energy Use per Person
 
 ```{r}
-head(energy_use)
-
-energy_use <- energy_use %>%
-  gather(key = Year, value = energy_use, -country) %>%
-  rename(Country=country) %>%
-  rename(`Energy Use (kg, oil-eq./capita)` = energy_use)
-
-sapply(energy_use, class)
-
-energy_use$Year <- as.numeric(energy_use$Year)
-
-summary(energy_use$Year)
-
+energy_use %>%
+  head()
 ```
 
-### Crude Mortality Rate
+```{r}
+energy_use %>%
+  glimpse()
+```
 
 
 ```{r}
-head(mortality)
+energy_use %<>%
+  pivot_longer(cols = -country, names_to = "Year", values_to = "energy_use") %>%
+  rename(Country=country) %>%
+  mutate(Year = as.numeric(Year)) %>%
+  rename(`Energy Use (kg, oil-eq./capita)` = energy_use)
 
+```
+
+#### {.scrollable}
+```{r}
+# Scroll through the output!
+energy_use %>%
+glimpse()
+```
+####
+
+### Crude Mortality Rate
+
+```{r}
+mortality %>%
+  head()
+```
+
+
+We can see that there are a couple of empty rows which indicate when the data was updated.
+We can also see that the columns really start at the 3rd row. So first we will repace the column names with the 3rd row. Then we will remove the first 3 rows.
+
+```{r}
+colnames(mortality)
 colnames(mortality) <- mortality[3,]
+colnames(mortality)
 mortality <- mortality[-c(1:3),]
+```
 
-mortality <- mortality %>%
+
+
+#### {.scrollable}
+```{r}
+mortality %>%
+  glimpse()
+
+```
+####
+
+
+That is looking better! However, we also want to remove some variables like: `Country Code`, `Indicator Name`, and `Indicator Code`. We can do that using the `select()` functio of the `dplyr` package. We can use the minus sign `-` to indicate what variables we dont want to keep.
+
+```{r}
+mortality %<>%
   select(-`Country Code`,
          -`Indicator Name`,
          -`Indicator Code`) %>%
-  rename(Country="Country Name") %>%
-  gather(key = Year, value = `Deaths/1000 People`, -Country)
+  rename(Country = "Country Name") %>%
+  #gather(key = Year, value = `Deaths/1000 People`, -Country) %>%
+  pivot_longer(cols = -Country, 
+               names_to = "Year", 
+               values_to = "Deaths/1000 People") %>%
+  mutate(Year = as.numeric(Year)) %>%
+  mutate(`Deaths/1000 People` = as.numeric(`Deaths/1000 People`))
 
-sapply(mortality, class)
-
-mortality$Year <- as.numeric(mortality$Year)
-mortality$`Deaths/1000 People` <- as.numeric(mortality$`Deaths/1000 People`)
-
-summary(mortality$Year)
 ```
+
+```{r}
+mortality %>%
+  head()
+```
+
 
 ## US-specific Data
 
 ### Disasters
 
 ```{r}
+us_disaster  %>%
+  head()
+```
 
-us_disaster <- us_disaster %>%
-  dplyr::select(Year,
-                `Drought Count`,
-                `Flooding Count`,
-                `Freeze Count`,
-                `Severe Storm Count`,
-                `Tropical Cyclone Count`,
-                `Wildfire Count`,
-                `Winter Storm Count`)
+We are specifically interested in the `Year` and  the variables that contain the word `"Count"` so we will select them using the `select()` and `contains()` functions in the `dplyr` package. Since we are selecting for variables with the word `"Count"` we need to use quotation marks around it. Selecting for the variable `year` does not require this as that is actually the name of one of the existing variables.
 
-sapply(us_disaster, class)
 
-us_disaster <- us_disaster %>%
-  mutate(`Disasters` = rowSums(.[2:dim(.)[2]])) %>%
+```{r}
+us_disaster %<>%
+           select(Year, contains("Count"))
+
+us_disaster %>%
+  head()
+```
+
+Now we want to create a new variable that will be the sum of all the different types of disasters for each year. 
+
+We can create this ne variable using the `mutate()` function of `dplyr` and we will use the base `rowSums()` function to perform the calculation. We dont want to include the `Year` variable in our sum, so we can exclude it using the `select`function within the `rowSums()` function. However, to do so we need to indicate that we are using the data that we already used as input to our `mutate()` and `rowSums()` functions. We can do so by using a `.`. 
+
+
+```{r}
+us_disaster %<>%
+  mutate(`Disasters` = rowSums(select(., -Year))) 
+
+us_disaster %>%
+  glimpse()
+```
+
+```{r}
+us_disaster %<>%
   dplyr::select(Year,
                 `Disasters`) %>%
-  mutate(Country="United States") %>%
-  gather(key = Indicator, value = Value, -Country, -Year) %>%
-  mutate(Region="United States",
-         Type="US-specific")
+  mutate(Country = "United States") %>%
+  pivot_longer(cols = c(-Country, - Year),
+               names_to = "Indicator",
+               values_to = "Value") %>%
+  mutate(Region = "United States",
+           Type = "US-specific")
 ```
 
 ### Temperature
@@ -375,11 +528,11 @@ sapply(us_temperature, class)
 us_temperature <- us_temperature %>%
   dplyr::select(-Anomaly) %>%
   mutate(Date = substr(Date, start = 1, stop = 4)) %>%
-  mutate(Country="United States",
-         Year = Date,
-         Indicator="Temperature (Fahrenheit)",
-         Region="United States",
-         Type="US-specific") %>%
+  mutate(Country = "United States",
+            Year = Date,
+       Indicator = "Temperature (Fahrenheit)",
+          Region = "United States",
+            Type = "US-specific") %>%
   dplyr::select(-Date, )
 ```
 
@@ -429,14 +582,21 @@ df_long <- df_long %>%
 
 
 ### CO2 plots
+
+We will rename the `Emissions` variable so that it will include more information in our plot.
+
 ```{r}
-ggplot(CO2_emissions, aes(x=Year, y=`CO2 Emissions (Mg)`, group=Country)) +
+
+CO2_emissions %>%
+  # rename(`CO2 Emissions (Mg)`= Emissions) %>%
+ggplot(aes(x=Year, y=`CO2 Emissions (Mg)`, group=Country)) +
   geom_line(alpha=0.2) + 
   labs(title = expression("Country CO"[2]*" Emissions per Year , 1751-2014"),
        caption = expression("Limited to reporting countries")) + 
   ylab("Emissions (1M Metric Tonnes)")
 
 CO2_world<-CO2_emissions %>%
+ # rename(`CO2 Emissions (Mg)`= Emissions) %>%
   group_by(Year) %>%
   summarise(`CO2 Emissions (Mg)` = sum(`CO2 Emissions (Mg)`, na.rm = TRUE)) %>%
   ggplot(aes(x=Year, y=`CO2 Emissions (Mg)`)) +
@@ -846,7 +1006,7 @@ df_long_us %>%
        subtitle = "Change (%) Lines")
 ```
 
-Main plot
+## Main plot
 
 ```{r}
 
