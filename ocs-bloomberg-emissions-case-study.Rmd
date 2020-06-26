@@ -110,7 +110,7 @@ See [here](https://www.epa.gov/report-environment/greenhouse-gases) and [here](h
 ## **Learning Objectives** 
 *** 
 
-In this case study, we will explore CO2 emission data from around the world. We will also focus on the US specifically to evaluate patterns of temperatures and storm activity. This case study will particularly focus on visualizations of patterns over time. We will especially focus on using packages and functions from the [`Tidyverse`](https://www.tidyverse.org/){target="_blank"}, such as `plotly`and `gganimate`. The tidyverse is a library of packages created by RStudio. While some students may be familiar with previous R programming packages, these packages make data science in R especially efficient.
+In this case study, we will explore CO2 emission data from around the world. We will also focus on the US specifically to evaluate patterns of temperatures and storm activity. This case study will particularly focus on how to use different datasets that span different ranges of time, as well as how to create visualizations of patterns over time. We will especially focus on using packages and functions from the [`Tidyverse`](https://www.tidyverse.org/){target="_blank"}, such as `dplyr`, `tidyr`, `plotly`and `gganimate`. The tidyverse is a library of packages created by RStudio. While some students may be familiar with previous R programming packages, these packages make data science in R especially efficient.
 
 
 *** 
@@ -221,13 +221,13 @@ In addition we will use some data that is specific to the United States from the
 
 
 Data   | Source         | Orginal Source   | Description | Citation                                                                    
----------- |-------------|-------------|-------------
-**CO2 emissions**  | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [Carbon Dioxid Information Analysis Center (CDIAC)](https://cdiac.ess-dive.lbl.gov/){target="_blank"}  |  CO2 emissions in tonnes or metric tons (equivalent to approximately 2,204.6 pounds) per person | NA
-**GDP per capita, yearly growth**  | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD.ZG){target="_blank"}  |  [Growth Domestic Product](https://www.investopedia.com/terms/g/gdp.asp#:~:text=Gross%20Domestic%20Product%20(GDP)%20is%20the%20monetary%20value%20of%20all,expenditures%2C%20production%2C%20or%20incomes.){target="_blank"}  (which is an overall measure of the health of nation's economy) per person | NA
-**Energy use per person**  | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/EG.USE.PCAP.KG.OE){target="_blank"}  |  Use of primary energy before transformation to other end-use fules, by country starting in 1960 | NA
-**Crude Mortality Rate**  | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN){target="_blank"} |  Death rate per 1,000 people from 1960 to 2018 by country| NA 
-**US Natural Disasters**  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}| [The National Oceanic and Atmospheric Administration (NOAA) ](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}|  Data from 1980 to 2019 including: <br> -- Drought Count <br> -- Flooding Count <br> -- Freeze Count <br> -- Severe Storm Count <br> -- Tropical Cyclone Count <br> -- Wildfire Count <br> -- Winter Storm Count | NOAA National Centers for Environmental Information (NCEI) U.S. Billion-Dollar Weather and Climate Disasters (2020). https://www.ncdc.noaa.gov/billions/, DOI: 10.25921/stkw-7w73
-**Temperature**  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/global/time-series/globe/land_ocean/ytd/5/1880-2020){target="_blank"}  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/global/time-series/globe/land_ocean/ytd/5/1880-2020){target="_blank"} | National yearly average temperature (in Fahrenheit) from 1895 to 2019 | NOAA National Centers for Environmental Information, State of the Climate: Global Climate Report for March 2020, published online April 2020, retrieved on June 25, 2020 from https://www.ncdc.noaa.gov/sotc/global/202003/supplemental/page-1.
+---------- |-------------|-------------|-------------|--------
+**CO2 emissions**  | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [Carbon Dioxid Information Analysis Center (CDIAC)](https://cdiac.ess-dive.lbl.gov/){target="_blank"}  |  CO2 emissions in tonnes or metric tons (equivalent to approximately 2,204.6 pounds) per person by country from 1751 to 2014 | NA
+**GDP per capita, yearly growth**  | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD.ZG){target="_blank"}  |  [Growth Domestic Product](https://www.investopedia.com/terms/g/gdp.asp#:~:text=Gross%20Domestic%20Product%20(GDP)%20is%20the%20monetary%20value%20of%20all,expenditures%2C%20production%2C%20or%20incomes.){target="_blank"}  (which is an overall measure of the health of nation's economy) per person by country from 1801 to 2019 | NA
+**Energy use per person**  | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/EG.USE.PCAP.KG.OE){target="_blank"}  |  Use of primary energy before transformation to other end-use fules, by country from 1960 to 2015 | NA
+**Crude Mortality Rate**  | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN){target="_blank"} |  Death rate per 1,000 people by country from 1960 to 2018 | NA 
+**US Natural Disasters**  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}| [The National Oceanic and Atmospheric Administration (NOAA) ](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}|  US data from 1980 to 2019 including about: <br> -- Droughts <br> -- Floods <br> -- Freezes <br> -- Severe Storms <br> -- Tropical Cyclones <br> -- Wildfires<br> -- Winter Storms | NOAA National Centers for Environmental Information (NCEI) U.S. Billion-Dollar Weather and Climate Disasters (2020). https://www.ncdc.noaa.gov/billions/, DOI: 10.25921/stkw-7w73
+**Temperature**  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/national/time-series){target="_blank"}  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/national/time-series){target="_blank"} | US National yearly average temperature (in Fahrenheit) from 1895 to 2019 | NOAA National Centers for Environmental information, Climate at a Glance: National Time Series, published June 2020, retrieved on June 26, 2020 from https://www.ncdc.noaa.gov/cag/
 
 
 To obtain the temperature data, annual average temperatures were selected as shown in this image:
@@ -361,6 +361,7 @@ glimpse()
 
 Again, we will use the `pivot_longer()` to transform the data to long format. We will also again change the `country` variable to be `Country` by using the `rename()` function , and we will make the `Year` varaible numeric using the `mutate()` function. 
 
+AVOCADO... this was in Michael's code... but I don't know that we need it
 We will use the `drop_na()` function of the `tidyr` package to drop all years with missing data.
 
 ```{r}
@@ -393,16 +394,21 @@ gdp_growth %>%
 
 ### Energy Use per Person
 
+Now let's take a look at the energy use per person data:
+
 ```{r}
 energy_use %>%
   head()
 ```
 
+#### {.scrollable}
 ```{r}
 energy_use %>%
   glimpse()
 ```
+####
 
+To wrangle the `energy_use` data, we will again convert the data to long format, rename some variables, and mutate the `Year` data to be numeric.
 
 ```{r}
 energy_use %<>%
@@ -450,7 +456,7 @@ mortality %>%
 ####
 
 
-That is looking better! However, we also want to remove some variables like: `Country Code`, `Indicator Name`, and `Indicator Code`. We can do that using the `select()` functio of the `dplyr` package. We can use the minus sign `-` to indicate what variables we dont want to keep.
+That is looking better! However, we also want to remove some variables like: `Country Code`, `Indicator Name`, and `Indicator Code`. We can do that using the `select()` functio of the `dplyr` package. We can use the minus sign `-` to indicate what variables we dont want to keep. Otherwise, we will perform similar modifications as we performed on the other datasets.
 
 ```{r}
 mortality %<>%
@@ -458,7 +464,6 @@ mortality %<>%
          -`Indicator Name`,
          -`Indicator Code`) %>%
   rename(Country = "Country Name") %>%
-  #gather(key = Year, value = `Deaths/1000 People`, -Country) %>%
   pivot_longer(cols = -Country, 
                names_to = "Year", 
                values_to = "Deaths/1000 People") %>%
@@ -474,6 +479,7 @@ mortality %>%
 
 
 ## US-specific Data
+Now we will take a look at the US data about disasters and temperature.
 
 ### Disasters
 
@@ -506,80 +512,198 @@ us_disaster %>%
   glimpse()
 ```
 
+Great, now we are going to remove some of these variables and just keep or select using the `select()` function the variables we are interested in. We will keep the `Flooding Count` becuase as you may recall from earlier in this case study, events of extreme perciptation levels appear to be associated with global warming. We will use this as a proxy for that.
+
+AVOCADO why is US listed in 3 variables?
+We are also going to add a new variable called `Country` to indicate that this data is from the United States. This will create a new variable where every value is `United States`. We will also create a new variable called `Region` where every value is `US-specific` and a new variable called `Type` where every value is `United States`.
+
 ```{r}
 us_disaster %<>%
   dplyr::select(Year,
-                `Disasters`) %>%
+                Disasters) %>%
   mutate(Country = "United States") %>%
   pivot_longer(cols = c(-Country, - Year),
                names_to = "Indicator",
                values_to = "Value") %>%
   mutate(Region = "United States",
            Type = "US-specific")
+
+head(us_disaster)
 ```
+
+
 
 ### Temperature
 
 ```{r}
-us_temperature <- read_csv(here("docs/temperature.txt"),skip=4,na="-99")
-
-sapply(us_temperature, class)
-
-us_temperature <- us_temperature %>%
-  dplyr::select(-Anomaly) %>%
-  mutate(Date = substr(Date, start = 1, stop = 4)) %>%
-  mutate(Country = "United States",
-            Year = Date,
-       Indicator = "Temperature (Fahrenheit)",
-          Region = "United States",
-            Type = "US-specific") %>%
-  dplyr::select(-Date, )
+us_temperature %>%
+  head()
 ```
+OK, so we want to remove the `Anomaly` variable which is an indicator of how different the national average temperature for that year was from the average temperature from 1901-2000 which was 52.02&deg;F. 
 
-## Analysis data frame
+We also want to change the date values, which are currently listed as the year followed by the number 12. To do so we want to just keep the first 4 characters in the `Date` variable string values. We can use the `str_sub()` function of the `stringr` package to do this. We just need to indicate the start and stop characters. In this case the start would be 1 and the 4th character would be where we want to stop, so we would use `start = 1, stop = 4`. Again we will create a `Country`, `Region` and `Type` variable. We will also change the name of the `Date` variable to `Year` so that it will be consistent with our other datasets. Furthermore, we also what it to be numeric. We can accomplish both renaming and changing to numeric by using the `mutate()` function. We canthen remove the `Date` variable and also order the columns just like the other us data using the `select()` function.
 
 ```{r}
-colnames(CO2_emissions)
-colnames(gdp_growth)
-colnames(energy_use)
-colnames(mortality)
+us_temperature %<>%
+  dplyr::select(-Anomaly) %>%
+  mutate(Date = str_sub(Date, start = 1, end = 4))%>%
+  rename() %>%
+  mutate(Year = as.numeric(Date), 
+      Country = "United States",
+    Indicator = "Temperature (Fahrenheit)",
+       Region = "United States",
+         Type = "US-specific") %>%
+  select(Year, Country, Indicator,  Value, Region, Type)
+
+head(us_temperature)
+```
+
+## Joining data
+
+Now we would like to join the different datasets together into one tibble. To do so it is often necessary to have at least one column or variable with the same name to be used as a key for putting your data together. To put all of our data together there are several `*_join()` functions available in the `dplyr` package. 
+
+
+```{r, echo = FALSE, out.width = "800 px"}
+knitr::include_graphics(here::here("img", "join.png"))
+```
+
+We will use the `full_join()` function as we have different time spans for each dataset and we would like to retain as much data as possible. The`full_join()` function will simply create `NA` values for any of the years that are not in one of the data sets. We can check by using the base `summary()` function. This will also allow us to check that there are column names that are consistent in each dataset that we wish to combine.
+
+```{r}
+summary(CO2_emissions)
+summary(gdp_growth)
+summary(energy_use)
+summary(mortality)
+
+```
+
+Indeed, `Country`, and `Year` variables are present in all of the datasets. We can see that the minimum and maximum year is different for nearly all the datasets.
+
+We need to specify what columns/variables we will be joining by using the `by =` argument in the `full_join()` function.
+
+```{r}
 
 df_wide <- CO2_emissions %>%
-  full_join(gdp_growth, by=c("Country", "Year")) %>%
-  full_join(energy_use, by=c("Country", "Year")) %>%
-  full_join(mortality, by=c("Country", "Year"))
+  full_join(gdp_growth, by = c("Country", "Year")) %>%
+  full_join(energy_use, by = c("Country", "Year")) %>%
+  full_join(mortality, by = c("Country", "Year"))
 
+df_wide %>%
+  head()
+```
+
+We can also do the same thing using by using the`reduce()` function of the `purrr` package. This is a good option if you have many dasasets to combine.
+
+
+```{r}
+df_wide <- list(CO2_emissions, 
+                gdp_growth, 
+                energy_use, 
+                mortality) %>% 
+  reduce(full_join, by = c("Country", "Year"))
+
+df_wide %>%
+  head()
+```
+
+```{r}
+df_wide %>%
+  glimpse()
+```
+
+Nice, looks good!
+
+We will also make a long version of this data, where we will create an new variable called `Indicator` that will indicate what dataset the data came from and we will collapse the values from the columns called `CO2 Emissions (Mg)`, `GDP Growth/Capita (%)`, `Energy Use (kg, oil-eq./capita)`, and `Deaths/1000 People`. 
+
+
+```{r}
 df_long <- df_wide %>%
-  gather(key=Indicator,value=Value,-Country, -Year) %>%
-  mutate(Region=case_when(Country=="United States" ~ "United States",
+  pivot_longer(cols = c(-Country, -Year), 
+               names_to = "Indicator", 
+               values_to = "Value")
+head(df_long)
+```
+
+We will also create a new variable called `Region` that will indicate if the data is about the United States or a different country based on the values in the `Country` variable. We will use the `case_when()` function of the `dplyr` package to do this. If the `Country` variable is equal to `"United States"` the value for the new variable will also be "United States", where as if the `Country` variable is not equal to `"United States"` but is some other character string value, such as `"Afghanistan"`, then the value for the new variable will be `"Rest of the World"`.
+The new values for the new variable `Region` are indicated after the specific conditional statements by using the `~` symbol. We will also create a new variable called `Type`, where all the values are `"Global"` to indicate that this data is not specific to just the United States. 
+
+
+```{r}
+ df_long %<>%
+  mutate(Region = case_when(Country=="United States" ~ "United States",
                           Country!="United States" ~ "Rest of the World"),
-         Type="Global")
+         Type = "Global")
+head(df_long)
+```
 
-setequal(sapply(df_long, class),sapply(us_disaster, class))
-setequal(sapply(df_long, class),sapply(us_temperature, class))
+We will now combine this data with the US data about disasters and temperatures.
 
-df_long <- df_long %>%
-  rbind(us_disaster) %>%
-  rbind(us_temperature)
+We will now use the `bind_rows()` function which will just append the `us_temperature` data and the `us_disaster` data after the `df_long` data. 
 
-sapply(df_long,class)
 
+```{r}
+head(us_disaster)
+head(us_temperature)
+
+df_long <-list(df_long, 
+               us_disaster,
+               us_temperature) %>%
+  bind_rows()
 df_long$Country <- as.factor(df_long$Country)
-df_long$Year <- as.numeric(df_long$Year)
+```
 
-sapply(df_long,class)
+We can check the top and bottom of the new `df_long` tibble to see that our `us_temperature` data is at the bottom.
 
-df_long <- df_long %>%
+```{r}
+head(df_long)
+tail(df_long)
+```
+
+
+<details> <summary> Click here for details about the difference between `full_join()` and `bind_rows()` </summary>
+
+The difference between this function and the `full_join()` function is that the `bind_rows()` function will assentially just append each dataset to each other, whereas the `full_join()` function collapses data that is comparable. Here you will see an example of what the data would have been like for `df_wide` if we had made it using `bind_rows()`.
+
+```{r}
+df_wide_br <- list(CO2_emissions, 
+                gdp_growth, 
+                energy_use, 
+                mortality) %>% 
+  bind_rows()
+
+dim(df_wide)
+dim(df_wide_br)
+
+df_wide%>%
+  filter(Country == "China", Year == "1960")
+
+df_wide_br%>%
+  filter(Country == "China", Year == "1960")
+```
+</detials>
+
+
+AVOCADO Hmmm the top plot changes completely if we drop countries with na values... 
+```{r}
+df_long_with_miss <- df_long %>%
+  arrange(Country)
+
+df_long_ <- df_long %>%
   filter(complete.cases(.)) %>%
   arrange(Country)
+
+
+head(df_long_with_miss)
+head(df_long)
+
 ```
 
 
 
 
-## **Data Visualization**
+## **Data Exploration**
 *** 
-
+Now we will create some simple plots to examine the data.
 
 ### CO2 plots
 
@@ -605,6 +729,16 @@ CO2_world<-CO2_emissions %>%
        caption = expression("Limited to reporting countries")) + 
   ylab("Emissions (1M Metric Metric Tonnes)")
 CO2_world
+
+df_long %>%
+  filter(Indicator == "CO2 Emissions (Mg)") %>%
+ggplot(aes(x=Year, y= Value, group=Country)) +
+  geom_line(alpha=0.2) + 
+  labs(title = expression("Country CO"[2]*" Emissions per Year , 1751-2014"),
+       caption = expression("Limited to reporting countries")) + 
+  ylab("Emissions (1M Metric Tonnes)")
+
+
 ```
 
 
@@ -673,7 +807,7 @@ mortality %>%
 
 
 
-
+## Data Visualization
 
 
 ```{r, eval=FALSE}
