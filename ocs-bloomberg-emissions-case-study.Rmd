@@ -126,7 +126,9 @@ library(dplyr)
 library(magrittr)
 library(tidyverse)
 library(plotly)
+library(ggplot2)
 library(gganimate)
+library(ggrepel)
 library(RColorBrewer)
 ```
 
@@ -140,6 +142,8 @@ library(RColorBrewer)
 [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use and reassign data objects using the `%<>%`pipe operator
 [tidyverse](https://www.tidyverse.org/packages/){target="_blank"}  | to wrangle the data and create ggplot2 plots
 [plotyly](https://plotly.com/r/){target="_blank"}  | to make the visualizations
+[ggplot2](https://ggplot2.tidyverse.org/){target="_blank"} | to make visualizations
+[ggrepel](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"} | to add labels that don't overlap to plots
 [gganimate](https://gganimate.com/){target="_blank"}  | to make the plots interactive
 [RColorBrewer](https://cran.r-project.org/web/packages/RColorBrewer/index.html){target="_blank"}  | to have greater control over the color in our plots
 
@@ -281,7 +285,7 @@ knitr::include_graphics(here::here("img", "tempdata.png"))
 ```{r}
 #csv files:
 us_disaster <- readr::read_csv(here("docs/time-series-US.csv"), skip = 2)
-us_temperature <- readr::read_csv(here("docs/temperature.txt"), skip = 4, na ="-99")
+us_temperature <- readr::read_csv(here("docs/temperature2.csv"), skip = 4, na ="-99")
 ```
 
 Great! now we have imported all of the data that we will need.
@@ -349,8 +353,8 @@ We also want to rename the `country` variable to be capitalized. W We can use th
  CO2_emissions  %<>% 
    dplyr::rename(Country=country) %>%
    dplyr::mutate(Emissions = Emissions/1000, 
-          Year = as.numeric(Year)) %>%
-     rename(`CO2 Emissions (Mg)`= Emissions)
+          Year = as.numeric(Year))
+     #rename(`CO2 Emissions (Mg)`= Emissions)
 
 ```
 
@@ -637,7 +641,7 @@ df_wide %>%
 
 Nice, looks good!
 
-We will also make a long version of this data, where we will create an new variable called `Indicator` that will indicate what dataset the data came from and we will collapse the values from the columns called `CO2 Emissions (Mg)`, `GDP Growth/Capita (%)`, `Energy Use (kg, oil-eq./capita)`, and `Deaths/1000 People`. 
+We will also make a long version of this data, where we will create an new variable called `Indicator` that will indicate what dataset the data came from and we will collapse the values from the columns called ` Emissions`, (`CO2 Emissions (Mg)`), `GDP Growth/Capita (%)`, `Energy Use (kg, oil-eq./capita)`, and `Deaths/1000 People`. 
 
 
 ```{r}
@@ -755,7 +759,7 @@ We can check the time span of this data by refering back to the  [**What are the
 # CO2_world
 
 df_long %>%
-  filter(Indicator == "CO2 Emissions (Mg)") %>%
+  filter(Indicator == "Emissions") %>%
   ggplot(aes(x=Year, y= Value, group=Country)) +
   geom_line(alpha=0.2) + 
   labs(title = expression("Country CO"[2]*" Emissions per Year , 1751-2014"),
@@ -763,15 +767,16 @@ df_long %>%
   ylab("Emissions (1M Metric Tonnes)")
 
 CO2_world<-df_long %>%
-  filter(Indicator == "CO2 Emissions (Mg)",
+  filter(Indicator == "Emissions",
          Year <= 2014) %>%
   group_by(Year) %>%
   summarise(Value = sum(Value, na.rm = TRUE)) %>%
   ggplot(aes(x=Year, y=Value)) +
-  geom_line() + 
+  geom_line(size = 1.5) + 
   labs(title = expression("World CO"[2]*" Emissions per Year , 1751-2014"),
        caption = expression("Limited to reporting countries")) + 
-  ylab("Emissions (1M Metric Metric Tonnes)")
+  ylab("Emissions (1M Metric Metric Tonnes)")+
+  theme_linedraw()
 CO2_world
 
 ```
@@ -947,7 +952,7 @@ df_long %>%
   ggplot(aes(x= Year, y = n, color = Indicator)) +
   geom_line() +
     geom_vline(xintercept = 1980, linetype=2, color="black") +
-  geom_vline(xintercept = 2010, linetype=2, color="black") +
+   geom_vline(xintercept = 2014, linetype=2, color="black") +
   labs(title = "Countries with Complete Data per Year",
        subtitle = "Global Data") + 
   ylab("Countries") + 
@@ -964,7 +969,7 @@ df_long %>%
   summarise(Start=min(Year), End=max(Year)) %>%
   ggplot(aes(x=Indicator, y=End)) +
   geom_hline(yintercept = 1980, linetype=2, color="black") +
-  geom_hline(yintercept = 2010, linetype=2, color="black") +
+  geom_hline(yintercept = 2014, linetype=2, color="black") +
   geom_segment(aes(x=Indicator,
                    xend=Indicator,
                    yend=End,
@@ -1048,7 +1053,7 @@ animate(animation_3, fps = 10, duration = 5)
 ```{r, Animation_4, warning=FALSE, eval=FALSE}
 animation_4 <- df_long %>%
   filter(Type=="Global") %>%
-  filter(Indicator=="CO2 Emissions (Mg)") %>%
+  filter(Indicator=="Emissions") %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region, alpha=Region)) +
@@ -1066,12 +1071,14 @@ animation_4 <- df_long %>%
 animate(animation_4, fps = 10, duration = 5)
 ```
 
+To color our plot we will use the viridis color pallette which is compatible with color-blindness by using the `scale_fill_viridis_c()` function which is simply available by loading the `ggplot2` package.There are a few variations such as discreet as `_d`, or binned continuous as `_b`. The `_c` indicates a continuous scale. See [here](https://ggplot2.tidyverse.org/reference/scale_viridis.html) for more information.
+
 ```{r}
 Top10<-df_long %>%
   filter(Type=="Global") %>%
-  filter(Indicator=="CO2 Emissions (Mg)") %>%
+  filter(Indicator=="Emissions") %>%
   filter(Year>=1900) %>%
-  filter(Year<=2010) %>%
+  filter(Year<=2014) %>%
   group_by(Country) %>%
   mutate(max_val = max(Value)) %>%
   ungroup() %>%
@@ -1079,20 +1086,72 @@ Top10<-df_long %>%
   filter(rank<=10) %>%
   ggplot(aes(x=Year, y=fct_reorder(Country, Value, max))) +
   geom_tile(color="transparent", aes(fill=log(Value))) +
-  scale_fill_gradientn(colors = c("yellow","red","black")) +
-  scale_x_continuous(breaks = seq(1900,2010,by=5),
-                     labels = seq(1900,2010,by=5)) + 
+   # scale_fill_gradientn(colors = c("red","black")) +
+  scale_fill_viridis_c()+
+ # scale_fill_gradientn(colors = c("yellow","red","black")) +
+  scale_x_continuous(breaks = seq(1900,2014,by=5),
+                     labels = seq(1900,2014,by=5)) + 
   theme_classic() + 
   theme(axis.text.x = element_text(angle = 90),
         axis.title = element_blank(),
         legend.position = "bottom") + 
-  labs(title = "Top 10 Emissions-producing Countries in 2010 (1900-2010)",
-       subtitle = "Ordered by Emissions Produced in 2010",
+  labs(title = "Top 10 Emissions-producing Countries in 2010 (1900-2014)",
+       subtitle = "Ordered by Emissions Produced in 2014",
        fill = "Ln(CO2 Emissions (Mg))")
 
 Top10
 ```
+Interestingly, we can see that Germany had ver low imission rates at the end of World War II. We see that the US has consistently had high emission rates since 1900, but that the emission rates in China recently surpased that of the US.
+```{r}
 
+Top10b<-df_long %>%
+  filter(Type=="Global") %>%
+  filter(Indicator=="Emissions") %>%
+  filter(Year>=1900) %>%
+  filter(Year<=2014) %>%
+  group_by(Country) %>%
+  mutate(max_val = max(Value)) %>%
+  ungroup() %>%
+  mutate(rank=dense_rank(-max_val)) %>%
+  filter(rank<=10) %>%
+  ggplot(aes(x=Year, y=Value, color = Country)) +
+geom_line() +  # scale_fill_gradientn(colors = c("red","black")) +
+  scale_color_viridis_d()+
+  geom_text_repel(data = df_long %>%
+  filter(Type=="Global") %>%
+  filter(Indicator=="Emissions") %>%
+  filter(Year>=1900) %>%
+  filter(Year<=2014) %>%
+  group_by(Country) %>%
+  mutate(max_val = max(Value)) %>%
+  ungroup() %>%
+  mutate(rank=dense_rank(-max_val)) %>%
+  filter(rank<=10) %>%
+              filter(Year == last(Year)),
+            aes(label = Country,
+                x = Year,
+                y = Value),
+            size = 3,
+            alpha = 1,
+            nudge_x = 10,
+            direction = "y",
+            hjust = 1,
+            vjust = 1,
+            segment.size = 0.25,
+            segment.alpha = 0.25,
+            force = 1)+
+  theme_linedraw() + 
+  theme(axis.text.x = element_text(angle = 90),
+        axis.title = element_blank(),
+        legend.position = "none") + 
+  labs(title = "Top 10 Emissions-producing Countries in 2010 (1900-2014)",
+       subtitle = "Ordered by Emissions Produced in 2014",
+       fill = "Ln(CO2 Emissions (Mg))")
+
+Top10b
+
+
+```
 ## US-specific
 
 ```{r}
@@ -1131,21 +1190,21 @@ US_Indicators <- df_long %>%
   theme_classic() + 
   theme(axis.text.x = element_text(angle = 90),
         axis.title.y = element_blank()) + 
-  labs(title = "US-specific Indicators (1980-2010)")
+  labs(title = "US-specific Indicators")
 US_Indicators
 ```
 
 ```{r}
 df_long_us %>%
   filter(Year>=1980) %>%
-  filter(Year<=2010) %>%
+  filter(Year<=2014) %>%
   ggplot(aes(x=Year, y=`Change (%)`, color=Indicator, fill="transparent")) + 
   geom_hline(yintercept=0.8, linetype=2) +
   geom_hline(yintercept=1.2, linetype=2) +
   geom_hline(yintercept = 1, linetype=3) +
   geom_line(size=0.5) + 
-  scale_x_continuous(breaks = seq(1980,2010,by=5),
-                     labels = seq(1980,2010,by=5)) +
+  scale_x_continuous(breaks = seq(1980,2014,by=5),
+                     labels = seq(1980,2014,by=5)) +
   scale_y_continuous(breaks = seq(-500,1250, by=250),
                      labels = seq(-500,1250, by=250)) +
   theme_classic() +
@@ -1158,17 +1217,17 @@ df_long_us %>%
 
 df_long_us %>%
   filter(Year>=1980) %>%
-  filter(Year<=2010) %>%
+  filter(Year<=2014) %>%
   filter(Indicator=="Temperature (Fahrenheit)"|
            Indicator=="Energy Use (kg, oil-eq./capita)"|
-           Indicator=="CO2 Emissions (Mg)") %>%
+           Indicator=="Emissions") %>%
   ggplot(aes(x=Year, y=`Change (%)`, color=Indicator)) + 
   geom_hline(yintercept=0.8, linetype=2) +
   geom_hline(yintercept=1.2, linetype=2) +
   geom_hline(yintercept = 1, linetype=3) +
   geom_line(size=1) +
-  scale_x_continuous(breaks = seq(1980,2010,by=5),
-                     labels = seq(1980,2010,by=5)) +
+  scale_x_continuous(breaks = seq(1980,2014,by=5),
+                     labels = seq(1980,2014,by=5)) +
   scale_y_continuous(breaks = seq(-10,10, by=1),
                      labels = seq(-10,10, by=1),
                      limits = c(-10,10)) +
@@ -1185,7 +1244,7 @@ df_long_us %>%
   filter(Year<=2010) %>%
   filter(Indicator=="Temperature (Fahrenheit)"|
            Indicator=="Energy Use (kg, oil-eq./capita)"|
-           Indicator=="CO2 Emissions (Mg)") %>%
+           Indicator=="Emissions") %>%
   ggplot(aes(x=Year, y=`Change (%)`, color=Indicator)) + 
   geom_hline(yintercept=0.8, linetype=2) +
   geom_hline(yintercept=1.2, linetype=2) +
@@ -1209,7 +1268,7 @@ df_long_us %>%
 df_long_us %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
-  filter(Indicator=="CO2 Emissions (Mg)"|
+  filter(Indicator=="Emissions"|
            Indicator=="Temperature (Fahrenheit)") %>%
   ggplot(aes(x=Year, y=Value)) +
   geom_line() + 
@@ -1222,7 +1281,7 @@ df_long_us %>%
   labs(title="US Emissions and Temperatures (1980-2010)")
 
 df_long_us %>%
-  filter(Indicator=="CO2 Emissions (Mg)"|
+  filter(Indicator=="Emissions"|
            Indicator=="Temperature (Fahrenheit)") %>%
   ggplot(aes(x=Year, y=Value)) +
   geom_vline(xintercept = 1980, linetype=2, color="black") + 
@@ -1244,7 +1303,7 @@ df_long_us %>%
 ```{r}
 df_long_us %>%
   filter(Indicator=="Temperature (Fahrenheit)"|
-           Indicator=="CO2 Emissions (Mg)") %>%
+           Indicator=="Emissions") %>%
   ggplot(aes(x=Year, y=`Change (%)`)) +
   annotate("rect", xmin=-Inf, xmax=Inf, ymin=0, ymax=Inf, alpha=0.25, fill="green") +
   annotate("rect", xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=0, alpha=0.25, fill="red") +
