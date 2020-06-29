@@ -220,14 +220,14 @@ The data that we will be using from Gapminder was obtained from the [World Bank]
 In addition we will use some data that is specific to the United States from the [National Oceanic and Atmospheric Administration (NOAA)] (https://www.noaa.gov/), which is an agency that collects weather and climate data.
 
 
-Data   | Source         | Orginal Source   | Description | Citation                                                                    
----------- |-------------|-------------|-------------|--------
-**CO2 emissions**  | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [Carbon Dioxid Information Analysis Center (CDIAC)](https://cdiac.ess-dive.lbl.gov/){target="_blank"}  |  CO2 emissions in tonnes or metric tons (equivalent to approximately 2,204.6 pounds) per person by country from 1751 to 2014 | NA
-**GDP per capita, yearly growth**  | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD.ZG){target="_blank"}  |  [Growth Domestic Product](https://www.investopedia.com/terms/g/gdp.asp#:~:text=Gross%20Domestic%20Product%20(GDP)%20is%20the%20monetary%20value%20of%20all,expenditures%2C%20production%2C%20or%20incomes.){target="_blank"}  (which is an overall measure of the health of nation's economy) per person by country from 1801 to 2019 | NA
-**Energy use per person**  | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/EG.USE.PCAP.KG.OE){target="_blank"}  |  Use of primary energy before transformation to other end-use fules, by country from 1960 to 2015 | NA
-**Crude Mortality Rate**  | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN){target="_blank"} |  Death rate per 1,000 people by country from 1960 to 2018 | NA 
-**US Natural Disasters**  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}| [The National Oceanic and Atmospheric Administration (NOAA) ](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}|  US data from 1980 to 2019 including about: <br> -- Droughts <br> -- Floods <br> -- Freezes <br> -- Severe Storms <br> -- Tropical Cyclones <br> -- Wildfires<br> -- Winter Storms | NOAA National Centers for Environmental Information (NCEI) U.S. Billion-Dollar Weather and Climate Disasters (2020). https://www.ncdc.noaa.gov/billions/, DOI: 10.25921/stkw-7w73
-**Temperature**  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/national/time-series){target="_blank"}  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/national/time-series){target="_blank"} | US National yearly average temperature (in Fahrenheit) from 1895 to 2019 | NOAA National Centers for Environmental information, Climate at a Glance: National Time Series, published June 2020, retrieved on June 26, 2020 from https://www.ncdc.noaa.gov/cag/
+Data   | Time span | Source  | Orginal Source   | Description | Citation                                                                    
+---------- |-------------|-------------|-------------|--------|-------
+**CO2 emissions**  |1751 to 2014 | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [Carbon Dioxid Information Analysis Center (CDIAC)](https://cdiac.ess-dive.lbl.gov/){target="_blank"}  |  CO2 emissions in tonnes or metric tons (equivalent to approximately 2,204.6 pounds) per person by country| NA
+**GDP per capita, yearly growth** | 1801 to 2019| [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD.ZG){target="_blank"}  |  [Growth Domestic Product](https://www.investopedia.com/terms/g/gdp.asp#:~:text=Gross%20Domestic%20Product%20(GDP)%20is%20the%20monetary%20value%20of%20all,expenditures%2C%20production%2C%20or%20incomes.){target="_blank"}  (which is an overall measure of the health of nation's economy) per person by country| NA
+**Energy use per person** |1960 to 2015 | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/EG.USE.PCAP.KG.OE){target="_blank"}  |  Use of primary energy before transformation to other end-use fules, by country | NA
+**Crude Mortality Rate** |1960 to 2018 | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN){target="_blank"} |  Death rate per 1,000 people by country | NA 
+**US Natural Disasters** | 1980 to 2019 | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}| [The National Oceanic and Atmospheric Administration (NOAA) ](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}|  US data about: <br> -- Droughts <br> -- Floods <br> -- Freezes <br> -- Severe Storms <br> -- Tropical Cyclones <br> -- Wildfires<br> -- Winter Storms | NOAA National Centers for Environmental Information (NCEI) U.S. Billion-Dollar Weather and Climate Disasters (2020). https://www.ncdc.noaa.gov/billions/, DOI: 10.25921/stkw-7w73
+**Temperature**  | 1895 to 2019|  [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/national/time-series){target="_blank"}  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/national/time-series){target="_blank"} | US National yearly average temperature (in Fahrenheit) from 1895 to 2019 | NOAA National Centers for Environmental information, Climate at a Glance: National Time Series, published June 2020, retrieved on June 26, 2020 from https://www.ncdc.noaa.gov/cag/
 
 
 To obtain the temperature data, annual average temperatures were selected as shown in this image:
@@ -235,7 +235,20 @@ To obtain the temperature data, annual average temperatures were selected as sho
 knitr::include_graphics(here::here("img", "temp.png"))
 ```
 
-https://www.ncdc.noaa.gov/cag/national/time-series/
+
+Importantly, notice that the data we would like to use span different time periods:
+
+Data   | Time span                                                                     
+---------- |-------------
+**CO2 emissions**  |1751 to 2014 
+**GDP per capita, yearly growth** | 1801 to 2019
+**Energy use per person** |1960 to 2015 
+**Crude Mortality Rate** |1960 to 2018 
+**US Natural Disasters** | 1980 to 2019 
+**Temperature**  | 1895 to 2019
+
+
+
 
 ## **Data Import**
 *** 
@@ -705,68 +718,99 @@ head(df_long)
 *** 
 Now we will create some simple plots to examine the data.
 
-### CO2 plots
+### CO2 Emissions (1751-2014)
 
-We will rename the `Emissions` variable so that it will include more information in our plot.
+We can check the time span of this data by refering back to the  [**What are the data?**] section.
 
 ```{r}
 
-CO2_emissions %>%
-  # rename(`CO2 Emissions (Mg)`= Emissions) %>%
-ggplot(aes(x=Year, y=`CO2 Emissions (Mg)`, group=Country)) +
+# CO2_emissions %>%
+#   # rename(`CO2 Emissions (Mg)`= Emissions) %>%
+# ggplot(aes(x=Year, y=`CO2 Emissions (Mg)`, group=Country)) +
+#   geom_line(alpha=0.2) + 
+#   labs(title = expression("Country CO"[2]*" Emissions per Year , 1751-2014"),
+#        caption = expression("Limited to reporting countries")) + 
+#   ylab("Emissions (1M Metric Tonnes)")
+# 
+# CO2_world<-CO2_emissions %>%
+#  # rename(`CO2 Emissions (Mg)`= Emissions) %>%
+#   group_by(Year) %>%
+#   summarise(`CO2 Emissions (Mg)` = sum(`CO2 Emissions (Mg)`, na.rm = TRUE)) %>%
+#   ggplot(aes(x=Year, y=`CO2 Emissions (Mg)`)) +
+#   geom_line() + 
+#   labs(title = expression("World CO"[2]*" Emissions per Year , 1751-2014"),
+#        caption = expression("Limited to reporting countries")) + 
+#   ylab("Emissions (1M Metric Metric Tonnes)")
+# CO2_world
+
+df_long %>%
+  filter(Indicator == "CO2 Emissions (Mg)") %>%
+  ggplot(aes(x=Year, y= Value, group=Country)) +
   geom_line(alpha=0.2) + 
   labs(title = expression("Country CO"[2]*" Emissions per Year , 1751-2014"),
        caption = expression("Limited to reporting countries")) + 
   ylab("Emissions (1M Metric Tonnes)")
 
-CO2_world<-CO2_emissions %>%
- # rename(`CO2 Emissions (Mg)`= Emissions) %>%
+CO2_world<-df_long %>%
+  filter(Indicator == "CO2 Emissions (Mg)",
+         Year <= 2014) %>%
   group_by(Year) %>%
-  summarise(`CO2 Emissions (Mg)` = sum(`CO2 Emissions (Mg)`, na.rm = TRUE)) %>%
-  ggplot(aes(x=Year, y=`CO2 Emissions (Mg)`)) +
+  summarise(Value = sum(Value, na.rm = TRUE)) %>%
+  ggplot(aes(x=Year, y=Value)) +
   geom_line() + 
   labs(title = expression("World CO"[2]*" Emissions per Year , 1751-2014"),
        caption = expression("Limited to reporting countries")) + 
   ylab("Emissions (1M Metric Metric Tonnes)")
 CO2_world
 
-df_long %>%
-  filter(Indicator == "CO2 Emissions (Mg)") %>%
-ggplot(aes(x=Year, y= Value, group=Country)) +
-  geom_line(alpha=0.2) + 
-  labs(title = expression("Country CO"[2]*" Emissions per Year , 1751-2014"),
-       caption = expression("Limited to reporting countries")) + 
-  ylab("Emissions (1M Metric Tonnes)")
-
-
 ```
 
 
-### Yearly Growth in GDP per Capita
+### Yearly Growth in GDP per Capita (1801 to 2019)
 
 ```{r}
-ggplot(gdp_growth, aes(x=Year, y=`GDP Growth/Capita (%)`, group=Country)) +
+# ggplot(gdp_growth, aes(x=Year, y=`GDP Growth/Capita (%)`, group=Country)) +
+#   geom_line(alpha=0.2) + 
+#   labs(title = expression("Country GDP Growth per Capita per Year (Annual %), 1801-2019"),
+#        caption = expression("Limited to reporting countries")) + 
+#   ylab("GDP Growth per Capita (Annual %)")
+# 
+# gdp_growth %>%
+#   group_by(Year) %>%
+#   summarise(`GDP Growth/Capita (%)` = mean(`GDP Growth/Capita (%)`, na.rm = TRUE)) %>%
+#   ggplot(aes(x=Year, y=`GDP Growth/Capita (%)`)) +
+#   geom_line() + 
+#   labs(title = expression("Mean Country GDP Growth per Capita per Year (Annual %), 1801-2019"),
+#        caption = expression("Limited to reporting countries")) + 
+#   ylab("GDP Growth per Capita (Annual %)")
+
+df_long %>%
+  filter(Indicator == "GDP Growth/Capita (%)", 
+         Year >= 1801) %>%
+ggplot(aes(x=Year, y=Value, group=Country)) +
   geom_line(alpha=0.2) + 
   labs(title = expression("Country GDP Growth per Capita per Year (Annual %), 1801-2019"),
        caption = expression("Limited to reporting countries")) + 
   ylab("GDP Growth per Capita (Annual %)")
 
-gdp_growth %>%
+df_long %>%
+  filter(Indicator == "GDP Growth/Capita (%)",
+         Year >= 1801) %>%
   group_by(Year) %>%
-  summarise(`GDP Growth/Capita (%)` = mean(`GDP Growth/Capita (%)`, na.rm = TRUE)) %>%
-  ggplot(aes(x=Year, y=`GDP Growth/Capita (%)`)) +
+  summarise(Value = mean(Value, na.rm = TRUE)) %>%
+  ggplot(aes(x=Year, y=Value)) +
   geom_line() + 
   labs(title = expression("Mean Country GDP Growth per Capita per Year (Annual %), 1801-2019"),
        caption = expression("Limited to reporting countries")) + 
   ylab("GDP Growth per Capita (Annual %)")
 ```
 
-### Energy Use per Person
+### Energy Use per Person (1960 to 2015)
 
 ```{r}
 ggplot(energy_use, aes(x=Year, y=`Energy Use (kg, oil-eq./capita)`, group=Country)) +
   geom_line(alpha=0.2) + 
-  labs(title = expression("Country Energy Use (kg of Oil Equivalent per Capita), 1960-2015",),
+  labs(title = expression("Country Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015",),
        caption = expression("Limited to reporting countries")) + 
   ylab("Energy Use (kg of Oil Equivalent per Capita)")
 
@@ -775,7 +819,30 @@ energy_use %>%
   summarise(`Energy Use (kg, oil-eq./capita)` = sum(`Energy Use (kg, oil-eq./capita)`, na.rm = TRUE)) %>%
   ggplot(aes(x=Year, y=`Energy Use (kg, oil-eq./capita)`)) +
   geom_line() + 
-  labs(title = expression("Worldwide Energy Use (kg of Oil Equivalent per Capita), 1960-2015"),
+  labs(title = expression("Worldwide Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015"),
+       caption = expression("Limited to reporting countries")) + 
+  ylab("Energy Use (kg of Oil Equivalent per Capita)")
+
+
+df_long %>%
+  filter(Indicator == "Energy Use (kg, oil-eq./capita)",
+              Year >= 1960, 
+              Year <= 2015) %>%
+ggplot(aes(x=Year, y= Value, group=Country)) +
+  geom_line(alpha=0.2) + 
+  labs(title = expression("Country Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015",),
+       caption = expression("Limited to reporting countries")) + 
+  ylab("Energy Use (kg of Oil Equivalent per Capita)")
+
+df_long %>%
+  filter(Indicator == "Energy Use (kg, oil-eq./capita)",
+              Year >= 1960, 
+              Year <= 2015) %>%
+  group_by(Year) %>%
+  summarise(Value = sum(Value, na.rm = TRUE)) %>%
+  ggplot(aes(x=Year, y=Value)) +
+  geom_line() + 
+  labs(title = expression("Worldwide Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015"),
        caption = expression("Limited to reporting countries")) + 
   ylab("Energy Use (kg of Oil Equivalent per Capita)")
 ```
