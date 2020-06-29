@@ -316,6 +316,17 @@ dplyr::glimpse()
 ```
 ####
 
+
+  Indicator                           n
+  <chr>                           <int>
+1 CO2 Emissions (Mg)              57246
+2 Deaths/1000 People              57246
+3 Disasters                          40
+4 Energy Use (kg, oil-eq./capita) 57246
+5 GDP Growth/Capita (%)           57246
+6 Temperature (Fahrenheit)          116
+
+
 We can see that we have a large [tibble](https://tibble.tidyverse.org/). A tibble is the tidyverse version of a data frame. It is essentially a table with variable information arranged as columns, and individual observations arranged as rows. We can see that the tibble gives us information about the class of each variable.  For example the `country` variable is made up of character (abbreviated as chr) values. We see that we have 265 different country variables and CO2 emission values for 192 different years (from 1751 to 2014). Recall that the values are emissions in metric tons also called tonnes. We can see that there are fewer `NA` values for later years.
 
 Now we will modify this data to make it more usable for making visualizations. One thing we will use is the `%<>%` opperator which is from the `magrittr` package. This allows us to use our `CO2_emissions` data and reassign it to a modified version at the same time. 
@@ -701,7 +712,7 @@ AVOCADO Hmmm the top plot changes completely if we drop countries with na values
 df_long_with_miss <- df_long %>%
   arrange(Country)
 
-df_long_ <- df_long %>%
+df_long<- df_long %>%
   filter(complete.cases(.)) %>%
   arrange(Country)
 
@@ -808,20 +819,20 @@ df_long %>%
 ### Energy Use per Person (1960 to 2015)
 
 ```{r}
-ggplot(energy_use, aes(x=Year, y=`Energy Use (kg, oil-eq./capita)`, group=Country)) +
-  geom_line(alpha=0.2) + 
-  labs(title = expression("Country Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015",),
-       caption = expression("Limited to reporting countries")) + 
-  ylab("Energy Use (kg of Oil Equivalent per Capita)")
-
-energy_use %>%
-  group_by(Year) %>%
-  summarise(`Energy Use (kg, oil-eq./capita)` = sum(`Energy Use (kg, oil-eq./capita)`, na.rm = TRUE)) %>%
-  ggplot(aes(x=Year, y=`Energy Use (kg, oil-eq./capita)`)) +
-  geom_line() + 
-  labs(title = expression("Worldwide Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015"),
-       caption = expression("Limited to reporting countries")) + 
-  ylab("Energy Use (kg of Oil Equivalent per Capita)")
+# ggplot(energy_use, aes(x=Year, y=`Energy Use (kg, oil-eq./capita)`, group=Country)) +
+#   geom_line(alpha=0.2) + 
+#   labs(title = expression("Country Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015",),
+#        caption = expression("Limited to reporting countries")) + 
+#   ylab("Energy Use (kg of Oil Equivalent per Capita)")
+# 
+# energy_use %>%
+#   group_by(Year) %>%
+#   summarise(`Energy Use (kg, oil-eq./capita)` = sum(`Energy Use (kg, oil-eq./capita)`, na.rm = TRUE)) %>%
+#   ggplot(aes(x=Year, y=`Energy Use (kg, oil-eq./capita)`)) +
+#   geom_line() + 
+#   labs(title = expression("Worldwide Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015"),
+#        caption = expression("Limited to reporting countries")) + 
+#   ylab("Energy Use (kg of Oil Equivalent per Capita)")
 
 
 df_long %>%
@@ -852,30 +863,71 @@ df_long %>%
 
 ```{r}
 
-ggplot(mortality, aes(x=Year, y=`Deaths/1000 People`, group=Country)) +
+df_long %>%
+  filter(Indicator == "Deaths/1000 People",
+              Year >= 1960, 
+              Year <= 2019) %>%
+  ggplot(aes(x=Year, y=Value, group=Country)) +
   geom_line(alpha=0.2) + 
-  labs(title = expression("Country Crude Mortality Rate (per 1000 Persons), 1960-2019",),
+  labs(title = expression("Country Crude Mortality Rate (per 1000 Persons), 1960 to 2019"),
        caption = expression("Limited to reporting countries")) + 
   ylab("Crude Mortality Rate (per 1000 Persons)")
 
-mortality %>%
-  group_by(Year) %>%
-  summarise(`Deaths/1000 People` = mean(`Deaths/1000 People`, na.rm = TRUE)) %>%
-  ggplot(aes(x=Year, y=`Deaths/1000 People`)) +
+
+df_long %>%
+  filter(Indicator == "Deaths/1000 People",
+              Year >= 1960, 
+              Year <= 2019) %>%
+   group_by(Year) %>%
+  summarise(Value = mean(Value, na.rm = TRUE)) %>%
+  ggplot(aes(x=Year, y=Value)) +
   geom_line() + 
-  labs(title = expression("Mean Country Crude Mortality Rate (per 1000 Persons), 1960-2019",),
+  labs(title = expression("Mean Country Crude Mortality Rate (per 1000 Persons), 1960 to 2019"),
        caption = expression("Limited to reporting countries")) + 
   ylab("Crude Mortality Rate (per 1000 Persons)")
+  
 ```
 
 ## US-specific Data
 
 ### Disasters
 
+```{r}
+
+df_long %>%
+  filter(Indicator == "Disasters",
+              Year >= 1980, 
+              Year <= 2019) %>%
+  ggplot(aes(x=Year, y=Value, group=Country)) +
+  geom_line() + 
+  geom_smooth(method = "lm") +
+  labs(title = expression("US Disasters, 1980 to 2019"),
+       subtitle = expression("Drougths, Floods, Freezes, Severe Storms. Tropical Cyclones, Wildfires, and Winter Storms")) + 
+  ylab("Disaster Count")
+  
+```
+
+### Temperature
+
+```{r}
+
+df_long %>%
+  filter(Indicator == "Temperature (Fahrenheit)",
+              Year >= 1895, 
+              Year <= 2019) %>%
+  ggplot(aes(x=Year, y=Value, group=Country)) +
+  geom_line() + 
+  geom_smooth(method = "lm") +
+  labs(title = expression("US Average Annual Temperature, 1895 to 2019"))+
+  ylab("Temperature (Fahrenheit)")
+
+```
 
 
 ## Data Visualization
 
+
+Now Let's try putting the data together. 
 
 ```{r, eval=FALSE}
 ggplot(df_long, aes(x=Year, y=Value, group=Country)) +
@@ -885,17 +937,17 @@ ggplot(df_long, aes(x=Year, y=Value, group=Country)) +
   labs(title="Distribution of Indicators by Year and Value")
 ```
 
-## Subsetting the data
+## Time spans of data
 
 ```{r}
 df_long %>%
-  filter(Type=="Global") %>%
-  group_by(Year,Indicator) %>%
+  filter(Type == "Global") %>%
+  group_by(Year, Indicator, .drop=FALSE) %>%
   tally() %>%
-  ggplot(aes(x=Year, y=n, color=Indicator)) +
-  geom_vline(xintercept = 1980, linetype=2, color="black") +
-  geom_vline(xintercept = 2010, linetype=2, color="black") +
+  ggplot(aes(x= Year, y = n, color = Indicator)) +
   geom_line() +
+    geom_vline(xintercept = 1980, linetype=2, color="black") +
+  geom_vline(xintercept = 2010, linetype=2, color="black") +
   labs(title = "Countries with Complete Data per Year",
        subtitle = "Global Data") + 
   ylab("Countries") + 
@@ -1049,8 +1101,8 @@ df_long_us <- df_long %>%
 
 # Approximated derivative function)
 df_long_us <- df_long_us %>%
-  filter(Year>=1900,
-         Year<=2010) %>%
+  filter(Year >= 1900,
+         Year <= 2010) %>%
   group_by(Indicator) %>%
   mutate("Change (%)"=((Value/lag(Value))*100)-100,
          Mean=mean(Value),
@@ -1065,14 +1117,17 @@ df_long_us <- df_long_us %>%
 ```
 
 ```{r}
-US_Indicators<-df_long_us %>%
+US_Indicators <- df_long %>%
+  filter(Country=="United States")%>%
+#US_Indicators<-df_long_us %>%
   filter(Year>=1980) %>%
-  filter(Year<=2010) %>%
+ # filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value)) + 
   geom_line() + 
+  geom_smooth(method = "loess") +
   facet_wrap(Indicator~., ncol=2, nrow=3, scales = "free_y") + 
-  scale_x_continuous(breaks = seq(1980,2010,by=5),
-                     labels = seq(1980,2010,by=5)) +
+  #scale_x_continuous(breaks = seq(1980,2010,by=5),
+  #                   labels = seq(1980,2010,by=5)) +
   theme_classic() + 
   theme(axis.text.x = element_text(angle = 90),
         axis.title.y = element_blank()) + 
