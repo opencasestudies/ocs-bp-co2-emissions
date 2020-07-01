@@ -288,6 +288,7 @@ knitr::include_graphics(here::here("img", "tempdata.png"))
 #csv files:
 us_disaster <- readr::read_csv(here("docs/time-series-US.csv"), skip = 2)
 us_temperature <- readr::read_csv(here("docs/temperature.csv"), skip = 4, na ="-99")
+mortality2 <-readr::read_csv(here("docs/mortality.csv"), skip = 5)
 ```
 
 Great! now we have imported all of the data that we will need.
@@ -454,13 +455,12 @@ energy_use %<>%
 
 ```
 
-#### {.scrollable}
+
 ```{r}
-# Scroll through the output!
 energy_use %>%
-glimpse()
+tail()
 ```
-####
+
 
 ## Crude Mortality Rate
 
@@ -786,13 +786,18 @@ df_long %>%
   labs(title = "Country" ~CO[2]~ "Emissions per Year, 1751-2014",
      caption = "Limited to reporting countries",
            y = "Emissions (1M Metric Tons)") +
+  geom_line(data = df_long %>%
+  filter(Indicator == "Emissions",
+         Country == "United States"), aes(x=Year, y=Value, color = Country)) +
+  scale_colour_manual(values=c("red")) +
   theme_linedraw() +
   theme(axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12),
        axis.title.x = element_text(size = 12),
        axis.title.y = element_text(size = 12),
        plot.caption = element_text(size = 12),
-         plot.title = element_text(size = 16))
+         plot.title = element_text(size = 16),
+       legend.title = element_blank())
 ```
 
 Great! We've created our first plot. We can see that many countries show a dramatic increase in emissions over time with a handful of countries with particularly high levels.
@@ -840,13 +845,18 @@ df_long %>%
   labs(title = "Country GDP Growth per Capita per Year (Annual %), 1801-2019",
      caption = "Limited to reporting countries",
            y = "GDP Growth per Capita (Annual %)") +
+  geom_line(data = df_long %>%
+  filter(Indicator == "GDP",
+         Country == "United States"), aes(x=Year, y=Value, color = Country)) +
+  scale_colour_manual(values=c("red")) +
   theme_linedraw() +
   theme(axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12),
        axis.title.x = element_text(size = 12),
        axis.title.y = element_text(size = 12),
        plot.caption = element_text(size = 12),
-         plot.title = element_text(size = 16))
+         plot.title = element_text(size = 16),
+       legend.title = element_blank())
 ```
 We can see that the variation in GDP has become greater over time.
 
@@ -879,6 +889,10 @@ df_long %>%
               Year <= 2015) %>%
 ggplot(aes(x=Year, y= Value, group=Country)) +
   geom_line(alpha=0.2) + 
+  geom_line(data = df_long %>%
+  filter(Indicator == "Energy",
+         Country == "United States"), aes(x=Year, y=Value, color = Country)) +
+  scale_colour_manual(values=c("red")) +
   labs(title = "Country Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015",
      caption = "Limited to reporting countries", 
            y = "Energy Use (kg of Oil Equivalent per Capita)")+
@@ -888,7 +902,8 @@ ggplot(aes(x=Year, y= Value, group=Country)) +
        axis.title.x = element_text(size = 12),
        axis.title.y = element_text(size = 12),
        plot.caption = element_text(size = 12),
-         plot.title = element_text(size = 15))
+         plot.title = element_text(size = 15),
+       legend.title = element_blank())
 ```
 
 ```{r}
@@ -900,6 +915,7 @@ df_long %>%
   summarise(Value = sum(Value, na.rm = TRUE)) %>%
   ggplot(aes(x=Year, y=Value)) +
   geom_line() + 
+  
   labs(title = "Worldwide Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015",
      caption = "Limited to reporting countries",
            y = "Energy Use (kg of Oil Equivalent per Capita)")+
@@ -917,12 +933,18 @@ df_long %>%
 
 ```{r}
 
-df_long %>%
+Mortality <-df_long %>%
   filter(Indicator == "Deaths",
               Year >= 1960, 
               Year <= 2019) %>%
   ggplot(aes(x=Year, y=Value, group=Country)) +
   geom_line(alpha=0.2) + 
+  geom_line(data =df_long %>%
+  filter(Indicator == "Deaths",
+         Country == "United States",
+              Year >= 1960, 
+              Year <= 2019), aes(x=Year, y=Value, color = Country)) +
+  scale_colour_manual(values=c("red")) +
   labs(title = "Country Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
      caption = "Limited to reporting countries",
            y = "Crude Mortality Rate (per 1000 Persons)")+
@@ -932,7 +954,109 @@ df_long %>%
        axis.title.x = element_text(size = 12),
        axis.title.y = element_text(size = 12),
        plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16),
+       legend.title = element_blank())
+
+Mortality 
+```
+```{r}
+df_long %>%
+  filter(Indicator == "Deaths", Year == 1980) %>% arrange(-Value)
+
+df_long %>%
+  filter(Indicator == "Deaths", Year == 1995) %>% arrange(-Value)
+
+df_long %>%
+   filter(Indicator == "Deaths", Year == 2017) %>% arrange(-Value)
+```
+
+```{r}
+df_long %>%
+  filter(Indicator == "Deaths",
+            Country == "Cambodia") %>%
+  ggplot(aes(x=Year, y=Value)) +
+  geom_line() + 
+  labs(title = "Cambodia Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
+     caption = "Limited to reporting countries",
+           y = "Crude Mortality Rate (per 1000 Persons)")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
          plot.title = element_text(size = 16))
+
+df_long %>%
+  filter(Indicator == "Deaths",
+            Country == "Rwanda") %>%
+  ggplot(aes(x=Year, y=Value)) +
+  geom_line() + 
+  labs(title = "Rwanda Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
+     caption = "Limited to reporting countries",
+           y = "Crude Mortality Rate (per 1000 Persons)")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
+
+df_long %>%
+  filter(Indicator == "Deaths",
+            Country %in% c("United States", "Rwanda", "Cambodia", "Qatar", "Niger", "Israel", "Mexico", "China"))%>%
+  ggplot(aes(x=Year, y=Value)) +
+  geom_line() + 
+  facet_grid(~ Country)
+  labs(title = " Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
+     caption = "Limited to reporting countries",
+           y = "Crude Mortality Rate (per 1000 Persons)")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
+
+
+df_long %>%
+  filter(Indicator == "Deaths",
+            Country %in% c("United States", "Rwanda", "Cambodia", "Qatar", "Niger", "Israel", "Mexico", "China"))%>%
+  ggplot(aes(x=Year, y=Value, color = Country)) +
+  geom_line() + 
+  labs(title = " Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
+     caption = "Limited to reporting countries",
+           y = "Crude Mortality Rate (per 1000 Persons)")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
+
+
+df_long %>%
+  filter(Indicator == "Deaths",
+            Country %in% c("United States", "Rwanda", "Cambodia", "Qatar", "Niger", "Israel", "Mexico", "China"))%>%
+    filter(Year > 2015) %>%
+  ggplot(aes(x=Year, y=Value, color = Country)) +
+  geom_line() + 
+  labs(title = " Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
+     caption = "Limited to reporting countries",
+           y = "Crude Mortality Rate (per 1000 Persons)")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
+  
+  
+  
 ```
 
 ```{r}
@@ -944,8 +1068,8 @@ df_long %>%
    group_by(Year) %>%
   summarise(Value = mean(Value, na.rm = TRUE)) %>%
   ggplot(aes(x=Year, y=Value)) +
-  geom_line() + 
-  labs(title = "Mean Country Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
+  geom_line(size = 1.4) + 
+  labs(title = "Mean Country Crude Mortality Rate (per 1000 Persons), 1960 to 2018",
      caption = "Limited to reporting countries",
            y = "Crude Mortality Rate (per 1000 Persons)")+
   theme_linedraw() +
@@ -968,7 +1092,7 @@ df_long %>%
               Year <= 2019) %>%
   ggplot(aes(x=Year, y=Value, group=Country)) +
   geom_line() + 
-  geom_smooth(method = "lm") +
+  geom_smooth(method = "loess") +
   labs(title = "US Disasters, 1980 to 2019",
     subtitle = "Drougths, Floods, Freezes, Severe Storms. Tropical Cyclones, Wildfires, and Winter Storms", 
            y = "Disaster Count")+
@@ -991,7 +1115,7 @@ df_long %>%
               Year <= 2019) %>%
   ggplot(aes(x=Year, y=Value, group=Country)) +
   geom_line() + 
-  geom_smooth(method = "lm") +
+  geom_smooth(method = "loess") +
   labs(title = "US Average Annual Temperature, 1895 to 2019",
            y =  "Temperature (Fahrenheit)")+
   theme_linedraw() +
@@ -1009,10 +1133,13 @@ df_long %>%
 
 Now Let's try putting the data together. 
 
-```{r, eval=FALSE}
+```{r,fig.width=10, fig.height=10}
 ggplot(df_long, aes(x=Year, y=Value, group=Country)) +
   geom_line(alpha=0.2) + 
-  facet_grid(Indicator~., scales = "free_y") +
+  geom_line(data = df_long %>%
+  filter(Country == "United States"), aes(x=Year, y=Value, color = Country)) +
+  scale_colour_manual(values=c("red")) +
+  facet_wrap(Indicator~., scales = "free_y",strip.position="right", ncol = 1) +
   labs(title="Distribution of Indicators by Year and Value", 
        y = "Indicator Value")+
   theme_linedraw() +
@@ -1024,7 +1151,11 @@ ggplot(df_long, aes(x=Year, y=Value, group=Country)) +
          plot.title = element_text(size = 16))
 ```
 
+This looks a bit awkward, because the eacy type of data spans a different time spans.
+
 ## Time spans of data
+
+Let's take a look at the reporting countries for each year for each type of data.
 
 ```{r}
 df_long %>%
@@ -1052,6 +1183,8 @@ df_long %>%
          plot.title = element_text(size = 16),
        legend.title = element_blank())
 ```
+
+We can see that all of our data spans from 1980 to 2014.
 
 ```{r}
 df_long %>%
@@ -1081,7 +1214,7 @@ df_long %>%
          plot.title = element_text(size = 16))
 ```
 
-```{r, Animation_1, warning=FALSE, eval=FALSE}
+```{r, Animation_1, warning=FALSE, eval=TRUE}
 animation_1 <- df_long %>%
   filter(Type=="Global") %>%
   filter(Indicator=="Deaths") %>%
@@ -1111,7 +1244,7 @@ animation_2 <- df_long %>%
   ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region, alpha=Region)) +
   geom_point() +
   scale_color_manual(values = c("Red","Black")) +
-  scale_alpha_manual(values = c(0.1, 1)) +
+  scale_alpha_manual(values = c(0.5, 1)) +
   scale_size_manual(values = c(0.25, 2)) +
   labs(title="Distribution of Indicators by Year and Value, 1980-2010",
        y = "Energy Use per Capita") +
@@ -1346,8 +1479,8 @@ df_long_us %>%
   ggplot(aes(x=Year, y=`Change (%)`, color=Indicator)) + 
   geom_hline(yintercept=0.8, linetype=2) +
   geom_hline(yintercept=1.2, linetype=2) +
-  geom_hline(yintercept = 1, linetype=3) +
-  geom_smooth(size=1, alpha=0.1, aes(fill=Indicator), se=FALSE) +
+  geom_hline(yintercept = 0, linetype=3) +
+  geom_smooth(size=1, alpha=0.1, aes(fill=Indicator), se=TRUE) +
   scale_x_continuous(breaks = seq(1980,2010,by=5),
                      labels = seq(1980,2010,by=5)) +
   scale_y_continuous(breaks = seq(-10,10, by=1),
