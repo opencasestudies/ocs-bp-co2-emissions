@@ -45,7 +45,7 @@ knitr::include_graphics(here::here("img", "mainplot.png"))
 
 **Disclaimer**: The purpose of the [Open Case Studies](https://opencasestudies.github.io){target="_blank"} project is **to demonstrate the use of various data science methods, tools, and software in the context of messy, real-world data**. A given case study does not cover all aspects of the research process, is not claiming to be the most appropriate way to analyze a given data set, and should not be used in the context of making policy decisions without external consultation from scientific experts. 
 
-## **Motivation**
+# **Motivation**
 *** 
 
 This case study explores how different countries have contributed to Carbon Dioxide (CO2) emissions over time and how CO2 emission rates may relate to increasing global temperatures and increased rates of natural disasters and storms. This report provides a basis for the motivation: https://www.epa.gov/report-environment/greenhouse-gases.
@@ -96,7 +96,7 @@ The National Climate Assessment Report states that:
 
 See [here](https://www.epa.gov/report-environment/greenhouse-gases) and [here](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations) for more information.
 
-## **Main Questions**
+# **Main Questions**
 *** 
 
 #### {.main_question_block}
@@ -107,7 +107,7 @@ See [here](https://www.epa.gov/report-environment/greenhouse-gases) and [here](h
 
 ####
 
-## **Learning Objectives** 
+# **Learning Objectives** 
 *** 
 
 In this case study, we will explore CO2 emission data from around the world. We will also focus on the US specifically to evaluate patterns of temperatures and storm activity. This case study will particularly focus on how to use different datasets that span different ranges of time, as well as how to create visualizations of patterns over time. We will especially focus on using packages and functions from the [`Tidyverse`](https://www.tidyverse.org/){target="_blank"}, such as `dplyr`, `tidyr`, `plotly`and `gganimate`. The tidyverse is a library of packages created by RStudio. While some students may be familiar with previous R programming packages, these packages make data science in R especially efficient.
@@ -150,7 +150,7 @@ library(RColorBrewer)
 The first time we use a function, we will use the `::` to indicate which package we are using. Unless we have overlapping function names, this is not necessary, but we will include it here to be informative about where the functions we will use come from.
 
 
-## **Context**
+# **Context**
 *** 
 
 Greenhouse gas emissions are due to both natural processes and anthropogenic (human-derived) activities. 
@@ -195,21 +195,23 @@ knitr::include_graphics(here::here("img", "storms.png"))
 ```
 
 
-## **Limitations**
+# **Limitations**
 *** 
 
 There are some important considerations regarding this data analysis to keep in mind: 
 
-1) Correlation or association does not imply causation 
+1) The datasets included only include countries and years in which countries were reporting such information to the agencies that collected the data. Thus the data is incomplete. For example while we have a fairly good sense of CO2 emissions globally for later years, additional emissions were also produced by countries that are not included in the data.
 
-2) Limitaiton 2  
+2) [Correlation or association does not imply causation](https://dfrieds.com/math/correlation-does-not-imply-causation.html){target="_blank"}. We will be showing how different datasets show similar trends across time. This does not imply that one caused the other. However, in the case of some of the data we will show, there is additional scientific evidence to suggest that for example, increased CO2 emissions may cause increased temperatures or increased rates of disastors. However, simply showing a similar trend over time does not in itself prove that two variables are causally related. As you can see from this plot, often data may show a similar pattern over time by random chance.  See this [website](https://www.tylervigen.com/spurious-correlations){target="_blank"} for more examples.
+
+```{r, echo = FALSE, out.width="500px"}
+knitr::include_graphics(here::here("img", "causation.png"))
+```
 
 
 
 
-
-
-## **What are the data?**
+# **What are the data?**
 *** 
 
 In this case study we will be using data related to CO2 emissions, as well as other data that may influence, be influenced or relate to CO2 emissions. Most of our data was obtained from [Gapminder](https://www.gapminder.org/data/){target="_blank"}, which is a unique nonprofit that provides a variety of data for free.
@@ -227,7 +229,7 @@ In addition we will use some data that is specific to the United States from the
 Data   | Time span | Source  | Orginal Source   | Description | Citation                                                                    
 ---------- |-------------|-------------|-------------|--------|-------
 **CO2 emissions**  |1751 to 2014 | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [Carbon Dioxid Information Analysis Center (CDIAC)](https://cdiac.ess-dive.lbl.gov/){target="_blank"}  |  CO2 emissions in tonnes or metric tons (equivalent to approximately 2,204.6 pounds) per person by country| NA
-**GDP per capita, yearly growth** | 1801 to 2019| [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD.ZG){target="_blank"}  |  [Growth Domestic Product](https://www.investopedia.com/terms/g/gdp.asp#:~:text=Gross%20Domestic%20Product%20(GDP)%20is%20the%20monetary%20value%20of%20all,expenditures%2C%20production%2C%20or%20incomes.){target="_blank"}  (which is an overall measure of the health of nation's economy) per person by country| NA
+**GDP per capita, percent yearly growth** | 1801 to 2019| [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD.ZG){target="_blank"}  |  [Growth Domestic Product](https://www.investopedia.com/terms/g/gdp.asp#:~:text=Gross%20Domestic%20Product%20(GDP)%20is%20the%20monetary%20value%20of%20all,expenditures%2C%20production%2C%20or%20incomes.){target="_blank"}  (which is an overall measure of the health of nation's economy) per person by country| NA
 **Energy use per person** |1960 to 2015 | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/EG.USE.PCAP.KG.OE){target="_blank"}  |  Use of primary energy before transformation to other end-use fules, by country | NA
 **Crude Mortality Rate** |1960 to 2018 | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN){target="_blank"} |  Death rate per 1,000 people by country | NA 
 **US Natural Disasters** | 1980 to 2019 | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}| [The National Oceanic and Atmospheric Administration (NOAA) ](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}|  US data about: <br> -- Droughts <br> -- Floods <br> -- Freezes <br> -- Severe Storms <br> -- Tropical Cyclones <br> -- Wildfires<br> -- Winter Storms | NOAA National Centers for Environmental Information (NCEI) U.S. Billion-Dollar Weather and Climate Disasters (2020). https://www.ncdc.noaa.gov/billions/, DOI: 10.25921/stkw-7w73
@@ -254,7 +256,7 @@ Data   | Time span
 
 
 
-## **Data Import**
+# **Data Import**
 *** 
 
 To read in the files that were downloaded from the various sources as indicated in the table above, we will use the `read_xlsx()` and `read_xls()` functions of the `readxl` package to import the data from the .xlsx and .xls files respectively and we will use the `read_csv` function of the `readr` package to import the data from the csv files.
@@ -285,13 +287,13 @@ knitr::include_graphics(here::here("img", "tempdata.png"))
 ```{r}
 #csv files:
 us_disaster <- readr::read_csv(here("docs/time-series-US.csv"), skip = 2)
-us_temperature <- readr::read_csv(here("docs/temperature2.csv"), skip = 4, na ="-99")
+us_temperature <- readr::read_csv(here("docs/temperature.csv"), skip = 4, na ="-99")
 ```
 
 Great! now we have imported all of the data that we will need.
 
 
-## **Data Exploration and Wrangling**
+# **Data Wrangling**
 *** 
 
 Now we will take a look at our data and wrangle it until it is easy to use to allow us to evaluate how CO2 emissions have changed over time and how emissions may relate to energy use, mortality, GDP etc. 
@@ -352,8 +354,9 @@ We also want to rename the `country` variable to be capitalized. W We can use th
   
  CO2_emissions  %<>% 
    dplyr::rename(Country=country) %>%
-   dplyr::mutate(Emissions = Emissions/1000, 
-          Year = as.numeric(Year))
+#   dplyr::mutate(Emissions = Emissions/1000, 
+         dplyr::mutate(Year = as.numeric(Year),
+          Label = "CO2 Emissions (Metric Tons)")
      #rename(`CO2 Emissions (Mg)`= Emissions)
 
 ```
@@ -363,7 +366,7 @@ Now let's take a look to see how our data has changed:
 ```{r}
 
 CO2_emissions %>%
-head()
+tail()
 
 ```
 Great, we can see that now the `Year` variable is of class double (abbreviated `dbl`), which is a numeric class.
@@ -405,9 +408,10 @@ gdp_growth %<>%
                names_to = "Year", 
                values_to = "gdp_growth") %>%
   rename(Country=country) %>%
-  mutate(Year =as.numeric(Year)) %>%
+  mutate(Year = as.numeric(Year),
+         Label = "GDP Growth/Capita (%)") %>%
   #  tidyr::drop_na() %>% # not sure we need this..
-  rename(`GDP Growth/Capita (%)` = gdp_growth)
+  rename(GDP = gdp_growth)
 ```
 
 Now let's see how this data has changed:
@@ -440,10 +444,13 @@ To wrangle the `energy_use` data, we will again convert the data to long format,
 
 ```{r}
 energy_use %<>%
-  pivot_longer(cols = -country, names_to = "Year", values_to = "energy_use") %>%
-  rename(Country=country) %>%
-  mutate(Year = as.numeric(Year)) %>%
-  rename(`Energy Use (kg, oil-eq./capita)` = energy_use)
+  pivot_longer(cols = -country, 
+           names_to = "Year", 
+          values_to = "energy_use") %>%
+  rename(Country = country) %>%
+  mutate(Year = as.numeric(Year),
+         Label = "Energy Use (kg, oil-eq./capita)") %>%
+  rename(Energy = energy_use)
 
 ```
 
@@ -455,7 +462,7 @@ glimpse()
 ```
 ####
 
-### Crude Mortality Rate
+## Crude Mortality Rate
 
 ```{r}
 mortality %>%
@@ -494,9 +501,10 @@ mortality %<>%
   rename(Country = "Country Name") %>%
   pivot_longer(cols = -Country, 
                names_to = "Year", 
-               values_to = "Deaths/1000 People") %>%
-  mutate(Year = as.numeric(Year)) %>%
-  mutate(`Deaths/1000 People` = as.numeric(`Deaths/1000 People`))
+               values_to = "Deaths") %>%
+  mutate(Year = as.numeric(Year),
+       Deaths = as.numeric(Deaths),
+       Label = "Deaths/1000 People")
 
 ```
 
@@ -507,6 +515,7 @@ mortality %>%
 
 
 ## US-specific Data
+
 Now we will take a look at the US data about disasters and temperature.
 
 ### Disasters
@@ -554,7 +563,8 @@ us_disaster %<>%
                names_to = "Indicator",
                values_to = "Value") %>%
   mutate(Region = "United States",
-           Type = "US-specific")
+           Type = "US-specific",
+          Label = "Number of Disasters")
 
 head(us_disaster)
 ```
@@ -578,10 +588,11 @@ us_temperature %<>%
   rename() %>%
   mutate(Year = as.numeric(Date), 
       Country = "United States",
-    Indicator = "Temperature (Fahrenheit)",
+    Indicator = "Temperature",
        Region = "United States",
-         Type = "US-specific") %>%
-  select(Year, Country, Indicator,  Value, Region, Type)
+         Type = "US-specific",
+        Label = "Temperature (Fahrenheit)") %>%
+  select(Year, Country, Indicator, Value, Region, Type, Label)
 
 head(us_temperature)
 ```
@@ -612,9 +623,9 @@ We need to specify what columns/variables we will be joining by using the `by =`
 ```{r}
 
 df_wide <- CO2_emissions %>%
-  full_join(gdp_growth, by = c("Country", "Year")) %>%
-  full_join(energy_use, by = c("Country", "Year")) %>%
-  full_join(mortality, by = c("Country", "Year"))
+  full_join(gdp_growth, by = c("Country", "Year", "Label")) %>%
+  full_join(energy_use, by = c("Country", "Year", "Label")) %>%
+  full_join(mortality, by = c("Country", "Year", "Label"))
 
 df_wide %>%
   head()
@@ -628,7 +639,7 @@ df_wide <- list(CO2_emissions,
                 gdp_growth, 
                 energy_use, 
                 mortality) %>% 
-  reduce(full_join, by = c("Country", "Year"))
+  reduce(full_join, by = c("Country", "Year", "Label"))
 
 df_wide %>%
   head()
@@ -641,12 +652,12 @@ df_wide %>%
 
 Nice, looks good!
 
-We will also make a long version of this data, where we will create an new variable called `Indicator` that will indicate what dataset the data came from and we will collapse the values from the columns called ` Emissions`, (`CO2 Emissions (Mg)`), `GDP Growth/Capita (%)`, `Energy Use (kg, oil-eq./capita)`, and `Deaths/1000 People`. 
+We will also make a long version of this data, where we will create an new variable called `Indicator` that will indicate what dataset the data came from and we will collapse the values from the columns called ` Emissions` (`CO2 Emissions (Mg)`), `GDP`(`GDP Growth/Capita (%)`), `Energy`(`Energy Use (kg, oil-eq./capita)`), and `Deaths` (`Deaths/1000 People`). 
 
 
 ```{r}
 df_long <- df_wide %>%
-  pivot_longer(cols = c(-Country, -Year), 
+  pivot_longer(cols = c(-Country, -Year, - Label), 
                names_to = "Indicator", 
                values_to = "Value")
 head(df_long)
@@ -658,8 +669,8 @@ The new values for the new variable `Region` are indicated after the specific co
 
 ```{r}
  df_long %<>%
-  mutate(Region = case_when(Country=="United States" ~ "United States",
-                          Country!="United States" ~ "Rest of the World"),
+  mutate(Region = case_when(Country == "United States" ~ "United States",
+                            Country != "United States" ~ "Rest of the World"),
          Type = "Global")
 head(df_long)
 ```
@@ -690,7 +701,7 @@ tail(df_long)
 
 <details> <summary> Click here for details about the difference between `full_join()` and `bind_rows()` </summary>
 
-The difference between this function and the `full_join()` function is that the `bind_rows()` function will assentially just append each dataset to each other, whereas the `full_join()` function collapses data that is comparable. Here you will see an example of what the data would have been like for `df_wide` if we had made it using `bind_rows()`.
+The difference between this function and the `full_join()` function is that the `bind_rows()` function will assentially just append each dataset to each other, whereas the `full_join()` function collapses data that is comparable. Here you will see an example of what the data would have been like for `df_wide` if we had made it using `bind_rows()`. We will specifically look at the values for China in the year of 1960.
 
 ```{r}
 df_wide_br <- list(CO2_emissions, 
@@ -711,7 +722,7 @@ df_wide_br%>%
 </detials>
 
 
-AVOCADO Hmmm the top plot changes completely if we drop countries with na values... 
+To remove entries for countries with NA values we can use `filter(complete.cases(.))`.
 ```{r}
 df_long_with_miss <- df_long %>%
   arrange(Country)
@@ -729,173 +740,225 @@ head(df_long)
 
 
 
-## **Data Exploration**
+# **Data Exploration**
 *** 
 Now we will create some simple plots to examine the data.
 
-### CO2 Emissions (1751-2014)
+We can check the time span of this data by refering back to the  [**What are the data?**] section. To make these plots we will use the `ggplot2` package. The first step in creating a plot is to define what data we intend to use and what data will be ploted on the x-axis, the y-axis, and if any data will be used to determine the color or the fill (also color of plots that have something to fill like a bar plot) or group. All of these are defined using the `aes()` argument, which is short for aesthetic mappings.
 
-We can check the time span of this data by refering back to the  [**What are the data?**] section.
+First we will take a look at the CO2 emission data.
+
+## CO2 Emissions (1751-2014)
+
+We first need to give the correct data input. We will filter our data to only include the CO2 emissions data by using the `filter()` function of the `dplyr` package. To use this function we need to specify what value we want for a given variable. In this case we want all rows where the `Indicator` variable is equal to the word `Emissions`. Notice that this needs to be in quotes, while the variable name does not.
+
+Then we use the `aes()` argument of the `ggplot()` function to define that our x-axis will be the `Year` variable, the y-axis will be the emission `Value` variable, and that our data should be grouped or separted by the `Country` variable. If we were to stop there we would get a blank plot, as you can see below. We need to add another layer to define how we want the plot to look. We do so by using the `+` sign in between each command. 
+
 
 ```{r}
-
-# CO2_emissions %>%
-#   # rename(`CO2 Emissions (Mg)`= Emissions) %>%
-# ggplot(aes(x=Year, y=`CO2 Emissions (Mg)`, group=Country)) +
-#   geom_line(alpha=0.2) + 
-#   labs(title = expression("Country CO"[2]*" Emissions per Year , 1751-2014"),
-#        caption = expression("Limited to reporting countries")) + 
-#   ylab("Emissions (1M Metric Tonnes)")
-# 
-# CO2_world<-CO2_emissions %>%
-#  # rename(`CO2 Emissions (Mg)`= Emissions) %>%
-#   group_by(Year) %>%
-#   summarise(`CO2 Emissions (Mg)` = sum(`CO2 Emissions (Mg)`, na.rm = TRUE)) %>%
-#   ggplot(aes(x=Year, y=`CO2 Emissions (Mg)`)) +
-#   geom_line() + 
-#   labs(title = expression("World CO"[2]*" Emissions per Year , 1751-2014"),
-#        caption = expression("Limited to reporting countries")) + 
-#   ylab("Emissions (1M Metric Metric Tonnes)")
-# CO2_world
-
 df_long %>%
   filter(Indicator == "Emissions") %>%
-  ggplot(aes(x=Year, y= Value, group=Country)) +
-  geom_line(alpha=0.2) + 
-  labs(title = expression("Country CO"[2]*" Emissions per Year , 1751-2014"),
-       caption = expression("Limited to reporting countries")) + 
-  ylab("Emissions (1M Metric Tonnes)")
+  ggplot(aes(x = Year, y = Value, group = Country))
 
+```
+We will use the `geom_line()` function becuase we would like to create a line plot. There are many `geom_*` functions to choose from that create many different types of plots.
+
+Type `geom` into the RStudio console and you will see many options to scroll through.
+
+```{r, echo = FALSE, out.width = "800 px"}
+knitr::include_graphics(here::here("img", "geom_.png"))
+```
+Since we have many overlapping lines, we will make our lines slightly transparent by using the `alpha` argument. This takes values from 0 to 1, where 0 is completely transparent and 1 is completely opague. We will also add labels using the `labs()` function. Again, notice that a plus sign is used between each layer that we add to the plot. To make CO2 appear with a subscript we can use `~CO[2]~`. We will also use the function `theme_linedraw()` of `ggplot2` to change the general apearance of the plot. 
+
+Type `theme_` in the RStudio console to see the varios plot theme options available.
+
+```{r, echo = FALSE, out.width = "800 px"}
+knitr::include_graphics(here::here("img", "themes.png"))
+```
+
+We will also use the `theme()` function to change the font size of the x-axis, y-axis, axis titles, and the caption as shown below. To know what to call each element of the plot in this function to change the size type `?theme()` in the console. You will see a very large list that includes other plot aspects like the background and the legend. This function can be used to modify your plot to your specifications.
+
+```{r}
+df_long %>%
+  filter(Indicator == "Emissions") %>%
+  ggplot(aes(x = Year, y = Value, group = Country))+
+  geom_line(alpha = 0.2) + 
+  labs(title = "Country" ~CO[2]~ "Emissions per Year, 1751-2014",
+     caption = "Limited to reporting countries",
+           y = "Emissions (1M Metric Tons)") +
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
+```
+
+Great! We've created our first plot. We can see that many countries show a dramatic increase in emissions over time with a handful of countries with particularly high levels.
+
+Now let's take a look at the data in slightly different way. Let's look at overall global emissions by calculating a sum each year of all the emission values for the different countries. Note that this is limited to only the countries included in the dataset. 
+
+To calculate this value we will first use the `group_by()` function of the `dplyr` package. This will allow our calcluation to be performed on aggregated data by the different values for the `Year` variable. Otherwise, we would simply get a sum of overall emissions across all of the years in the data set.
+
+Then we will use the `summarize()` function (also of the `dplyr` package) and the base `sum()` function to calculate a sum of the emission values each year.
+
+Since we will be ploting only one value each year, we no longer need to assign a `group` in the `aes()` argument. this time we will make the size of the line that will be plotted a bit larger using the `size()` argument in the `geom_line()` function.
+
+```{r}
 CO2_world<-df_long %>%
-  filter(Indicator == "Emissions",
-         Year <= 2014) %>%
+  filter(Indicator == "Emissions") %>%
   group_by(Year) %>%
-  summarise(Value = sum(Value, na.rm = TRUE)) %>%
-  ggplot(aes(x=Year, y=Value)) +
+  summarize(Value = sum(Value)) %>%
+  ggplot(aes(x = Year, y = Value)) +
   geom_line(size = 1.5) + 
-  labs(title = expression("World CO"[2]*" Emissions per Year , 1751-2014"),
-       caption = expression("Limited to reporting countries")) + 
-  ylab("Emissions (1M Metric Metric Tonnes)")+
-  theme_linedraw()
+  labs(title = "World "~CO[2]~" Emissions per Year , 1751-2014",
+     caption = "Limited to reporting countries", 
+           y = "Emissions (Metric Tonnes)")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
 CO2_world
 
 ```
 
+Ok, we can now clearly see that global CO2 emissions have dramatically risen since 1900.
 
-### Yearly Growth in GDP per Capita (1801 to 2019)
+## Yearly Growth in GDP per Capita (1801 to 2019)
+
+Now we will take a look a GDP growth of various countries
 
 ```{r}
-# ggplot(gdp_growth, aes(x=Year, y=`GDP Growth/Capita (%)`, group=Country)) +
-#   geom_line(alpha=0.2) + 
-#   labs(title = expression("Country GDP Growth per Capita per Year (Annual %), 1801-2019"),
-#        caption = expression("Limited to reporting countries")) + 
-#   ylab("GDP Growth per Capita (Annual %)")
-# 
-# gdp_growth %>%
-#   group_by(Year) %>%
-#   summarise(`GDP Growth/Capita (%)` = mean(`GDP Growth/Capita (%)`, na.rm = TRUE)) %>%
-#   ggplot(aes(x=Year, y=`GDP Growth/Capita (%)`)) +
-#   geom_line() + 
-#   labs(title = expression("Mean Country GDP Growth per Capita per Year (Annual %), 1801-2019"),
-#        caption = expression("Limited to reporting countries")) + 
-#   ylab("GDP Growth per Capita (Annual %)")
-
 df_long %>%
-  filter(Indicator == "GDP Growth/Capita (%)", 
-         Year >= 1801) %>%
-ggplot(aes(x=Year, y=Value, group=Country)) +
-  geom_line(alpha=0.2) + 
-  labs(title = expression("Country GDP Growth per Capita per Year (Annual %), 1801-2019"),
-       caption = expression("Limited to reporting countries")) + 
-  ylab("GDP Growth per Capita (Annual %)")
+  filter(Indicator == "GDP") %>%
+  ggplot(aes(x = Year, y = Value, group = Country)) +
+  geom_line(alpha = 0.2) + 
+  labs(title = "Country GDP Growth per Capita per Year (Annual %), 1801-2019",
+     caption = "Limited to reporting countries",
+           y = "GDP Growth per Capita (Annual %)") +
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
+```
+We can see that the variation in GDP has become greater over time.
 
+```{r}
 df_long %>%
-  filter(Indicator == "GDP Growth/Capita (%)",
+  filter(Indicator == "GDP",
          Year >= 1801) %>%
   group_by(Year) %>%
   summarise(Value = mean(Value, na.rm = TRUE)) %>%
   ggplot(aes(x=Year, y=Value)) +
   geom_line() + 
-  labs(title = expression("Mean Country GDP Growth per Capita per Year (Annual %), 1801-2019"),
-       caption = expression("Limited to reporting countries")) + 
-  ylab("GDP Growth per Capita (Annual %)")
+  labs(title = "Mean Country GDP Growth per Capita per Year (Annual %), 1801-2019",
+     caption = "Limited to reporting countries", 
+           y = "GDP Growth per Capita (Annual %)") +
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
 ```
 
-### Energy Use per Person (1960 to 2015)
+## Energy Use per Person (1960 to 2015)
 
 ```{r}
-# ggplot(energy_use, aes(x=Year, y=`Energy Use (kg, oil-eq./capita)`, group=Country)) +
-#   geom_line(alpha=0.2) + 
-#   labs(title = expression("Country Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015",),
-#        caption = expression("Limited to reporting countries")) + 
-#   ylab("Energy Use (kg of Oil Equivalent per Capita)")
-# 
-# energy_use %>%
-#   group_by(Year) %>%
-#   summarise(`Energy Use (kg, oil-eq./capita)` = sum(`Energy Use (kg, oil-eq./capita)`, na.rm = TRUE)) %>%
-#   ggplot(aes(x=Year, y=`Energy Use (kg, oil-eq./capita)`)) +
-#   geom_line() + 
-#   labs(title = expression("Worldwide Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015"),
-#        caption = expression("Limited to reporting countries")) + 
-#   ylab("Energy Use (kg of Oil Equivalent per Capita)")
-
-
 df_long %>%
-  filter(Indicator == "Energy Use (kg, oil-eq./capita)",
+  filter(Indicator == "Energy",
               Year >= 1960, 
               Year <= 2015) %>%
 ggplot(aes(x=Year, y= Value, group=Country)) +
   geom_line(alpha=0.2) + 
-  labs(title = expression("Country Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015",),
-       caption = expression("Limited to reporting countries")) + 
-  ylab("Energy Use (kg of Oil Equivalent per Capita)")
+  labs(title = "Country Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015",
+     caption = "Limited to reporting countries", 
+           y = "Energy Use (kg of Oil Equivalent per Capita)")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 15))
+```
 
+```{r}
 df_long %>%
-  filter(Indicator == "Energy Use (kg, oil-eq./capita)",
+  filter(Indicator == "Energy",
               Year >= 1960, 
               Year <= 2015) %>%
   group_by(Year) %>%
   summarise(Value = sum(Value, na.rm = TRUE)) %>%
   ggplot(aes(x=Year, y=Value)) +
   geom_line() + 
-  labs(title = expression("Worldwide Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015"),
-       caption = expression("Limited to reporting countries")) + 
-  ylab("Energy Use (kg of Oil Equivalent per Capita)")
+  labs(title = "Worldwide Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015",
+     caption = "Limited to reporting countries",
+           y = "Energy Use (kg of Oil Equivalent per Capita)")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 15))
 ```
 
-### Crude Mortality Rate
+## Crude Mortality Rate
 
 
 ```{r}
 
 df_long %>%
-  filter(Indicator == "Deaths/1000 People",
+  filter(Indicator == "Deaths",
               Year >= 1960, 
               Year <= 2019) %>%
   ggplot(aes(x=Year, y=Value, group=Country)) +
   geom_line(alpha=0.2) + 
-  labs(title = expression("Country Crude Mortality Rate (per 1000 Persons), 1960 to 2019"),
-       caption = expression("Limited to reporting countries")) + 
-  ylab("Crude Mortality Rate (per 1000 Persons)")
+  labs(title = "Country Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
+     caption = "Limited to reporting countries",
+           y = "Crude Mortality Rate (per 1000 Persons)")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
+```
 
+```{r}
 
 df_long %>%
-  filter(Indicator == "Deaths/1000 People",
+  filter(Indicator == "Deaths",
               Year >= 1960, 
               Year <= 2019) %>%
    group_by(Year) %>%
   summarise(Value = mean(Value, na.rm = TRUE)) %>%
   ggplot(aes(x=Year, y=Value)) +
   geom_line() + 
-  labs(title = expression("Mean Country Crude Mortality Rate (per 1000 Persons), 1960 to 2019"),
-       caption = expression("Limited to reporting countries")) + 
-  ylab("Crude Mortality Rate (per 1000 Persons)")
+  labs(title = "Mean Country Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
+     caption = "Limited to reporting countries",
+           y = "Crude Mortality Rate (per 1000 Persons)")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
   
 ```
 
-## US-specific Data
-
-### Disasters
+## US Disasters
 
 ```{r}
 
@@ -906,31 +969,43 @@ df_long %>%
   ggplot(aes(x=Year, y=Value, group=Country)) +
   geom_line() + 
   geom_smooth(method = "lm") +
-  labs(title = expression("US Disasters, 1980 to 2019"),
-       subtitle = expression("Drougths, Floods, Freezes, Severe Storms. Tropical Cyclones, Wildfires, and Winter Storms")) + 
-  ylab("Disaster Count")
+  labs(title = "US Disasters, 1980 to 2019",
+    subtitle = "Drougths, Floods, Freezes, Severe Storms. Tropical Cyclones, Wildfires, and Winter Storms", 
+           y = "Disaster Count")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+         plot.title = element_text(size = 16))
   
 ```
 
-### Temperature
+## US Temperature
 
 ```{r}
 
 df_long %>%
-  filter(Indicator == "Temperature (Fahrenheit)",
+  filter(Indicator == "Temperature",
               Year >= 1895, 
               Year <= 2019) %>%
   ggplot(aes(x=Year, y=Value, group=Country)) +
   geom_line() + 
   geom_smooth(method = "lm") +
-  labs(title = expression("US Average Annual Temperature, 1895 to 2019"))+
-  ylab("Temperature (Fahrenheit)")
+  labs(title = "US Average Annual Temperature, 1895 to 2019",
+           y =  "Temperature (Fahrenheit)")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+         plot.title = element_text(size = 16))
 
 ```
 
 
-## Data Visualization
-
+# **Data Visualization**
+*** 
 
 Now Let's try putting the data together. 
 
@@ -938,8 +1013,15 @@ Now Let's try putting the data together.
 ggplot(df_long, aes(x=Year, y=Value, group=Country)) +
   geom_line(alpha=0.2) + 
   facet_grid(Indicator~., scales = "free_y") +
-  ylab("Indicator Value") + 
-  labs(title="Distribution of Indicators by Year and Value")
+  labs(title="Distribution of Indicators by Year and Value", 
+       y = "Indicator Value")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
 ```
 
 ## Time spans of data
@@ -947,50 +1029,62 @@ ggplot(df_long, aes(x=Year, y=Value, group=Country)) +
 ```{r}
 df_long %>%
   filter(Type == "Global") %>%
-  group_by(Year, Indicator, .drop=FALSE) %>%
+  group_by(Year, Label, .drop=FALSE) %>%
   tally() %>%
-  ggplot(aes(x= Year, y = n, color = Indicator)) +
+  ggplot(aes(x= Year, y = n, color = Label)) +
   geom_line() +
     geom_vline(xintercept = 1980, linetype=2, color="black") +
    geom_vline(xintercept = 2014, linetype=2, color="black") +
   labs(title = "Countries with Complete Data per Year",
-       subtitle = "Global Data") + 
-  ylab("Countries") + 
+    subtitle = "Global Data", 
+           y = "Countries") + 
   scale_x_continuous(breaks = seq(1750,2020,by=10),
                      labels = seq(1750,2020,by=10)) +
-  theme_minimal() +
   theme(axis.text.x = element_text(angle = 90),
         axis.title.x = element_blank(),
-        legend.position = "bottom")
+        legend.position = "bottom")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12, angle = 90),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16),
+       legend.title = element_blank())
+```
 
+```{r}
 df_long %>%
   filter(Region=="United States") %>%
-  group_by(Indicator) %>%
+  group_by(Label) %>%
   summarise(Start=min(Year), End=max(Year)) %>%
-  ggplot(aes(x=Indicator, y=End)) +
+  ggplot(aes(x=Label, y=End)) +
   geom_hline(yintercept = 1980, linetype=2, color="black") +
   geom_hline(yintercept = 2014, linetype=2, color="black") +
-  geom_segment(aes(x=Indicator,
-                   xend=Indicator,
+  geom_segment(aes(x=Label,
+                   xend=Label,
                    yend=End,
                    y=Start)) +
-  geom_point(aes(x=Indicator, y=Start), shape=16, color="black") +
-  geom_point(aes(x=Indicator, y=End), shape=21, fill="white", color="black") + 
+  geom_point(aes(x=Label, y=Start), shape=16, color="black") +
+  geom_point(aes(x=Label, y=End), shape=21, fill="white", color="black") + 
   coord_flip() +
   labs(title = "Complete Data per Year",
-       subtitle = "US-specific Data") + 
-  ylab("Countries") + 
+    subtitle = "US-specific Data", 
+           y = "Countries") + 
   scale_y_continuous(breaks = seq(1750,2020,by=10),
                      labels = seq(1750,2020,by=10)) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90),
-        axis.title = element_blank())
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12,angle = 90),
+        axis.text.y = element_text(size = 12),
+         axis.title = element_blank(),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
 ```
 
 ```{r, Animation_1, warning=FALSE, eval=FALSE}
 animation_1 <- df_long %>%
   filter(Type=="Global") %>%
-  filter(Indicator=="Deaths/1000 People") %>%
+  filter(Indicator=="Deaths") %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region,alpha=Region)) +
@@ -998,10 +1092,10 @@ animation_1 <- df_long %>%
   scale_color_manual(values = c("Red","Black")) +
   scale_alpha_manual(values = c(0.1, 1)) +
   scale_size_manual(values = c(0.25, 2)) +
-  labs(title="Distribution of Indicators by Year and Value, 1980-2010") +
+  labs(title = "Distribution of Indicators by Year and Value, 1980-2010",
+           y = "Crude Mortality Rate") +
   theme(axis.text.x = element_text(angle = 90)) + 
   theme_classic() +
-  ylab("Crude Mortality Rate") +
   transition_time(as.integer(Year)) +
   shadow_wake(wake_length = 1, alpha = FALSE)
 
@@ -1011,7 +1105,7 @@ animate(animation_1, fps = 10, duration = 5)
 ```{r, Animation_2, warning=FALSE, eval=FALSE}
 animation_2 <- df_long %>%
   filter(Type=="Global") %>%
-  filter(Indicator=="Energy Use (kg, oil-eq./capita)") %>%
+  filter(Indicator=="Energy") %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region, alpha=Region)) +
@@ -1019,10 +1113,11 @@ animation_2 <- df_long %>%
   scale_color_manual(values = c("Red","Black")) +
   scale_alpha_manual(values = c(0.1, 1)) +
   scale_size_manual(values = c(0.25, 2)) +
-  labs(title="Distribution of Indicators by Year and Value, 1980-2010") +
+  labs(title="Distribution of Indicators by Year and Value, 1980-2010",
+       y = "Energy Use per Capita") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90)) + 
-  ylab("Energy Use per Capita") +
+  
   transition_time(as.integer(Year)) +
   shadow_wake(wake_length = 1, alpha = FALSE)
 
@@ -1032,7 +1127,7 @@ animate(animation_2, fps = 10, duration = 5)
 ```{r, Animation_3, warning=FALSE, eval=FALSE}
 animation_3 <- df_long %>%
   filter(Type=="Global") %>%
-  filter(Indicator=="GDP Growth/Capita (%)") %>%
+  filter(Indicator=="GDP") %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region, alpha=Region)) +
@@ -1040,10 +1135,11 @@ animation_3 <- df_long %>%
   scale_color_manual(values = c("Red","Black")) +
   scale_alpha_manual(values = c(0.1, 1)) +
   scale_size_manual(values = c(0.25, 2)) +
-  labs(title="Distribution of Indicators by Year and Value, 1980-2010") +
+  labs(title="Distribution of Indicators by Year and Value, 1980-2010",
+       y= "GDP Growth per Capita (%)") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90)) +
-  ylab("GDP Growth per Capita (%)") +
+  
   transition_time(as.integer(Year)) +
   shadow_wake(wake_length = 1, alpha = FALSE)
 
@@ -1061,10 +1157,10 @@ animation_4 <- df_long %>%
   scale_color_manual(values = c("Red","Black")) +
   scale_alpha_manual(values = c(0.1, 1)) +
   scale_size_manual(values = c(0.25, 2)) +
-  labs(title="Distribution of Indicators by Year and Value, 1980-2010") +
+  labs(title = "Distribution of Indicators by Year and Value, 1980-2010",
+           y = "CO2 Emissions (Mg)") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90)) +
-  ylab("CO2 Emissions (Mg)") +
   transition_time(as.integer(Year)) +
   shadow_wake(wake_length = 1, alpha = FALSE)
 
@@ -1078,7 +1174,6 @@ Top10<-df_long %>%
   filter(Type=="Global") %>%
   filter(Indicator=="Emissions") %>%
   filter(Year>=1900) %>%
-  filter(Year<=2014) %>%
   group_by(Country) %>%
   mutate(max_val = max(Value)) %>%
   ungroup() %>%
@@ -1086,22 +1181,24 @@ Top10<-df_long %>%
   filter(rank<=10) %>%
   ggplot(aes(x=Year, y=fct_reorder(Country, Value, max))) +
   geom_tile(color="transparent", aes(fill=log(Value))) +
-   # scale_fill_gradientn(colors = c("red","black")) +
   scale_fill_viridis_c()+
- # scale_fill_gradientn(colors = c("yellow","red","black")) +
   scale_x_continuous(breaks = seq(1900,2014,by=5),
                      labels = seq(1900,2014,by=5)) + 
-  theme_classic() + 
-  theme(axis.text.x = element_text(angle = 90),
-        axis.title = element_blank(),
-        legend.position = "bottom") + 
-  labs(title = "Top 10 Emissions-producing Countries in 2010 (1900-2014)",
-       subtitle = "Ordered by Emissions Produced in 2014",
-       fill = "Ln(CO2 Emissions (Mg))")
+  labs(title = "Top 10 "~CO[2]~"Emission-producing Countries in 2014",
+    subtitle = "Ordered by Emissions Produced in 2014",
+        fill = "Ln(CO2 Emissions (Mg))") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12, angle = 90),
+        axis.text.y = element_text(size = 12),
+         axis.title = element_blank(),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16),
+    legend.position = "bottom")
 
 Top10
 ```
 Interestingly, we can see that Germany had ver low imission rates at the end of World War II. We see that the US has consistently had high emission rates since 1900, but that the emission rates in China recently surpased that of the US.
+
 ```{r}
 
 Top10b<-df_long %>%
@@ -1115,7 +1212,7 @@ Top10b<-df_long %>%
   mutate(rank=dense_rank(-max_val)) %>%
   filter(rank<=10) %>%
   ggplot(aes(x=Year, y=Value, color = Country)) +
-geom_line() +  # scale_fill_gradientn(colors = c("red","black")) +
+  geom_line() +
   scale_color_viridis_d()+
   geom_text_repel(data = df_long %>%
   filter(Type=="Global") %>%
@@ -1176,20 +1273,21 @@ df_long_us <- df_long_us %>%
 ```
 
 ```{r}
+
+
 US_Indicators <- df_long %>%
   filter(Country=="United States")%>%
-#US_Indicators<-df_long_us %>%
   filter(Year>=1980) %>%
- # filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value)) + 
   geom_line() + 
   geom_smooth(method = "loess") +
-  facet_wrap(Indicator~., ncol=2, nrow=3, scales = "free_y") + 
-  #scale_x_continuous(breaks = seq(1980,2010,by=5),
-  #                   labels = seq(1980,2010,by=5)) +
-  theme_classic() + 
-  theme(axis.text.x = element_text(angle = 90),
-        axis.title.y = element_blank()) + 
+  facet_wrap(Label~., ncol=2, nrow=3, scales = "free_y") + 
+  theme_linedraw() + 
+  theme(axis.text.x = element_text(angle = 90, size = 12),
+        axis.text.y = element_text(size = 12),
+        strip.text.x = element_text(face = "bold", size = 12),
+        axis.title.y = element_blank(),
+        axis.title.x = element_text(size = 12)) + 
   labs(title = "US-specific Indicators")
 US_Indicators
 ```
@@ -1218,8 +1316,8 @@ df_long_us %>%
 df_long_us %>%
   filter(Year>=1980) %>%
   filter(Year<=2014) %>%
-  filter(Indicator=="Temperature (Fahrenheit)"|
-           Indicator=="Energy Use (kg, oil-eq./capita)"|
+  filter(Indicator=="Temperature"|
+           Indicator=="Energy"|
            Indicator=="Emissions") %>%
   ggplot(aes(x=Year, y=`Change (%)`, color=Indicator)) + 
   geom_hline(yintercept=0.8, linetype=2) +
@@ -1242,8 +1340,8 @@ df_long_us %>%
 df_long_us %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
-  filter(Indicator=="Temperature (Fahrenheit)"|
-           Indicator=="Energy Use (kg, oil-eq./capita)"|
+  filter(Indicator=="Temperature"|
+           Indicator=="Energy"|
            Indicator=="Emissions") %>%
   ggplot(aes(x=Year, y=`Change (%)`, color=Indicator)) + 
   geom_hline(yintercept=0.8, linetype=2) +
@@ -1269,9 +1367,10 @@ df_long_us %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
   filter(Indicator=="Emissions"|
-           Indicator=="Temperature (Fahrenheit)") %>%
+           Indicator=="Temperature") %>%
   ggplot(aes(x=Year, y=Value)) +
-  geom_line() + 
+  geom_line() +
+  geom_smooth(method = "loess")+
   scale_x_continuous(breaks = seq(1980,2010,by=5),
                      labels = seq(1980,2010,by=5)) + 
   facet_wrap(Indicator~., scales = "free_y", ncol=1) +
@@ -1279,10 +1378,30 @@ df_long_us %>%
   theme(axis.text.x = element_text(angle = 90),
         axis.title = element_blank()) + 
   labs(title="US Emissions and Temperatures (1980-2010)")
+```
 
+
+```{r}
+
+df_wide_US <-df_long_us %>%
+  select(-c(Label, Anomaly, Anomaly_color, Mean, "Change (%)", Type)) %>%
+  pivot_wider(names_from = "Indicator", values_from = Value)%>%
+  filter(Year>=1980) %>%
+  filter(Year<=2010)
+  
+cor.test(pull(df_wide_US, Emissions),
+         pull(df_wide_US, Temperature))
+
+cor.test(pull(df_wide_US, Emissions),
+         pull(df_wide_US, Disasters))
+
+```
+
+
+```{r}
 df_long_us %>%
   filter(Indicator=="Emissions"|
-           Indicator=="Temperature (Fahrenheit)") %>%
+           Indicator=="Temperature") %>%
   ggplot(aes(x=Year, y=Value)) +
   geom_vline(xintercept = 1980, linetype=2, color="black") + 
   geom_vline(xintercept = 2010, linetype=2, color="black") +
@@ -1302,8 +1421,8 @@ df_long_us %>%
 
 ```{r}
 df_long_us %>%
-  filter(Indicator=="Temperature (Fahrenheit)"|
-           Indicator=="Emissions") %>%
+  filter(Indicator == "Temperature"|
+         Indicator == "Emissions") %>%
   ggplot(aes(x=Year, y=`Change (%)`)) +
   annotate("rect", xmin=-Inf, xmax=Inf, ymin=0, ymax=Inf, alpha=0.25, fill="green") +
   annotate("rect", xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=0, alpha=0.25, fill="red") +
