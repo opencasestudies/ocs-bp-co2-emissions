@@ -913,7 +913,7 @@ Top10b
 
 ```
 
-It's still a bit difficult to tell which line corresponds to which country. So, let's add a label. One way to do this is to add text layer to our plot using the `geom_text()` function of the `ggplot2` package. We need to first specify what data we will use, in this case we will filter for just the data for the last year(which we can do using the `last()` function of the `dplyr` package) and then we need to indicate that our label will be based on the `Country` variable using the `aes()` asthetics mapping argument. We will also get rid of our legend since we will not need it anymore, by using the `theme()` function of the `ggplot2` package.
+It's still a bit difficult to tell which line corresponds to which country. So, let's add a label. One way to do this is to add text layer to our plot using the `geom_text()` function of the `ggplot2` package. We need to first specify what data we will use, in this case we will filter for just the data for the last year (which we can do using the `last()` function of the `dplyr` package) and then we need to indicate that our label will be based on the `Country` variable using the `aes()` asthetics mapping argument. We will also get rid of our legend since we will not need it anymore, by using the `theme()` function of the `ggplot2` package.
 
 ```{r}
 
@@ -951,6 +951,7 @@ The most simple option is to use the `direct.label()` function. which will autom
 library(directlabels)
 direct.label(Top10b) +scale_x_continuous(expand = c(0.3,0))
 ```
+
 Alternatively this can be done in a more `ggplot2` layering method by using the `geom_dl()` function.
 
 ```{r}
@@ -1052,7 +1053,7 @@ We can also create this plot directly without using the `top_10_count` tibble, b
 ```{r}
 
 df_long %>%
-  filter(Type=="Global") %>%
+  #filter(Type=="Global") %>%
   filter(Indicator=="Emissions") %>%
   filter(Year>=1900) %>%
   group_by(Country) %>%
@@ -1253,9 +1254,7 @@ df_long %>%
 ```{r}
 
 Mortality <-df_long %>%
-  filter(Indicator == "Deaths",
-              Year >= 1960, 
-              Year <= 2019) %>%
+  filter(Indicator == "Deaths") %>%
   ggplot(aes(x=Year, y=Value, group=Country)) +
   geom_line(alpha=0.2) + 
   geom_line(data =df_long %>%
@@ -1276,26 +1275,80 @@ Mortality <-df_long %>%
          plot.title = element_text(size = 16),
        legend.title = element_blank())
 
-Mortality 
+Mortality
+
 ```
+
+Let's take a look to see which countries account for the large peaks in Morality in the late 1970s and the early 1990s. It's always a good idea to check your data if you see anomolies like this. 
+
 ```{r}
 df_long %>%
-  filter(Indicator == "Deaths", Year == 1980) %>% slice_max(Value, n = 10)
+  filter(Indicator == "Deaths", Year == 1978) %>% slice_max(Value, n = 3)
+```
 
+Looks like Cambodia is the country with the large peak in the late 1970s. If you look up the history of Cambodia during this time period, you will see that the peak we are seeing makes sense because Cambodia experienced [war](https://en.wikipedia.org/wiki/Cambodian_Civil_War){target = "blank"} and [genicide](https://en.wikipedia.org/wiki/Cambodian_genocide){target = "blank"} during this time. 
+
+```{r}
 df_long %>%
-  filter(Indicator == "Deaths", Year == 1995) %>% slice_max(Value, n = 10)
+  filter(Indicator == "Deaths", Year == 1993) %>% slice_max(Value, n = 3)
+```
+Rwanda is the country with the peak in the early 1990s. This also makes sense because Rwanda experienced a [civil war](https://en.wikipedia.org/wiki/Rwandan_Civil_War){target = "blank"} at this time. 
 
+What about now? What countries have the highest rates?
+
+```{r}
 df_long %>%
    filter(Indicator == "Deaths", Year == 2017) %>% slice_max(Value, n = 10)
 ```
+It seems that many eastern european countries currently have the highest mortality rates, as well as [Lesotho](https://apps.who.int/iris/bitstream/handle/10665/136910/ccsbrief_lso_en.pdf;jsessionid=227D2B563F133AE2054046887D2D905D?sequence=1){target = "blank"}.
+
+Let's make a plot of just these countries:
+```{r}
+Mortality <-df_long %>%
+  filter(Type=="Global") %>%
+  filter(Indicator=="Deaths") %>%
+  group_by(Country) %>%
+  mutate(last_val = last(Value)) %>%
+  ungroup() %>%
+  mutate(rank=dense_rank(desc(last_val))) %>%
+  filter(rank<=5) %>%
+  ggplot(aes(x=Year, y=Value, color = Country)) +
+  geom_line() + 
+  scale_color_viridis_d()+
+  labs(title = "Country Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
+     caption = "Limited to reporting countries",
+           y = "Crude Mortality Rate (per 1000 Persons)")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16),
+       legend.title = element_blank())
+
+direct.label(Mortality, method = list("angled.boxes"))
+
+
+
+```
+With the exception of Losotho, we can see that the mortality rate appears to be steadily increasing in these countries. 
+
+What countries have the lowest reported rates? We can simply alter our plot code to not use the descinding value to rank mortality. 
 
 ```{r}
-df_long %>%
-  filter(Indicator == "Deaths",
-            Country == "Cambodia") %>%
-  ggplot(aes(x=Year, y=Value)) +
+Mortality <-df_long %>%
+  filter(Type=="Global") %>%
+  filter(Indicator=="Deaths") %>%
+  group_by(Country) %>%
+  mutate(last_val = last(Value)) %>%
+  ungroup() %>%
+  mutate(rank=dense_rank(last_val)) %>%
+  filter(rank<=5) %>%
+  ggplot(aes(x=Year, y=Value, color = Country)) +
   geom_line() + 
-  labs(title = "Cambodia Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
+  scale_color_viridis_d()+
+  labs(title = "Country Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
      caption = "Limited to reporting countries",
            y = "Crude Mortality Rate (per 1000 Persons)")+
   theme_linedraw() +
@@ -1304,45 +1357,23 @@ df_long %>%
        axis.title.x = element_text(size = 12),
        axis.title.y = element_text(size = 12),
        plot.caption = element_text(size = 12),
-         plot.title = element_text(size = 16))
+         plot.title = element_text(size = 16),
+       legend.title = element_blank())
+
+direct.label(Mortality, method = list("angled.boxes")) + scale_x_continuous(expand = c(0.3,0))
+
+
+
+```
+Looks like many countries in the Persian Gulf region have the lowest rates of mortality. 
+
+Let's make a plot of some of the countries that showed unusal patterns over time. We will include the US for comparison.
+
+```{r}
 
 df_long %>%
   filter(Indicator == "Deaths",
-            Country == "Rwanda") %>%
-  ggplot(aes(x=Year, y=Value)) +
-  geom_line() + 
-  labs(title = "Rwanda Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
-     caption = "Limited to reporting countries",
-           y = "Crude Mortality Rate (per 1000 Persons)")+
-  theme_linedraw() +
-  theme(axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 12),
-       axis.title.x = element_text(size = 12),
-       axis.title.y = element_text(size = 12),
-       plot.caption = element_text(size = 12),
-         plot.title = element_text(size = 16))
-
-df_long %>%
-  filter(Indicator == "Deaths",
-            Country %in% c("United States", "Rwanda", "Cambodia", "Qatar", "Niger", "Israel", "Mexico", "China"))%>%
-  ggplot(aes(x=Year, y=Value)) +
-  geom_line() + 
-  facet_grid(~ Country)
-  labs(title = " Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
-     caption = "Limited to reporting countries",
-           y = "Crude Mortality Rate (per 1000 Persons)")+
-  theme_linedraw() +
-  theme(axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 12),
-       axis.title.x = element_text(size = 12),
-       axis.title.y = element_text(size = 12),
-       plot.caption = element_text(size = 12),
-         plot.title = element_text(size = 16))
-
-
-df_long %>%
-  filter(Indicator == "Deaths",
-            Country %in% c("United States", "Rwanda", "Cambodia", "Qatar", "Niger", "Israel", "Mexico", "China"))%>%
+            Country %in% c("United States", "Rwanda", "Cambodia", "Qatar", "Bulgria"))%>%
   ggplot(aes(x=Year, y=Value, color = Country)) +
   geom_line() + 
   labs(title = " Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
@@ -1355,35 +1386,55 @@ df_long %>%
        axis.title.y = element_text(size = 12),
        plot.caption = element_text(size = 12),
          plot.title = element_text(size = 16))
-
-
-df_long %>%
-  filter(Indicator == "Deaths",
-            Country %in% c("United States", "Rwanda", "Cambodia", "Qatar", "Niger", "Israel", "Mexico", "China"))%>%
-    filter(Year > 2015) %>%
-  ggplot(aes(x=Year, y=Value, color = Country)) +
-  geom_line() + 
-  labs(title = " Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
-     caption = "Limited to reporting countries",
-           y = "Crude Mortality Rate (per 1000 Persons)")+
-  theme_linedraw() +
-  theme(axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 12),
-       axis.title.x = element_text(size = 12),
-       axis.title.y = element_text(size = 12),
-       plot.caption = element_text(size = 12),
-         plot.title = element_text(size = 16))
-  
-  
-  
 ```
 
+We can make a similar plot where each country is shown side by side by using the `facet_grid()` function of the `ggplot2` package. We need to indicate what variable we would like to use to group the data by and indicate it with this symbol `~`.
+
 ```{r}
 
 df_long %>%
   filter(Indicator == "Deaths",
-              Year >= 1960, 
-              Year <= 2019) %>%
+            Country %in% c("United States", "Rwanda", "Cambodia", "Qatar", "Bulgaria"))%>%
+  ggplot(aes(x=Year, y=Value)) +
+  geom_line() + 
+  facet_grid(~ Country)+
+  labs(title = " Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
+     caption = "Limited to reporting countries",
+           y = "Crude Mortality Rate (per 1000 Persons)")+
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
+```
+
+
+
+```{r}
+df_long %>%
+  filter(Type=="Global") %>%
+  filter(Indicator=="Deaths") %>%
+  filter(Year == 2014) %>%
+  group_by(Country) %>%
+  mutate(last_val = last(Value)) %>%
+  ungroup() %>%
+  mutate(rank=dense_rank(desc(last_val)))%>%
+  filter(Country == "United States")
+
+```
+
+The US ranked 83 out of 253 countries. This means that 70 % of the countries included had lower mortality rates.
+
+
+
+
+Let's see what the overall trend in mortality has been over time.
+```{r}
+
+df_long %>%
+  filter(Indicator == "Deaths") %>%
    group_by(Year) %>%
   summarise(Value = mean(Value, na.rm = TRUE)) %>%
   ggplot(aes(x=Year, y=Value)) +
@@ -1400,6 +1451,8 @@ df_long %>%
          plot.title = element_text(size = 16))
   
 ```
+We can see that despite some countries with different patterns of mortality, overall the world has exprienced much lower rates of mortality than in previous decades.
+
 
 ## US Disasters
 
@@ -1477,8 +1530,9 @@ This looks a bit awkward, because the eacy type of data spans a different time s
 Let's take a look at the reporting countries for each year for each type of data.
 
 ```{r}
-df_long %>%
-  filter(Type == "Global") %>%
+dataspan2 <-df_long %>%
+   filter(Indicator != "Disasters" &
+          Indicator != "Temperature") %>%
   group_by(Year, Label, .drop=FALSE) %>%
   tally() %>%
   ggplot(aes(x= Year, y = n, color = Label)) +
@@ -1507,7 +1561,7 @@ We can see that all of our data spans from 1980 to 2014.
 
 ```{r}
 df_long %>%
-  filter(Region=="United States") %>%
+  filter(Country =="United States") %>%
   group_by(Label) %>%
   summarise(Start=min(Year), End=max(Year)) %>%
   ggplot(aes(x=Label, y=End)) +
@@ -1535,10 +1589,10 @@ df_long %>%
 
 ```{r, Animation_1, warning=FALSE, eval=TRUE}
 animation_1 <- df_long %>%
-  filter(Type=="Global") %>%
+  #filter(Type=="Global") %>%
   filter(Indicator=="Deaths") %>%
-  filter(Year>=1980) %>%
-  filter(Year<=2010) %>%
+  #filter(Year>=1980) %>%
+  #filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region,alpha=Region)) +
   geom_point() +
   scale_color_manual(values = c("Red","Black")) +
@@ -1556,10 +1610,10 @@ animate(animation_1, fps = 10, duration = 5)
 
 ```{r, Animation_2, warning=FALSE, eval=FALSE}
 animation_2 <- df_long %>%
-  filter(Type=="Global") %>%
+  #filter(Type=="Global") %>%
   filter(Indicator=="Energy") %>%
-  filter(Year>=1980) %>%
-  filter(Year<=2010) %>%
+  #filter(Year>=1980) %>%
+  #filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region, alpha=Region)) +
   geom_point() +
   scale_color_manual(values = c("Red","Black")) +
@@ -1578,10 +1632,10 @@ animate(animation_2, fps = 10, duration = 5)
 
 ```{r, Animation_3, warning=FALSE, eval=FALSE}
 animation_3 <- df_long %>%
-  filter(Type=="Global") %>%
+  #filter(Type=="Global") %>%
   filter(Indicator=="GDP") %>%
-  filter(Year>=1980) %>%
-  filter(Year<=2010) %>%
+  #filter(Year>=1980) %>%
+  #filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region, alpha=Region)) +
   geom_point() +
   scale_color_manual(values = c("Red","Black")) +
@@ -1600,10 +1654,10 @@ animate(animation_3, fps = 10, duration = 5)
 
 ```{r, Animation_4, warning=FALSE, eval=FALSE}
 animation_4 <- df_long %>%
-  filter(Type=="Global") %>%
+  #filter(Type=="Global") %>%
   filter(Indicator=="Emissions") %>%
-  filter(Year>=1980) %>%
-  filter(Year<=2010) %>%
+  #filter(Year>=1980) %>%
+  #filter(Year<=2010) %>%
   ggplot(aes(x=Year, y=Value, group=Country, color=Region, size=Region, alpha=Region)) +
   geom_point() +
   scale_color_manual(values = c("Red","Black")) +
@@ -1827,5 +1881,12 @@ png(here::here("img", "mainplot.png"), width = 900, height = 700)
     plot_layout(widths = c(1, 2), heights = unit(c(4, 5), c('cm', 'null')))
 dev.off()
 ```
+
+## **Homework**
+
+***
+
+Ask students to create a plot with labels showing the countries with the lowest CO2 emission levels.
+
 
 
