@@ -301,13 +301,16 @@ Now we will take a look at our data and wrangle it until it is easy to use to al
 
 ### Yearly CO~2~ Emissions
 
-First let's take a look at the CO2 data. We can use the base `head()` function to see just the first 6 rows of our data.
+First let's take a look at the CO2 data. We can use the base `slice_head()` function of the `dplyr` package to see just the first rows of our data. We can specify how many rows we would like to see by using the `n =` argument. It is also useful to use the `slice_sample()` function to look at a selection of random rows.
 
 We will use the `%>%` pipe which can be used to define the input for later sequential steps. This will make more sense when we have multiple sequential steps using the same data object. To use the pipe notation we need to install and load  the `dplyr` package.
 
 ```{r}
 CO2_emissions %>%
-  head()
+  slice_head(n = 6)
+
+CO2_emissions %>%
+  slice_sample(n = 10)
 ```
 
 OK, we can see that our country data makes of the rows and the yearly data makes up the columns. We also see that we have alot of `NA` values.
@@ -346,10 +349,11 @@ We want to collapse all of the values for the emission data across the different
 CO2_emissions  %<>%
   pivot_longer(cols = -country, names_to = "Year", values_to = "Emissions")
 
-head(CO2_emissions)
+CO2_emissions %>%
+  slice_sample(n = 6)
 ```
 
-We also want to rename the `country` variable to be capitalized. W We can use the `rename()` function of the `dplyr` package to rename this variable. When renaming variables the new name is listed first before the `=`. We will also modify the `Emissions` data by dividing it by 1000 to make the numbers smaller. To do this we will use the `mutate()` function, which is also part of the `dplyr()` package. This function allows us to create and modify variables. You may also note that the `Year` variable is currently of class type character. We would like to change it to be numeric. This can also be accomplished using the `mutate()` function.
+We also want to rename the `country` variable to be capitalized.  We can use the `rename()` function of the `dplyr` package to rename this variable. When renaming variables the new name is listed first before the `=`. We will also modify the `Emissions` data by dividing it by 1000 to make the numbers smaller. To do this we will use the `mutate()` function, which is also part of the `dplyr()` package. This function allows us to create and modify variables. You may also note that the `Year` variable is currently of class type character. We would like to change it to be numeric. This can also be accomplished using the `mutate()` function.
 
 ```{r}
   
@@ -367,7 +371,7 @@ Now let's take a look to see how our data has changed:
 ```{r}
 
 CO2_emissions %>%
-tail()
+slice_sample(n = 6)
 
 ```
 Great, we can see that now the `Year` variable is of class double (abbreviated `dbl`), which is a numeric class.
@@ -376,7 +380,7 @@ Great, we can see that now the `Year` variable is of class double (abbreviated `
 
 ```{r}
 gdp_growth %>%
-  head()
+  slice_head(n = 6)
 ```
 
 ```{r}
@@ -393,15 +397,7 @@ glimpse()
 
 Again, we will use the `pivot_longer()` to transform the data to long format. We will also again change the `country` variable to be `Country` by using the `rename()` function , and we will make the `Year` varaible numeric using the `mutate()` function. 
 
-AVOCADO... this was in Michael's code... but I don't know that we need it
-We will use the `drop_na()` function of the `tidyr` package to drop all years with missing data.
 
-```{r}
-# gdp_growth %<>%
-#    tidyr::drop_na()
-# 
-# head(gdp_growth)
-```
 
 ```{r}
 gdp_growth %<>%
@@ -411,7 +407,6 @@ gdp_growth %<>%
   rename(Country=country) %>%
   mutate(Year = as.numeric(Year),
          Label = "GDP Growth/Capita (%)") %>%
-  #  tidyr::drop_na() %>% # not sure we need this..
   rename(GDP = gdp_growth)
 ```
 
@@ -419,7 +414,7 @@ Now let's see how this data has changed:
 
 ```{r}
 gdp_growth %>%
-  head()
+  slice_head(n = 6)
 
 gdp_growth %>%
   count(Year)
@@ -431,7 +426,7 @@ Now let's take a look at the energy use per person data:
 
 ```{r}
 energy_use %>%
-  head()
+  slice_head(n = 6)
 ```
 
 #### {.scrollable}
@@ -458,7 +453,7 @@ energy_use %<>%
 
 ```{r}
 energy_use %>%
-tail()
+slice_sample(n = 10)
 ```
 
 
@@ -466,7 +461,7 @@ tail()
 
 ```{r}
 mortality %>%
-  head()
+  slice_head(n = 6)
 ```
 
 
@@ -491,13 +486,13 @@ mortality %>%
 ####
 
 
-That is looking better! However, we also want to remove some variables like: `Country Code`, `Indicator Name`, and `Indicator Code`. We can do that using the `select()` functio of the `dplyr` package. We can use the minus sign `-` to indicate what variables we dont want to keep. Otherwise, we will perform similar modifications as we performed on the other datasets.
+That is looking better! However, we also want to remove some variables like: `Country Code`, `Indicator Name`, and `Indicator Code`. We can do that using the `select()` functio of the `dplyr` package. We can use the minus sign `-` to indicate what variables we dont want to keep. Otherwise, we will perform similar modifications as we performed on the other datasets. Note that these variable names need quotation marks around them because they have spaces. 
 
 ```{r}
 mortality %<>%
-  select(-`Country Code`,
-         -`Indicator Name`,
-         -`Indicator Code`) %>%
+  select(-"Country Code",
+         -"Indicator Name",
+         -"Indicator Code") %>%
   rename(Country = "Country Name") %>%
   pivot_longer(cols = -Country, 
                names_to = "Year", 
@@ -510,7 +505,7 @@ mortality %<>%
 
 ```{r}
 mortality %>%
-  head()
+  slice_head(n = 6)
 ```
 
 
@@ -522,7 +517,7 @@ Now we will take a look at the US data about disasters and temperature.
 
 ```{r}
 us_disaster  %>%
-  head()
+  slice_head(n = 6)
 ```
 
 We are specifically interested in the `Year` and  the variables that contain the word `"Count"` so we will select them using the `select()` and `contains()` functions in the `dplyr` package. Since we are selecting for variables with the word `"Count"` we need to use quotation marks around it. Selecting for the variable `year` does not require this as that is actually the name of one of the existing variables.
@@ -533,7 +528,7 @@ us_disaster %<>%
            select(Year, contains("Count"))
 
 us_disaster %>%
-  head()
+  slice_head(n = 6)
 ```
 
 Now we want to create a new variable that will be the sum of all the different types of disasters for each year. 
@@ -566,7 +561,8 @@ us_disaster %<>%
            Type = "US-specific",
           Label = "Number of Disasters")
 
-head(us_disaster)
+us_disaster %>%
+  slice_head(n = 6)
 ```
 
 
@@ -575,7 +571,7 @@ head(us_disaster)
 
 ```{r}
 us_temperature %>%
-  head()
+  slice_head(n = 6)
 ```
 OK, so we want to remove the `Anomaly` variable which is an indicator of how different the national average temperature for that year was from the average temperature from 1901-2000 which was 52.02&deg;F. 
 
@@ -594,10 +590,11 @@ us_temperature %<>%
         Label = "Temperature (Fahrenheit)") %>%
   select(Year, Country, Indicator, Value, Region, Type, Label)
 
-head(us_temperature)
+us_temperature %>%
+  slice_head(n = 6)
 ```
 
-## Joining data
+# Joining data
 
 Now we would like to join the different datasets together into one tibble. To do so it is often necessary to have at least one column or variable with the same name to be used as a key for putting your data together. To put all of our data together there are several `*_join()` functions available in the `dplyr` package. 
 
@@ -628,7 +625,7 @@ df_wide <- CO2_emissions %>%
   full_join(mortality, by = c("Country", "Year", "Label"))
 
 df_wide %>%
-  head()
+  slice_head(n = 6)
 ```
 
 We can also do the same thing using by using the`reduce()` function of the `purrr` package. This is a good option if you have many dasasets to combine.
@@ -642,7 +639,7 @@ df_wide <- list(CO2_emissions,
   reduce(full_join, by = c("Country", "Year", "Label"))
 
 df_wide %>%
-  head()
+  slice_head(n = 6)
 ```
 
 ```{r}
@@ -657,10 +654,11 @@ We will also make a long version of this data, where we will create an new varia
 
 ```{r}
 df_long <- df_wide %>%
-  pivot_longer(cols = c(-Country, -Year, - Label), 
+  pivot_longer(cols = c(-Country, -Year, -Label), 
                names_to = "Indicator", 
                values_to = "Value")
-head(df_long)
+df_long %>%
+  slice_head(n = 6)
 ```
 
 We will also create a new variable called `Region` that will indicate if the data is about the United States or a different country based on the values in the `Country` variable. We will use the `case_when()` function of the `dplyr` package to do this. If the `Country` variable is equal to `"United States"` the value for the new variable will also be "United States", where as if the `Country` variable is not equal to `"United States"` but is some other character string value, such as `"Afghanistan"`, then the value for the new variable will be `"Rest of the World"`.
@@ -672,7 +670,9 @@ The new values for the new variable `Region` are indicated after the specific co
   mutate(Region = case_when(Country == "United States" ~ "United States",
                             Country != "United States" ~ "Rest of the World"),
          Type = "Global")
-head(df_long)
+
+df_long %>%
+  slice_head(n = 6)
 ```
 
 We will now combine this data with the US data about disasters and temperatures.
@@ -681,8 +681,10 @@ We will now use the `bind_rows()` function which will just append the `us_temper
 
 
 ```{r}
-head(us_disaster)
-head(us_temperature)
+us_disaster %>%
+  slice_head(n = 6)     
+us_temperature %>%
+  slice_head(n = 6)    
 
 df_long <-list(df_long, 
                us_disaster,
@@ -691,17 +693,20 @@ df_long <-list(df_long,
 df_long$Country <- as.factor(df_long$Country)
 ```
 
-We can check the top and bottom of the new `df_long` tibble to see that our `us_temperature` data is at the bottom.
+We can check the top and bottom of the new `df_long` tibble to see that our `us_temperature` data is at the bottom. To see the end of our tibble we can use `slice_tail()` function of the `dplyr` package.
 
 ```{r}
-head(df_long)
-tail(df_long)
+df_long %>%
+  slice_head(n = 6)
+
+df_long %>%
+  slice_tail(n = 6)
 ```
 
 
 <details> <summary> Click here for details about the difference between `full_join()` and `bind_rows()` </summary>
 
-The difference between this function and the `full_join()` function is that the `bind_rows()` function will assentially just append each dataset to each other, whereas the `full_join()` function collapses data that is comparable. Here you will see an example of what the data would have been like for `df_wide` if we had made it using `bind_rows()`. We will specifically look at the values for China in the year of 1960.
+The difference between this function and the `full_join()` function is that the `bind_rows()` function will essentially just append each dataset to each other, whereas the `full_join()` function collapses data that is comparable. Here you will see an example of what the data would have been like for `df_wide` if we had made it using `bind_rows()` and if `full_join()` had been used but was not joined by the `Label` variable. Since the `Label` variable had unique values for each type of `Indicator`, this causes the `full_join()` result to be the same as `bind_rows()`. We will specifically look at the values for China in the year of 1980.
 
 ```{r}
 df_wide_br <- list(CO2_emissions, 
@@ -710,35 +715,56 @@ df_wide_br <- list(CO2_emissions,
                 mortality) %>% 
   bind_rows()
 
-dim(df_wide)
+
+df_wide_fj <- list(CO2_emissions, 
+                gdp_growth, 
+                energy_use, 
+                mortality) %>% 
+  reduce(full_join, by = c("Country", "Year"))
+
+df_wide_fj_label <- list(CO2_emissions, 
+                gdp_growth, 
+                energy_use, 
+                mortality) %>% 
+  reduce(full_join, by = c("Country", "Year", "Label"))
+
+
+dim(df_wide_fj)
 dim(df_wide_br)
 
-df_wide%>%
-  filter(Country == "China", Year == "1960")
+identical(df_wide_fj_label, df_wide_br)
 
-df_wide_br%>%
-  filter(Country == "China", Year == "1960")
+df_wide %>%
+  filter(Country == "China", Year == "1980")
+
+df_wide_br %>%
+  filter(Country == "China", Year == "1980")
 ```
 </detials>
 
 
-To remove entries for countries with NA values we can use `filter(complete.cases(.))`.
+To remove entries for countries with NA values we can use the `drop_na()` function of the `tidyr` package to drop all years with missing data.
+
 ```{r}
 df_long_with_miss <- df_long %>%
   arrange(Country)
 
-df_long<- df_long %>%
-  filter(complete.cases(.)) %>%
+df_long %<>%
+  drop_na() %>%
   arrange(Country)
-
-
-head(df_long_with_miss)
-head(df_long)
 
 ```
 
+You can see that by removing the NA values the data for Afghanistan starts at 1949 instead of 1751.
 
+```{r}
+df_long_with_miss %>%
+  slice_head(n = 6)
 
+df_long %>%
+  slice_head(n = 6)
+
+```
 
 # **Data Exploration**
 *** 
@@ -776,7 +802,31 @@ Type `theme_` in the RStudio console to see the varios plot theme options availa
 knitr::include_graphics(here::here("img", "themes.png"))
 ```
 
-We will also use the `theme()` function to change the font size of the x-axis, y-axis, axis titles, and the caption as shown below. To know what to call each element of the plot in this function to change the size type `?theme()` in the console. You will see a very large list that includes other plot aspects like the background and the legend. This function can be used to modify your plot to your specifications.
+We will also use the `theme()` function to change the font size of the x-axis, y-axis, axis titles, and the caption as shown below. To know what to call each element of the plot in this function to change the size type `?theme()` in the console. You will see a very large list that includes other plot aspects like the background and the legend. This function can be used to modify your plot to your specifications. We will also use it to remove the legend title by using `element_blank()`. In this case, we are also saving the plot to an object called `co2plot`. To show the plot we simply type the name of the object.
+
+```{r}
+co2plot <-df_long %>%
+  filter(Indicator == "Emissions") %>%
+  ggplot(aes(x = Year, y = Value, group = Country))+
+  geom_line(alpha = 0.2) + 
+  labs(title = "Country" ~CO[2]~ "Emissions per Year, 1751-2014",
+     caption = "Limited to reporting countries",
+           y = "Emissions (Metric Tons)") +
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16),
+       legend.title = element_blank())
+
+co2plot
+```
+
+Great! We've created our first plot. We can see that many countries show a dramatic increase in emissions over time with a handful of countries with particularly high levels. What about the United States? Which line indicates the emissions in the US? We can add another layer on top of our first plot to add a red line just for the US data. To do this we need to indicate what data we would like to plot, so we need to filter for just the US data and then we need to indicate that it will be colored by Country, even though in this case we only have one line to color. The default color would be a salmon pink color, but we would like red. So we will use the `scale_color_manual()` function to manually choose the color that we want by using `scale_colour_manual(values = c("red"))`. Notice how the color name needs to be in quotes and that the argument `values =` is used to specify what color values to use.
+
+We can add this line to the plot in two ways. The first way is to add the code for this layer to the original code that we used to create the `co2plot` or the second way is to simply add to that plot object by using the `+`.
 
 ```{r}
 df_long %>%
@@ -785,7 +835,7 @@ df_long %>%
   geom_line(alpha = 0.2) + 
   labs(title = "Country" ~CO[2]~ "Emissions per Year, 1751-2014",
      caption = "Limited to reporting countries",
-           y = "Emissions (1M Metric Tons)") +
+           y = "Emissions (Metric Tons)") +
   geom_line(data = df_long %>%
   filter(Indicator == "Emissions",
          Country == "United States"), aes(x=Year, y=Value, color = Country)) +
@@ -798,9 +848,264 @@ df_long %>%
        plot.caption = element_text(size = 12),
          plot.title = element_text(size = 16),
        legend.title = element_blank())
+
+co2plot + geom_line(data = df_long %>%
+  filter(Indicator == "Emissions",
+         Country == "United States"), aes(x=Year, y=Value, color = Country)) +
+  scale_colour_manual(values=c("red"))
 ```
 
-Great! We've created our first plot. We can see that many countries show a dramatic increase in emissions over time with a handful of countries with particularly high levels.
+It looks like the US has long been the largest CO2 emission producing country until recently, when the US was surpassed by another country. 
+
+Let's figure out which country, by seeing what the top 10 emission producing countries were in 2014. We can do so by filtering the data for 2014, which was the final year of the data. Then we can make a rank variable based on the `Value` variable for the amount of emissions produced. There are many functions in the `dplyr` package for ranking values that are based on the [SQL](https://en.wikipedia.org/wiki/SQL){target="_blank"} [rank functions](https://www.sqlshack.com/overview-of-sql-rank-functions/){target="_blank"}. SQL is another programming language for managing large amounts of data. The difference in the rank functions mostly has to do with how to deal with ties in the data.  We will use `dense_rank()`, as we do not want gaps between ranks.
+
+```{r, echo = FALSE, out.width = "600 px"}
+knitr::include_graphics(here::here("img", "rank.png"))
+```
+
+We want to do this in descending order becuase we want to rank by largest to smallest, so we will use the `desc()` function of the `dplyr` package. Then we will arrange the output by rank using the `arrange()` function of the `dplyr` package. 
+
+```{r}
+
+top_10_count <-df_long %>%
+    filter(Indicator=="Emissions") %>%
+    filter(Year==2014) %>%
+    mutate(rank=dense_rank(desc(Value))) %>%
+    filter(rank<=10) %>%
+    arrange(rank)
+
+top_10_count
+
+```
+We can see that China is now the top emission producing country.
+
+
+Let's make a plot of these top countries. We need to filter the data to just these top countries by using the `%in%` opperator to only keep countries in our`Country` variable that are also in the `Country` variable within `top_10_count`. We can use the `pull()` function also fo the `dplyr` package to specifically grab just the `Country` data out of `top_10_count`.
+
+
+Since we have 10 countries we will want to differentiate them by color. 
+
+To color our plot we will use the viridis color pallette which is compatible with color-blindness by using the `scale_fill_viridis_d()` function which is simply available by loading the `ggplot2` package. There are a few variations such as discreet as `_d`, or binned continuous as `_b`, or continuous scale as `_c`. See [here](https://ggplot2.tidyverse.org/reference/scale_viridis.html) for more information.
+
+
+```{r}
+
+Top10b<-df_long %>%
+  filter(Country %in% pull(top_10_count, Country)) %>%
+  filter(Indicator=="Emissions") %>%
+  filter(Year>=1900) %>%
+  ggplot(aes(x=Year, y=Value, color = Country)) +
+  geom_line() +
+  scale_color_viridis_d()+
+  theme_linedraw() + 
+  labs(title = "Top 10 Emissions-producing Countries in 2010 (1900-2014)",
+       subtitle = "Ordered by Emissions Produced in 2014",
+       y = "Emissions (Metric Tons)",
+       x = "Year")+
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
+
+Top10b
+
+```
+
+It's still a bit difficult to tell which line corresponds to which country. So, let's add a label. One way to do this is to add text layer to our plot using the `geom_text()` function of the `ggplot2` package. We need to first specify what data we will use, in this case we will filter for just the data for the last year(which we can do using the `last()` function of the `dplyr` package) and then we need to indicate that our label will be based on the `Country` variable using the `aes()` asthetics mapping argument. We will also get rid of our legend since we will not need it anymore, by using the `theme()` function of the `ggplot2` package.
+
+```{r}
+
+Top10b +
+geom_text(data = df_long %>%
+  filter(Country %in% pull(top_10_count, Country)) %>%
+  filter(Indicator=="Emissions") %>%
+  filter(Year == last(Year)), aes(label = Country)) +
+  theme(legend.position = "none")
+```
+
+Not bad, but some of the labels are overlapping and difficult to read. We can use the `check_overlap = TRUE` argument within the `geom_text()` function to remove overlapping variables and we can expand the plot area horizontally so that the names are not cutoff by using `scale_x_continuous(expand = c(0.2,0))`.
+
+```{r}
+
+Top10b +
+geom_text(data = df_long %>%
+  filter(Country %in% pull(top_10_count, Country)) %>%
+  filter(Indicator=="Emissions") %>%
+  filter(Year == last(Year)), aes(label = Country), check_overlap = TRUE) + 
+  scale_x_continuous(expand = c(0.2,0))+
+  theme(legend.position = "none")
+
+```
+
+This is easier to read now, but it also causes us to lose some of the labels. 
+There are several alternative ways we can keep all of our labels and make them easier to read. The first package we will show is called `directlabels`.
+
+The most simple option is to use the `direct.label()` function. which will automatically add lables at the end of the lines. However, it is a bit difficult to see some of our labels as they get automatically sized to fit the plot.
+
+
+
+
+```{r}
+library(directlabels)
+direct.label(Top10b) +scale_x_continuous(expand = c(0.3,0))
+```
+Alternatively this can be done in a more `ggplot2` layering method by using the `geom_dl()` function.
+
+```{r}
+
+Top10b +scale_x_continuous(expand = c(0.3,0)) +
+     geom_dl(aes(label = Country), method = list("last.bumpup")) +
+     theme(legend.position = "none")
+```
+
+This is nice and legible now. We have all 10 countries names listed and they are in order of the last data point and they are relatively close to the lines that they correspond to. 
+
+Another option is to use a different method in the `directlables` package. [Here](http://directlabels.r-forge.r-project.org/docs/index.html){target="_blank"} is a list of options.
+
+The `"angled.boxes"` method looks nice for some plots but doesn't work very well for our plot:
+```{r}
+direct.label(Top10b, method = list("angled.boxes"))+scale_x_continuous(expand = c(0.3,0)) 
+```
+
+However the `"last.polygons"` method works quite well:
+```{r}
+direct.label(Top10b,method = list("last.polygons"))+scale_x_continuous(expand = c(0.3,0))
+```
+The second package is the `ggrepel` package which is especially good for crowded labels that might overlap one another. It alows for more control than the `directlabels` package. We will use the `geom_text_repel()` function. Just like with `geom_text`, first we need to specify what data we want to include. We then specify with the `aes()` argument that our label will be based on the `Country` variable and we again specify what variable to use for our x axis and y axis, so that we indicate where the labels should be plotted. 
+
+```{r}
+
+Top10b + geom_text_repel(data = df_long %>%
+  filter(Country %in% pull(top_10_count, Country)) %>%
+  filter(Indicator=="Emissions") %>%
+  filter(Year == last(Year)),
+            aes(label = Country,
+                x = Year,
+                y = Value)) +
+  theme(legend.position = "none")+scale_x_continuous(expand = c(0.3,0))
+
+```
+You can see that this package creates segments that connect the label to the line.
+
+There are many arguments to use to style your labels just the way that you want:
+
+```{r, echo = FALSE, out.width = "600 px"}
+knitr::include_graphics(here::here("img", "ggrepel.png"))
+```
+
+See [here](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target = "blank"} for more details.
+
+
+```{r}
+
+Top10b + geom_text_repel(data = df_long %>%
+  filter(Country %in% pull(top_10_count, Country)) %>%
+  filter(Indicator=="Emissions") %>%
+  filter(Year == last(Year)),
+            aes(label = Country,
+                x = Year,
+                y = Value),
+            nudge_x = 10,
+              hjust = 1,
+              vjust = 1,
+       segment.size = 0.25,
+              force = 1)+
+  theme(legend.position = "none")+
+  scale_x_continuous(expand = c(0.3,0))+
+  scale_y_continuous(expand = c(0.3,0))
+
+```
+Nice, that looks pretty good.
+
+Now let's try showing our data in a different way. This time we will create a `geom_tile` plot.
+To color our plot we will use the viridis color pallette again  but this time we will use the `scale_fill_viridis_c()`, recall that the `_c` indicates a continuous scale. See [here](https://ggplot2.tidyverse.org/reference/scale_viridis.html) for more information.  Again, we will filter our data to include only the Countries included in the `Country` variable of the `top_10_count`. Recall that the `pull()` function specifically  grabs the `Country` variable data values within `top_10_count`. Then we will use the `fct_reorder()` function of the `forcats` package to order our countries based on the last emission value in 2014. 
+
+To use this function, the variable that is to be reordered is listed first, then the variable that is being used to determine the order, followed by a function to determine the order, in this case the last value using the `last()` function (recall that this is also a function of the `dplyr` package).
+
+```{r}
+Top10<-df_long %>%
+  filter(Country %in% pull(top_10_count, Country)) %>%
+  filter(Indicator=="Emissions") %>%
+  filter(Year>=1900)%>%
+  ggplot(aes(x=Year, y=fct_reorder(Country, Value, last))) +
+  geom_tile( aes(fill=log(Value))) +
+  scale_fill_viridis_c()+
+  scale_x_continuous(breaks = seq(1900,2014,by=5),
+                     labels = seq(1900,2014,by=5)) + 
+  labs(title = "Top 10 "~CO[2]~"Emission-producing Countries in 2014",
+    subtitle = "Ordered by Emissions Produced in 2014",
+        fill = "Ln(CO2 Emissions (Metric Tons))") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12, angle = 90),
+        axis.text.y = element_text(size = 12),
+         axis.title = element_blank(),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16),
+    legend.position = "bottom")
+
+Top10
+
+```
+We can also create this plot directly without using the `top_10_count` tibble, by creating a new variable for the last value that we will call `last_val`, or in other words the emission value in 2014 for each country. To do this we need to first use the `group_by()` function of the `dplyr` package to make sure that the last value is calculated and repeated for each row for a given country. Here you can see that that is the case for Afghanistan.
+```{r}
+
+df_long %>%
+  filter(Type=="Global") %>%
+  filter(Indicator=="Emissions") %>%
+  filter(Year>=1900) %>%
+  group_by(Country) %>%
+  mutate(last_val = last(Value))
+```
+
+Now we will also create a `rank` variable like we did when we created `top_10_count` that will be calculated as the rank of the countries based on the `last_val` value (again this is the emission value in the last year of the data, 2014). Now we want to ungroup our data, as we want the rank to be calculated across the countries.     
+
+```{r}
+
+df_long %>%
+  filter(Type=="Global") %>%
+  filter(Indicator=="Emissions") %>%
+  filter(Year>=1900) %>%
+  group_by(Country) %>%
+  mutate(last_val = last(Value)) %>%
+  ungroup() %>%
+  mutate(rank=dense_rank(desc(last_val))) %>%
+  filter(rank<=10) 
+```
+
+Now we can put it all together to create the plot directly from `df_long`.
+
+```{r}
+
+Top10<-df_long %>%
+  filter(Type=="Global") %>%
+  filter(Indicator=="Emissions") %>%
+  filter(Year>=1900) %>%
+  group_by(Country) %>%
+  mutate(last_val = last(Value)) %>%
+  ungroup() %>%
+  mutate(rank=dense_rank(desc(last_val))) %>%
+  filter(rank<=10) %>%
+  ggplot(aes(x=Year, y=fct_reorder(Country, Value, last))) +
+  geom_tile( aes(fill=log(Value))) +
+  scale_fill_viridis_c()+
+  scale_x_continuous(breaks = seq(1900,2014,by=5),
+                     labels = seq(1900,2014,by=5)) + 
+  labs(title = "Top 10 "~CO[2]~"Emission-producing Countries in 2014",
+    subtitle = "Ordered by Emissions Produced in 2014",
+        fill = "Ln(CO2 Emissions (Mg))") +
+  theme_classic() +
+  theme(axis.text.x = element_text(size = 12, angle = 90),
+        axis.text.y = element_text(size = 12),
+         axis.title = element_blank(),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16),
+    legend.position = "bottom")
+
+Top10
+```
+We can see that Germany had very low emission rates at the end of World War II. We see that the US has consistently had high emission rates since 1900, but that the emission rates in China recently surpased that of the US. The portions of the plot that are white indicate that there is no emission data for that country.
 
 Now let's take a look at the data in slightly different way. Let's look at overall global emissions by calculating a sum each year of all the emission values for the different countries. Note that this is limited to only the countries included in the dataset. 
 
@@ -808,7 +1113,7 @@ To calculate this value we will first use the `group_by()` function of the `dply
 
 Then we will use the `summarize()` function (also of the `dplyr` package) and the base `sum()` function to calculate a sum of the emission values each year.
 
-Since we will be ploting only one value each year, we no longer need to assign a `group` in the `aes()` argument. this time we will make the size of the line that will be plotted a bit larger using the `size()` argument in the `geom_line()` function.
+Since we will be ploting only one value each year, we do not need to assign a `group` in the `aes()` argument. this time we will make the size of the line that will be plotted a bit larger using the `size()` argument in the `geom_line()` function.
 
 ```{r}
 CO2_world<-df_long %>%
@@ -884,14 +1189,12 @@ df_long %>%
 
 ```{r}
 df_long %>%
-  filter(Indicator == "Energy",
-              Year >= 1960, 
-              Year <= 2015) %>%
+  filter(Indicator == "Energy") %>%
 ggplot(aes(x=Year, y= Value, group=Country)) +
   geom_line(alpha=0.2) + 
   geom_line(data = df_long %>%
   filter(Indicator == "Energy",
-         Country == "United States"), aes(x=Year, y=Value, color = Country)) +
+           Country == "United States"), aes(x=Year, y=Value, color = Country)) +
   scale_colour_manual(values=c("red")) +
   labs(title = "Country Energy Use (kg of Oil Equivalent per Capita), 1960 to 2015",
      caption = "Limited to reporting countries", 
@@ -906,11 +1209,27 @@ ggplot(aes(x=Year, y= Value, group=Country)) +
        legend.title = element_blank())
 ```
 
+Let's see who the top countries are. First let's take a look at the year 2000, and then 2014.
+
+```{r}
+
+df_long %>%
+filter(Indicator == "Energy") %>%
+  filter(Year == 2000) %>%
+ slice_max(Value, n = 10)
+
+
+df_long %>%
+filter(Indicator == "Energy") %>%
+  filter(Year == 2014) %>%
+  slice_max(Value, n = 10)
+
+```
+
+
 ```{r}
 df_long %>%
-  filter(Indicator == "Energy",
-              Year >= 1960, 
-              Year <= 2015) %>%
+  filter(Indicator == "Energy") %>%
   group_by(Year) %>%
   summarise(Value = sum(Value, na.rm = TRUE)) %>%
   ggplot(aes(x=Year, y=Value)) +
@@ -961,13 +1280,13 @@ Mortality
 ```
 ```{r}
 df_long %>%
-  filter(Indicator == "Deaths", Year == 1980) %>% arrange(-Value)
+  filter(Indicator == "Deaths", Year == 1980) %>% slice_max(Value, n = 10)
 
 df_long %>%
-  filter(Indicator == "Deaths", Year == 1995) %>% arrange(-Value)
+  filter(Indicator == "Deaths", Year == 1995) %>% slice_max(Value, n = 10)
 
 df_long %>%
-   filter(Indicator == "Deaths", Year == 2017) %>% arrange(-Value)
+   filter(Indicator == "Deaths", Year == 2017) %>% slice_max(Value, n = 10)
 ```
 
 ```{r}
@@ -1300,88 +1619,9 @@ animation_4 <- df_long %>%
 animate(animation_4, fps = 10, duration = 5)
 ```
 
-To color our plot we will use the viridis color pallette which is compatible with color-blindness by using the `scale_fill_viridis_c()` function which is simply available by loading the `ggplot2` package.There are a few variations such as discreet as `_d`, or binned continuous as `_b`. The `_c` indicates a continuous scale. See [here](https://ggplot2.tidyverse.org/reference/scale_viridis.html) for more information.
-
-```{r}
-Top10<-df_long %>%
-  filter(Type=="Global") %>%
-  filter(Indicator=="Emissions") %>%
-  filter(Year>=1900) %>%
-  group_by(Country) %>%
-  mutate(max_val = max(Value)) %>%
-  ungroup() %>%
-  mutate(rank=dense_rank(-max_val)) %>%
-  filter(rank<=10) %>%
-  ggplot(aes(x=Year, y=fct_reorder(Country, Value, max))) +
-  geom_tile(color="transparent", aes(fill=log(Value))) +
-  scale_fill_viridis_c()+
-  scale_x_continuous(breaks = seq(1900,2014,by=5),
-                     labels = seq(1900,2014,by=5)) + 
-  labs(title = "Top 10 "~CO[2]~"Emission-producing Countries in 2014",
-    subtitle = "Ordered by Emissions Produced in 2014",
-        fill = "Ln(CO2 Emissions (Mg))") +
-  theme_classic() +
-  theme(axis.text.x = element_text(size = 12, angle = 90),
-        axis.text.y = element_text(size = 12),
-         axis.title = element_blank(),
-       plot.caption = element_text(size = 12),
-         plot.title = element_text(size = 16),
-    legend.position = "bottom")
-
-Top10
-```
-Interestingly, we can see that Germany had ver low imission rates at the end of World War II. We see that the US has consistently had high emission rates since 1900, but that the emission rates in China recently surpased that of the US.
-
-```{r}
-
-Top10b<-df_long %>%
-  filter(Type=="Global") %>%
-  filter(Indicator=="Emissions") %>%
-  filter(Year>=1900) %>%
-  filter(Year<=2014) %>%
-  group_by(Country) %>%
-  mutate(max_val = max(Value)) %>%
-  ungroup() %>%
-  mutate(rank=dense_rank(-max_val)) %>%
-  filter(rank<=10) %>%
-  ggplot(aes(x=Year, y=Value, color = Country)) +
-  geom_line() +
-  scale_color_viridis_d()+
-  geom_text_repel(data = df_long %>%
-  filter(Type=="Global") %>%
-  filter(Indicator=="Emissions") %>%
-  filter(Year>=1900) %>%
-  filter(Year<=2014) %>%
-  group_by(Country) %>%
-  mutate(max_val = max(Value)) %>%
-  ungroup() %>%
-  mutate(rank=dense_rank(-max_val)) %>%
-  filter(rank<=10) %>%
-              filter(Year == last(Year)),
-            aes(label = Country,
-                x = Year,
-                y = Value),
-            size = 3,
-            alpha = 1,
-            nudge_x = 10,
-            direction = "y",
-            hjust = 1,
-            vjust = 1,
-            segment.size = 0.25,
-            segment.alpha = 0.25,
-            force = 1)+
-  theme_linedraw() + 
-  theme(axis.text.x = element_text(angle = 90),
-        axis.title = element_blank(),
-        legend.position = "none") + 
-  labs(title = "Top 10 Emissions-producing Countries in 2010 (1900-2014)",
-       subtitle = "Ordered by Emissions Produced in 2014",
-       fill = "Ln(CO2 Emissions (Mg))")
-
-Top10b
 
 
-```
+
 ## US-specific
 
 ```{r}
