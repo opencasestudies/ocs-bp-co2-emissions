@@ -327,15 +327,6 @@ dplyr::glimpse()
 ####
 
 
-  Indicator                           n
-  <chr>                           <int>
-1 CO2 Emissions (Mg)              57246
-2 Deaths/1000 People              57246
-3 Disasters                          40
-4 Energy Use (kg, oil-eq./capita) 57246
-5 GDP Growth/Capita (%)           57246
-6 Temperature (Fahrenheit)          116
-
 
 We can see that we have a large [tibble](https://tibble.tidyverse.org/). A tibble is the tidyverse version of a data frame. It is essentially a table with variable information arranged as columns, and individual observations arranged as rows. We can see that the tibble gives us information about the class of each variable.  For example the `country` variable is made up of character (abbreviated as chr) values. We see that we have 265 different country variables and CO2 emission values for 192 different years (from 1751 to 2014). Recall that the values are emissions in metric tons also called tonnes. We can see that there are fewer `NA` values for later years.
 
@@ -375,6 +366,21 @@ slice_sample(n = 6)
 
 ```
 Great, we can see that now the `Year` variable is of class double (abbreviated `dbl`), which is a numeric class.
+
+
+Now let's take a look at the `Country` variable just to check if there is anything unexpected. We will use the `distinct()` function of the `dplyr` package to view the unique values only.
+
+#### {.scrollable }
+```{r}
+#Scroll through the output!
+CO2_emissions %>%
+       distinct(Country)
+
+```
+####
+
+These all look as expected!
+
 
 ### Yearly Growth in GDP per Capita
 
@@ -420,6 +426,20 @@ gdp_growth %>%
   count(Year)
 ```
 
+
+Again let's check that the `Country` variable only contains values we would expect.
+
+#### {.scrollable }
+```{r}
+#Scroll through the output!
+gdp_growth %>%
+       distinct(Country)
+
+```
+####
+
+Also looks good!
+
 ### Energy Use per Person
 
 Now let's take a look at the energy use per person data:
@@ -455,6 +475,20 @@ energy_use %<>%
 energy_use %>%
 slice_sample(n = 10)
 ```
+
+Now we will check the `Country` variable:
+
+#### {.scrollable }
+```{r}
+#Scroll through the output!
+energy_use %>%
+       distinct(Country)
+
+```
+####
+
+
+Looks good!
 
 
 ## Crude Mortality Rate
@@ -508,6 +542,33 @@ mortality %>%
   slice_head(n = 6)
 ```
 
+Let's check the `Country` variable:
+
+#### {.scrollable }
+```{r}
+#Scroll through the output!
+mortality %>%
+       distinct(Country)
+
+```
+####
+
+Ok, in this case it looks like there are some regions included as well, like:
+
+"East Asia & Pacific (excluding high income)", "Early-demographic dividend", "East Asia & Pacific", "Europe & Central Asia (excluding high income)", "Europe & Central Asia", "Euro area", "Fragile and conflict affected situations", "European Union", "Heavily indebted poor countries (HIPC)", "IBRD only", "IDA & IBRD total", "IDA total", "IDA blend", "IDA only", "Not classified", "Latin America & Caribbean (excluding high income)", "Latin America & Caribbean", "Least developed countries: UN classification","Low income"," Lower middle income", "Low & middle income", "Late-demographic dividend", "Middle East & North Africa", "Middle income", "Middle East & North Africa (excluding high income)", "North America", "OECD members", "Other small states", "Pre-demographic dividend", "West Bank and Gaza", "Pacific island small states", "Post-demographic dividend", "French Polynesia", "South Asia", 
+"Sub-Saharan Africa (excluding high income)", "Sub-Saharan Africa", "East Asia & Pacific (IDA & IBRD countries)", "Europe & Central Asia (IDA & IBRD countries)", "Latin America & the Caribbean (IDA & IBRD countries)", "Middle East & North Africa (IDA & IBRD countries)", "South Asia (IDA & IBRD)", "Sub-Saharan Africa (IDA & IBRD countries)", "Upper middle income". 
+
+
+Let's remove these regions:
+```{r}
+mortality %<>% 
+filter(!Country %in% c("East Asia & Pacific (excluding high income)", "Early-demographic dividend", "East Asia & Pacific", "Europe & Central Asia (excluding high income)", "Europe & Central Asia", "Euro area", "Fragile and conflict affected situations", "European Union", "Heavily indebted poor countries (HIPC)", "IBRD only", "IDA & IBRD total", "IDA total", "IDA blend", "IDA only", "Not classified", "Latin America & Caribbean (excluding high income)", "Latin America & Caribbean", "Least developed countries: UN classification", "Low income"," Lower middle income", "Low & middle income", "Late-demographic dividend", "Middle East & North Africa", "Middle income", "Middle East & North Africa (excluding high income)", "North America", "OECD members", "Other small states", "Pre-demographic dividend", "West Bank and Gaza", "Pacific island small states", "Post-demographic dividend", "French Polynesia", "South Asia", 
+"Sub-Saharan Africa (excluding high income)", "Sub-Saharan Africa", "East Asia & Pacific (IDA & IBRD countries)", "Europe & Central Asia (IDA & IBRD countries)", "Latin America & the Caribbean (IDA & IBRD countries)", "Middle East & North Africa (IDA & IBRD countries)", "South Asia (IDA & IBRD)", "Sub-Saharan Africa (IDA & IBRD countries)", "Upper middle income"))  
+
+```
+
+
+
 
 ## US-specific Data
 
@@ -546,9 +607,7 @@ us_disaster %>%
 
 Great, now we are going to remove some of these variables and just keep or select using the `select()` function the variables we are interested in. We will keep the `Flooding Count` becuase as you may recall from earlier in this case study, events of extreme perciptation levels appear to be associated with global warming. We will use this as a proxy for that.
 
-AVOCADO why is US listed in 3 variables?
-We are also going to add a new variable called `Country` to indicate that this data is from the United States. This will create a new variable where every value is `United States`. We will also create a new variable called `Region` where every value is `US-specific` and a new variable called `Type` where every value is `United States`.
-
+We are also going to add a new variable called `Country` to indicate that this data is from the United States. This will create a new variable where every value is `United States`.
 ```{r}
 us_disaster %<>%
   dplyr::select(Year,
@@ -557,9 +616,7 @@ us_disaster %<>%
   pivot_longer(cols = c(-Country, - Year),
                names_to = "Indicator",
                values_to = "Value") %>%
-  mutate(Region = "United States",
-           Type = "US-specific",
-          Label = "Number of Disasters")
+  mutate(Label = "Number of Disasters")
 
 us_disaster %>%
   slice_head(n = 6)
@@ -575,7 +632,7 @@ us_temperature %>%
 ```
 OK, so we want to remove the `Anomaly` variable which is an indicator of how different the national average temperature for that year was from the average temperature from 1901-2000 which was 52.02&deg;F. 
 
-We also want to change the date values, which are currently listed as the year followed by the number 12. To do so we want to just keep the first 4 characters in the `Date` variable string values. We can use the `str_sub()` function of the `stringr` package to do this. We just need to indicate the start and stop characters. In this case the start would be 1 and the 4th character would be where we want to stop, so we would use `start = 1, stop = 4`. Again we will create a `Country`, `Region` and `Type` variable. We will also change the name of the `Date` variable to `Year` so that it will be consistent with our other datasets. Furthermore, we also what it to be numeric. We can accomplish both renaming and changing to numeric by using the `mutate()` function. We canthen remove the `Date` variable and also order the columns just like the other us data using the `select()` function.
+We also want to change the date values, which are currently listed as the year followed by the number 12. To do so we want to just keep the first 4 characters in the `Date` variable string values. We can use the `str_sub()` function of the `stringr` package to do this. We just need to indicate the start and stop characters. In this case the start would be 1 and the 4th character would be where we want to stop, so we would use `start = 1, stop = 4`. Again we will create a `Country` variable. We will also change the name of the `Date` variable to `Year` so that it will be consistent with our other datasets. Furthermore, we also what it to be numeric. We can accomplish both renaming and changing to numeric by using the `mutate()` function. We canthen remove the `Date` variable and also order the columns just like the other us data using the `select()` function.
 
 ```{r}
 us_temperature %<>%
@@ -585,16 +642,14 @@ us_temperature %<>%
   mutate(Year = as.numeric(Date), 
       Country = "United States",
     Indicator = "Temperature",
-       Region = "United States",
-         Type = "US-specific",
         Label = "Temperature (Fahrenheit)") %>%
-  select(Year, Country, Indicator, Value, Region, Type, Label)
+  select(Year, Country, Indicator, Value, Label)
 
 us_temperature %>%
   slice_head(n = 6)
 ```
 
-# Joining data
+## Joining data
 
 Now we would like to join the different datasets together into one tibble. To do so it is often necessary to have at least one column or variable with the same name to be used as a key for putting your data together. To put all of our data together there are several `*_join()` functions available in the `dplyr` package. 
 
@@ -625,7 +680,8 @@ df_wide <- CO2_emissions %>%
   full_join(mortality, by = c("Country", "Year", "Label"))
 
 df_wide %>%
-  slice_head(n = 6)
+  slice_sample(n = 6)
+
 ```
 
 We can also do the same thing using by using the`reduce()` function of the `purrr` package. This is a good option if you have many dasasets to combine.
@@ -658,22 +714,10 @@ df_long <- df_wide %>%
                names_to = "Indicator", 
                values_to = "Value")
 df_long %>%
-  slice_head(n = 6)
+  slice_sample(n = 6)
 ```
 
-We will also create a new variable called `Region` that will indicate if the data is about the United States or a different country based on the values in the `Country` variable. We will use the `case_when()` function of the `dplyr` package to do this. If the `Country` variable is equal to `"United States"` the value for the new variable will also be "United States", where as if the `Country` variable is not equal to `"United States"` but is some other character string value, such as `"Afghanistan"`, then the value for the new variable will be `"Rest of the World"`.
-The new values for the new variable `Region` are indicated after the specific conditional statements by using the `~` symbol. We will also create a new variable called `Type`, where all the values are `"Global"` to indicate that this data is not specific to just the United States. 
 
-
-```{r}
- df_long %<>%
-  mutate(Region = case_when(Country == "United States" ~ "United States",
-                            Country != "United States" ~ "Rest of the World"),
-         Type = "Global")
-
-df_long %>%
-  slice_head(n = 6)
-```
 
 We will now combine this data with the US data about disasters and temperatures.
 
@@ -701,6 +745,9 @@ df_long %>%
 
 df_long %>%
   slice_tail(n = 6)
+
+df_long %>%
+  slice_sample(n = 10)
 ```
 
 
@@ -742,6 +789,21 @@ df_wide_br %>%
 ```
 </detials>
 
+
+
+We will also create a new variable called `Region` that will indicate if the data is about the United States or a different country based on the values in the `Country` variable. We will use the `case_when()` function of the `dplyr` package to do this. If the `Country` variable is equal to `"United States"` the value for the new variable will also be "United States", where as if the `Country` variable is not equal to `"United States"` but is some other character string value, such as `"Afghanistan"`, then the value for the new variable will be `"Rest of the World"`.
+The new values for the new variable `Region` are indicated after the specific conditional statements by using the `~` symbol. 
+
+
+```{r}
+ df_long %<>%
+  mutate(Region = case_when(Country == "United States" ~ "United States",
+                            Country != "United States" ~ "Rest of the World"))
+
+
+df_long %>%
+  slice_head(n = 6)
+```
 
 To remove entries for countries with NA values we can use the `drop_na()` function of the `tidyr` package to drop all years with missing data.
 
@@ -1053,7 +1115,6 @@ We can also create this plot directly without using the `top_10_count` tibble, b
 ```{r}
 
 df_long %>%
-  #filter(Type=="Global") %>%
   filter(Indicator=="Emissions") %>%
   filter(Year>=1900) %>%
   group_by(Country) %>%
@@ -1065,7 +1126,6 @@ Now we will also create a `rank` variable like we did when we created `top_10_co
 ```{r}
 
 df_long %>%
-  filter(Type=="Global") %>%
   filter(Indicator=="Emissions") %>%
   filter(Year>=1900) %>%
   group_by(Country) %>%
@@ -1080,7 +1140,6 @@ Now we can put it all together to create the plot directly from `df_long`.
 ```{r}
 
 Top10<-df_long %>%
-  filter(Type=="Global") %>%
   filter(Indicator=="Emissions") %>%
   filter(Year>=1900) %>%
   group_by(Country) %>%
@@ -1305,7 +1364,6 @@ It seems that many eastern european countries currently have the highest mortali
 Let's make a plot of just these countries:
 ```{r}
 Mortality <-df_long %>%
-  filter(Type=="Global") %>%
   filter(Indicator=="Deaths") %>%
   group_by(Country) %>%
   mutate(last_val = last(Value)) %>%
@@ -1338,7 +1396,6 @@ What countries have the lowest reported rates? We can simply alter our plot code
 
 ```{r}
 Mortality <-df_long %>%
-  filter(Type=="Global") %>%
   filter(Indicator=="Deaths") %>%
   group_by(Country) %>%
   mutate(last_val = last(Value)) %>%
@@ -1373,7 +1430,11 @@ Let's make a plot of some of the countries that showed unusal patterns over time
 
 df_long %>%
   filter(Indicator == "Deaths",
-            Country %in% c("United States", "Rwanda", "Cambodia", "Qatar", "Bulgria"))%>%
+            Country %in% c("United States", 
+                           "Rwanda", 
+                           "Cambodia", 
+                           "Qatar", 
+                           "Bulgria"))%>%
   ggplot(aes(x=Year, y=Value, color = Country)) +
   geom_line() + 
   labs(title = " Crude Mortality Rate (per 1000 Persons), 1960 to 2019",
@@ -1394,7 +1455,11 @@ We can make a similar plot where each country is shown side by side by using the
 
 df_long %>%
   filter(Indicator == "Deaths",
-            Country %in% c("United States", "Rwanda", "Cambodia", "Qatar", "Bulgaria"))%>%
+            Country %in% c("United States", 
+                           "Rwanda", 
+                           "Cambodia", 
+                           "Qatar", 
+                           "Bulgaria"))%>%
   ggplot(aes(x=Year, y=Value)) +
   geom_line() + 
   facet_grid(~ Country)+
@@ -1410,11 +1475,12 @@ df_long %>%
          plot.title = element_text(size = 16))
 ```
 
+We can see that recently the US has actually had higher mortality rates than Rwanda and Cambodia.
 
+Let's see how the US ranks.
 
 ```{r}
 df_long %>%
-  filter(Type=="Global") %>%
   filter(Indicator=="Deaths") %>%
   filter(Year == 2014) %>%
   group_by(Country) %>%
@@ -1425,10 +1491,12 @@ df_long %>%
 
 ```
 
-The US ranked 83 out of 253 countries. This means that 70 % of the countries included had lower mortality rates.
+The US ranked 68 out of 212 countries in 2014. This means that roughly 70% of the countries included had lower mortality rates than the US. See [here](https://www.healthsystemtracker.org/chart-collection/mortality-rates-u-s-compare-countries/#item-overall-age-adjusted-mortality-rate-decline-1980-2015){target = "blank"} and [here](https://www.drugabuse.gov/drug-topics/trends-statistics/overdose-death-rates){target = "blank"} for more information about mortality rates in the US. 
 
-
-
+#### {.question_block}
+Question Opportunity
+How would you determine the total number of countries reporting in 2014?
+####
 
 Let's see what the overall trend in mortality has been over time.
 ```{r}
@@ -1456,12 +1524,12 @@ We can see that despite some countries with different patterns of mortality, ove
 
 ## US Disasters
 
+Now let's take a look at Disaster data for the US.
+
 ```{r}
 
 df_long %>%
-  filter(Indicator == "Disasters",
-              Year >= 1980, 
-              Year <= 2019) %>%
+  filter(Indicator == "Disasters") %>%
   ggplot(aes(x=Year, y=Value, group=Country)) +
   geom_line() + 
   geom_smooth(method = "loess") +
@@ -1477,14 +1545,17 @@ df_long %>%
   
 ```
 
+We can see that the rate of disasters appears to be increasing over time.
+
+
 ## US Temperature
+
+How about temperature?
 
 ```{r}
 
 df_long %>%
-  filter(Indicator == "Temperature",
-              Year >= 1895, 
-              Year <= 2019) %>%
+  filter(Indicator == "Temperature") %>%
   ggplot(aes(x=Year, y=Value, group=Country)) +
   geom_line() + 
   geom_smooth(method = "loess") +
@@ -1498,12 +1569,13 @@ df_long %>%
          plot.title = element_text(size = 16))
 
 ```
+Temperatures also appear to be rising, especially in the last 10-20 years.
 
 
 # **Data Visualization**
 *** 
 
-Now Let's try putting the data together. 
+Now Let's try putting some of the different data types together together. 
 
 ```{r,fig.width=10, fig.height=10}
 ggplot(df_long, aes(x=Year, y=Value, group=Country)) +
@@ -1523,14 +1595,14 @@ ggplot(df_long, aes(x=Year, y=Value, group=Country)) +
          plot.title = element_text(size = 16))
 ```
 
-This looks a bit awkward, because the eacy type of data spans a different time spans.
+This looks a bit awkward, because the each type of data spans a different time spans.
 
 ## Time spans of data
 
-Let's take a look at the reporting countries for each year for each type of data.
+Let's take a look at the reporting countries for each year for each type of data for the global indicators. To calculate the number of reporting countries we will use the `tally()` function of the `dplyr` package to get the count for each year and indicator. Thus we will first group by  year and the `Label` variable (as a proxy for the `Indicator` variable), as this also specifies the different indicators but with additional information and formatting so that we can have nice labels in our plot.
 
 ```{r}
-dataspan2 <-df_long %>%
+df_long %>%
    filter(Indicator != "Disasters" &
           Indicator != "Temperature") %>%
   group_by(Year, Label, .drop=FALSE) %>%
@@ -1559,6 +1631,8 @@ dataspan2 <-df_long %>%
 
 We can see that all of our data spans from 1980 to 2014.
 
+What about the US data?
+
 ```{r}
 df_long %>%
   filter(Country =="United States") %>%
@@ -1586,10 +1660,11 @@ df_long %>%
        plot.caption = element_text(size = 12),
          plot.title = element_text(size = 16))
 ```
+It looks like the overlapping time spans for the different datasets is also from 1980 to 2014.
+
 
 ```{r, Animation_1, warning=FALSE, eval=TRUE}
 animation_1 <- df_long %>%
-  #filter(Type=="Global") %>%
   filter(Indicator=="Deaths") %>%
   #filter(Year>=1980) %>%
   #filter(Year<=2010) %>%
@@ -1628,7 +1703,9 @@ animation_2 <- df_long %>%
   shadow_wake(wake_length = 1, alpha = FALSE)
 
 animate(animation_2, fps = 10, duration = 5)
+
 ```
+
 
 ```{r, Animation_3, warning=FALSE, eval=FALSE}
 animation_3 <- df_long %>%
@@ -1678,12 +1755,13 @@ animate(animation_4, fps = 10, duration = 5)
 
 ## US-specific
 
+
+
 ```{r}
-df_long_us <- df_long %>%
-  filter(Country=="United States")
 
 # Approximated derivative function)
-df_long_us <- df_long_us %>%
+df_long_us <- df_long %>%
+  filter(Country == "United States") %>%
   filter(Year >= 1900,
          Year <= 2010) %>%
   group_by(Indicator) %>%
@@ -1698,6 +1776,9 @@ df_long_us <- df_long_us %>%
                                                         "Zero"),
                               ordered = TRUE))
 ```
+
+
+Let's plot all of the US indicators together.
 
 ```{r}
 
@@ -1719,82 +1800,15 @@ US_Indicators <- df_long %>%
 US_Indicators
 ```
 
-```{r}
-df_long_us %>%
-  filter(Year>=1980) %>%
-  filter(Year<=2014) %>%
-  ggplot(aes(x=Year, y=`Change (%)`, color=Indicator, fill="transparent")) + 
-  geom_hline(yintercept=0.8, linetype=2) +
-  geom_hline(yintercept=1.2, linetype=2) +
-  geom_hline(yintercept = 1, linetype=3) +
-  geom_line(size=0.5) + 
-  scale_x_continuous(breaks = seq(1980,2014,by=5),
-                     labels = seq(1980,2014,by=5)) +
-  scale_y_continuous(breaks = seq(-500,1250, by=250),
-                     labels = seq(-500,1250, by=250)) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 90),
-        axis.title.x  = element_blank(),
-        legend.position = "bottom",
-        legend.direction = "horizontal") + 
-  labs(title = "US-specific Indicators (1980-2010)",
-       subtitle = "Change (%) Lines")
-
-df_long_us %>%
-  filter(Year>=1980) %>%
-  filter(Year<=2014) %>%
-  filter(Indicator=="Temperature"|
-           Indicator=="Energy"|
-           Indicator=="Emissions") %>%
-  ggplot(aes(x=Year, y=`Change (%)`, color=Indicator)) + 
-  geom_hline(yintercept=0.8, linetype=2) +
-  geom_hline(yintercept=1.2, linetype=2) +
-  geom_hline(yintercept = 1, linetype=3) +
-  geom_line(size=1) +
-  scale_x_continuous(breaks = seq(1980,2014,by=5),
-                     labels = seq(1980,2014,by=5)) +
-  scale_y_continuous(breaks = seq(-10,10, by=1),
-                     labels = seq(-10,10, by=1),
-                     limits = c(-10,10)) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 90),
-        axis.title.x  = element_blank(),
-        legend.position = "bottom",
-        legend.direction = "horizontal") + 
-  labs(title = "Emissions, Energy Use, and Temperature (1980-2010)",
-       subtitle = "Change (%) Lines")
-
-df_long_us %>%
-  filter(Year>=1980) %>%
-  filter(Year<=2010) %>%
-  filter(Indicator=="Temperature"|
-           Indicator=="Energy"|
-           Indicator=="Emissions") %>%
-  ggplot(aes(x=Year, y=`Change (%)`, color=Indicator)) + 
-  geom_hline(yintercept=0.8, linetype=2) +
-  geom_hline(yintercept=1.2, linetype=2) +
-  geom_hline(yintercept = 0, linetype=3) +
-  geom_smooth(size=1, alpha=0.1, aes(fill=Indicator), se=TRUE) +
-  scale_x_continuous(breaks = seq(1980,2010,by=5),
-                     labels = seq(1980,2010,by=5)) +
-  scale_y_continuous(breaks = seq(-10,10, by=1),
-                     labels = seq(-10,10, by=1),
-                     limits = c(-10,10)) +
-  theme_classic() + 
-  theme(axis.text.x = element_text(angle = 90),
-        axis.title.x  = element_blank(),
-        legend.position = "bottom",
-        legend.direction = "horizontal") + 
-  labs(title = "US Emissions, Energy Use, and Temperatures (1980-2010)",
-       subtitle = "Smoothed Change (%) Lines")
-```
+If we want to really look at how two indicators may relate to eachother it is imporant that both datasets span the same amount of time.
 
 ```{r}
-df_long_us %>%
+df_long %>%
+  filter(Country == "United States") %>%
   filter(Year>=1980) %>%
   filter(Year<=2010) %>%
-  filter(Indicator=="Emissions"|
-           Indicator=="Temperature") %>%
+  filter(Indicator == "Emissions"|
+         Indicator == "Temperature") %>%
   ggplot(aes(x=Year, y=Value)) +
   geom_line() +
   geom_smooth(method = "loess")+
@@ -1806,12 +1820,12 @@ df_long_us %>%
         axis.title = element_blank()) + 
   labs(title="US Emissions and Temperatures (1980-2010)")
 ```
-
+We can see that there are very similar patterns of CO2 emission levels an average annual temperatures.
 
 ```{r}
 
 df_wide_US <-df_long_us %>%
-  select(-c(Label, Anomaly, Anomaly_color, Mean, "Change (%)", Type)) %>%
+  select(-c(Label, Anomaly, Anomaly_color, Mean, "Change (%)")) %>%
   pivot_wider(names_from = "Indicator", values_from = Value)%>%
   filter(Year>=1980) %>%
   filter(Year<=2010)
@@ -1828,7 +1842,7 @@ cor.test(pull(df_wide_US, Emissions),
 ```{r}
 df_long_us %>%
   filter(Indicator=="Emissions"|
-           Indicator=="Temperature") %>%
+         Indicator=="Temperature") %>%
   ggplot(aes(x=Year, y=Value)) +
   geom_vline(xintercept = 1980, linetype=2, color="black") + 
   geom_vline(xintercept = 2010, linetype=2, color="black") +
@@ -1889,4 +1903,8 @@ dev.off()
 Ask students to create a plot with labels showing the countries with the lowest CO2 emission levels.
 
 
+
+Summary
+
+As natural disaster rates rise, countries are experiencing higher rates of death due to natural disasters https://ourworldindata.org/natural-disasters
 
