@@ -1,6 +1,5 @@
 ---
-title: "Open Case Studies : CO2 Emissions Over Time"
-author: "Michael Ontiveros, Carrie Wright, PhD."
+title: "Open Case Studies: Exploring CO2 emissions acorss time"
 css: style.css
 output:
   html_document:
