@@ -47,69 +47,97 @@ knitr::include_graphics(here::here("img", "mainplot.png"))
 # **Motivation**
 *** 
 
-This case study explores how different countries have contributed to Carbon Dioxide (CO2) emissions over time and how CO2 emission rates may relate to increasing global temperatures and increased rates of natural disasters and storms. This report provides a basis for the motivation: https://www.epa.gov/report-environment/greenhouse-gases.
+This case study explores how different countries have contributed to Carbon Dioxide (CO2) emissions over time and how CO2 emission rates may relate to increasing global temperatures and increased rates of natural disasters and storms.
+We used this [report from the EPA](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"} as the basis for motivating this case study. 
 
+AVODCADO: the sentence right above, i couldn't tell if you saying this is the report that contains the data or just "click for more info" type thing? 
 
 CO2 makes up the largest proportion of greenhouse gas emissions in the United States:
 
 
-```{r, echo = FALSE, out.width="500px"}
+```{r, echo = FALSE, out.width="300px"}
 knitr::include_graphics(here::here("img", "emissions.jpg"))
 ```
 
+AVODCADO: add source
+
 A variety of sources and sectors contribute to greenhouse gas emissions, with transportation contributing the most metric tons of CO2:
 
+AVODCADO: is that true? it looks like electricty generation contributes more? 
 
-```{r, echo = FALSE, out.width="600px"}
+```{r, echo = FALSE, out.width="400px"}
 knitr::include_graphics(here::here("img", "sector.png"))
 ```
 
+AVODCADO: add source
+
 So why should we pay attention to greenhouse gases?
 
-According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks): 
+According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"}: 
 
 > Greenhouse gases absorb infrared radiation, thereby trapping heat in the atmosphere and making the planet warmer. The most important greenhouse gases directly emitted by humans include carbon dioxide (CO2), methane (CH4), nitrous oxide (N2O), and several fluorine-containing halogenated substances. Although CO2, CH4, and N2O occur naturally in the atmosphere, human activities have changed their atmospheric concentrations. From the pre- industrial era (i.e., ending about 1750) to 2018, concentrations of these greenhouse gases have increased globally by 46, 165, and 23 percent, respectively (IPCC 2013; NOAA/ESRL 2019a, 2019b, 2019c). 
 
 * IPCC stands for the Intergovernmental Panel on Climate Change
 
-There are many signs that our planet is experiencing warmer temperatures:
+In fact, there are many signs that our planet is experiencing warmer temperatures:
 
-```{r, echo = FALSE, out.width="600px"}
+```{r, echo = FALSE, out.width="400px"}
 knitr::include_graphics(here::here("img", "warming.png"))
 ```
+
+AVODCADO: add source
 
 The connection between greenhouse gas levels and global temperatures and the influence of increased global temperatures on human health are motivated by these reports:
 
 #### {.reference_block}
 
-Melillo, J.M., T.C. Richmond, and G.W. Yohe (eds.). 2014. Climate change impacts in the United States: The third National Climate Assessment. U.S. Global Change Research Program.  
+- Melillo, J.M., T.C. Richmond, and G.W. Yohe (eds.). 2014. Climate change impacts in the United States: The third National Climate Assessment. U.S. Global Change Research Program.  
 
-2020. “Inventory of US Greenhouse Gas Emissions and Sinks: 1990--2018.” EPA 430-R-20-002, Tech. Rep. https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks.
+- 2020. “Inventory of US Greenhouse Gas Emissions and Sinks: 1990--2018.” EPA 430-R-20-002, Tech. Rep. https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks.
 
 
 ####
 
-The National Climate Assessment Report states that:
+AVODCADO: could we link to the national climate assessement report? I set up the link below
+
+The [National Climate Assessment Report](){target="_blank"} states that:
 
 > Heat-trapping gases already in the atmosphere have committed us to a hotter future with more climate-related impacts over the next few decades. The magnitude of climate change beyond the next few decades depends primarily on the amount of heat-trapping gases that human activities emit globally, now and in the future.
 
 See [here](https://www.epa.gov/report-environment/greenhouse-gases) and [here](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations) for more information.
 
+AVODCADO: more information about what? 
+
 # **Main Questions**
 *** 
 
 #### {.main_question_block}
-<b><u> Our main question: </u></b>
+<b><u> Our main questions: </u></b>
 
-1) How have global CO2 emission rates changed over time? In particular for the US, and how does the US compare to other countries? 
-2) Are US CO2 emissions, global temperatures, and US storm rates associated? 
+1. How have global CO2 emission rates changed over time? In particular for the US, and how does the US compare to other countries? 
+2. Are CO2 emissions in the US, global temperatures, and storm rates in the US associated? 
 
 ####
 
 # **Learning Objectives** 
 *** 
 
-In this case study, we will explore CO2 emission data from around the world. We will also focus on the US specifically to evaluate patterns of temperatures and storm activity. This case study will particularly focus on how to use different datasets that span different ranges of time, as well as how to create visualizations of patterns over time. We will especially focus on using packages and functions from the [`Tidyverse`](https://www.tidyverse.org/){target="_blank"}, such as `dplyr`, `tidyr`, `ggplot2`and `gganimate`. The tidyverse is a library of packages created by RStudio. While some students may be familiar with previous R programming packages, these packages make data science in R especially efficient.
+In this case study, we will explore CO2 emission data from around the world. 
+We will also focus on the US specifically to evaluate patterns of temperatures and storm activity. 
+
+AVODCADO: Could we break this up into more bulleted learning objectives? Also we should mention the analysis learning objectives. As it stands, we seem to suggest our only goal is to teach tidyverse packages? I started a few below, but would appreciate your help formalizing it
+
+Our learning objectives are: 
+
+- Create data visualizations across time 
+- Introduce concepts of correlation
+- Demonstrate how to use packages in the `tidyverse`
+
+
+This case study will particularly focus on how to use different data sets that span different ranges of time, as well as how to create visualizations of patterns over time. 
+We will especially focus on using packages and functions from the [`Tidyverse`](https://www.tidyverse.org/){target="_blank"}, such as `dplyr`, `tidyr`, `ggplot2`and `gganimate`. 
+The tidyverse is a library of packages created by RStudio. 
+While some students may be familiar with previous R programming packages, these packages make data science in R especially efficient.
 
 
 *** 
@@ -153,6 +181,8 @@ The first time we use a function, we will use the `::` to indicate which package
 # **Context**
 *** 
 
+AVOCADO: I'm not sure I get the difference between the Motivation and Context section here? 
+
 Greenhouse gas emissions are due to both natural processes and anthropogenic (human-derived) activities. 
 
 These emissions are one of the contributing factors to rising global temperatures, which can have a great influence on [public health](https://www.epa.gov/climate-indicators/understanding-connections-between-climate-change-and-human-health){target="_blank"}  as illustrated in the following image:
@@ -161,74 +191,80 @@ These emissions are one of the contributing factors to rising global temperature
 knitr::include_graphics(here::here("img", "health.png"))
 ```
 
+AVOCADO: add source 
+
 > Gases in the atmosphere can contribute to climate change both directly and indirectly. Direct effects occur when the gas itself absorbs radiation. Indirect radiative forcing occurs when chemical transformations of the substance produce other greenhouse gases, when a gas influences the atmospheric lifetimes of other gases, and/or when a gas affects atmospheric processes that alter the radiative balance of the earth (e.g., affect cloud formation or albedo). The IPCC developed the Global Warming Potential (GWP) concept to compare the ability of a greenhouse gas to trap heat in the atmosphere relative to another gas.
 The GWP of a greenhouse gas is defined as the ratio of the accumulated radiative forcing within a specific time horizon caused by emitting 1 kilogram of the gas, relative to that of the reference gas CO2 (IPCC 2013). Therefore GWP-weighted emissions are provided in million metric tons of CO2 equivalent (MMT CO2 Eq.)
 
+AVOCADO: add link or source? Unclear purpose of text above? I know the definition of GWP is in the text, but can we remove the text and just state the definition? 
 
- CO2 is actually the least capable of the greenhouse gases for trapping heat:
+CO2 is actually the least capable of the greenhouse gases for trapping heat:
 
 ```{r, echo = FALSE, out.width="800px"}
 knitr::include_graphics(here::here("img", "GWP.png"))
 ```
 
+AVOCADO: add source. also not sure how to interepret the table above in terms of the comment of "least capable? 
+
 However, because CO2 is so much more abundant and stays in the atmosphere so much longer than other greenhouse gases, it has been the largest contributor to global warming.
-
-See [here](https://www.ucsusa.org/resources/why-does-co2-get-more-attention-other-gases#:~:text=CO2%20sticks%20around,oxide%20(N2O){target="_blank"}.)
-for more details.
-
+See [here](https://www.ucsusa.org/resources/why-does-co2-get-more-attention-other-gases#:~:text=CO2%20sticks%20around,oxide%20(N2O)){target="_blank"} for more details.
 
 Furthermore, sizing CO2 levels also influence ocean acidity:
+
+AVOCADO: what does sizing CO2 levels mean? 
 
 ```{r, echo = FALSE, out.width="500px"}
 knitr::include_graphics(here::here("img", "oceans.png"))
 ```
+
+AVOCADO: add source
 
 This makes it difficult for organisms to maintain their shells or skeletons that are made of calcium carbonate, thus making it more difficult for these organisms to survive and impacting their role in the ecosystem and food chain. 
 
 
 Furthermore, greenhouse gas emissions are believed to influence storm rates. 
 
-Indeed events with high levels of precipitation which can induce flooding and property damage are generally increasing around the country:
+AVOCADO: should we cite a paper for the statement above? 
+
+Indeed, events with high levels of precipitation which can induce flooding and property damage are generally increasing around the country:
 
 ```{r, echo = FALSE, out.width="500px"}
 knitr::include_graphics(here::here("img", "storms.png"))
 ```
 
+AVOCADO: add source
 
 # **Limitations**
 *** 
 
 There are some important considerations regarding this data analysis to keep in mind: 
 
-1) The datasets included only include countries and years in which countries were reporting such information to the agencies that collected the data. Thus the data is incomplete. For example while we have a fairly good sense of CO2 emissions globally for later years, additional emissions were also produced by countries that are not included in the data.
+1. The data sets only include countries and years in which countries were reporting such information to the agencies that collected the data. Thus, the data are incomplete. For example, while we have a fairly good sense of CO2 emissions globally for later years, additional emissions were also produced by countries that are not included in the data.
 
-2) [Correlation or association does not imply causation](https://dfrieds.com/math/correlation-does-not-imply-causation.html){target="_blank"}. We will be showing how different datasets show similar trends across time. This does not imply that one caused the other. However, in the case of some of the data we will show, there is additional scientific evidence to suggest that for example, increased CO2 emissions may cause increased temperatures or increased rates of disasters. However, simply showing a similar trend over time does not in itself prove that two variables are causally related. As you can see from this plot, often data may show a similar pattern over time by random chance.  See this [website](https://www.tylervigen.com/spurious-correlations){target="_blank"} for more examples.
+2. [Correlation or association does not imply causation](https://dfrieds.com/math/correlation-does-not-imply-causation.html){target="_blank"}. We will be showing how different data sets show similar trends across time. This does not imply that one caused the other. However, in the case of some of the data we will show, there is additional scientific evidence to suggest that for example, increased CO2 emissions may cause increased temperatures or increased rates of disasters. However, simply showing a similar trend over time does not in itself prove that two variables are causally related. As you can see from this plot, often data may show a similar pattern over time by random chance.  See this [website](https://www.tylervigen.com/spurious-correlations){target="_blank"} for more examples.
+
+AVOCADO: point 2 seems more like this would be a learning objective?
 
 ```{r, echo = FALSE, out.width="500px"}
 knitr::include_graphics(here::here("img", "causation.png"))
 ```
 
-
+AVOCADO: add source
 
 
 # **What are the data?**
 *** 
 
-In this case study we will be using data related to CO2 emissions, as well as other data that may influence, be influenced or relate to CO2 emissions. Most of our data was obtained from [Gapminder](https://www.gapminder.org/data/){target="_blank"}, which is a unique nonprofit that provides a variety of data for free.
+In this case study we will be using data related to CO2 emissions, as well as other data that may influence, be influenced or relate to CO2 emissions. 
+Most of our data is from [Gapminder](https://www.gapminder.org/data/){target="_blank"} that was originally obtained from the [World Bank](https://www.worldbank.org/en/what-we-do){target="_blank"}.
 
-In their words, Gapminder is...
+In addition, we will use some data that is specific to the United States from the [National Oceanic and Atmospheric Administration (NOAA)](https://www.noaa.gov/){target="_blank"}, which is an agency that collects weather and climate data.
 
-> Gapminder is an independent Swedish foundation with no political, religious or economic affiliations. Gapminder is a fact tank, not a think tank. Gapminder fights devastating misconceptions about global development. Gapminder produces free teaching resources making the world understandable based on reliable statistics. Gapminder promotes a fact-based worldview everyone can understand.  Gapminder collaborates with universities, UN, public agencies and non-governmental organizations. All Gapminder activities are governed by the board. We do not award grants. Gapminder Foundation is registered at Stockholm County Administration Board. Our constitution can be found [here](https://www.gapminder.org/about-gapminder/constitution/).
-
-The data that we will be using from Gapminder was obtained from the [World Bank](https://www.worldbank.org/en/what-we-do){target="_blank"}.
-
-
-In addition we will use some data that is specific to the United States from the [National Oceanic and Atmospheric Administration (NOAA)] (https://www.noaa.gov/), which is an agency that collects weather and climate data.
-
+AVOCADO: could we make the description column wider? 
 
 Data   | Time span | Source  | Orginal Source   | Description | Citation                                                                    
 ---------- |-------------|-------------|-------------|--------|-------
-**CO2 emissions**  |1751 to 2014 | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [Carbon Dioxid Information Analysis Center (CDIAC)](https://cdiac.ess-dive.lbl.gov/){target="_blank"}  |  CO2 emissions in tonnes or metric tons (equivalent to approximately 2,204.6 pounds) per person by country| NA
+**CO2 emissions**  |1751 to 2014 | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [Carbon Dioxide Information Analysis Center (CDIAC)](https://cdiac.ess-dive.lbl.gov/){target="_blank"}  |  CO2 emissions in tonnes or metric tons (equivalent to approximately 2,204.6 pounds) per person by country| NA
 **GDP per capita, percent yearly growth** | 1801 to 2019| [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD.ZG){target="_blank"}  |  [Growth Domestic Product](https://www.investopedia.com/terms/g/gdp.asp#:~:text=Gross%20Domestic%20Product%20(GDP)%20is%20the%20monetary%20value%20of%20all,expenditures%2C%20production%2C%20or%20incomes.){target="_blank"}  (which is an overall measure of the health of nation's economy) per person by country| NA
 **Energy use per person** |1960 to 2015 | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/EG.USE.PCAP.KG.OE){target="_blank"}  |  Use of primary energy before transformation to other end-use fuels, by country | NA
 **Crude Mortality Rate** |1960 to 2018 | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/SP.DYN.CDRT.IN){target="_blank"} |  Death rate per 1,000 people by country | NA 
@@ -236,7 +272,7 @@ Data   | Time span | Source  | Orginal Source   | Description | Citation
 **Temperature**  | 1895 to 2019|  [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/national/time-series){target="_blank"}  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/national/time-series){target="_blank"} | US National yearly average temperature (in Fahrenheit) from 1895 to 2019 | NOAA National Centers for Environmental information, Climate at a Glance: National Time Series, published June 2020, retrieved on June 26, 2020 from https://www.ncdc.noaa.gov/cag/
 
 
-To obtain the temperature data, annual average temperatures were selected as shown in this image:
+To obtain the temperature data, the annual average temperatures were selected as shown in this image:
 ```{r, echo = FALSE, out.width = "800 px"}
 knitr::include_graphics(here::here("img", "temp.png"))
 ```
@@ -253,42 +289,58 @@ Data   | Time span
 **US Natural Disasters** | 1980 to 2019 
 **Temperature**  | 1895 to 2019
 
-
-
+We will explore more about this a bit later. 
 
 # **Data Import**
 *** 
 
-To read in the files that were downloaded from the various sources as indicated in the table above, we will use the `read_xlsx()` and `read_xls()` functions of the `readxl` package to import the data from the .xlsx and .xls files respectively and we will use the `read_csv` function of the `readr` package to import the data from the csv files.
+To read in the files that were downloaded from the various sources as indicated in the table above, we will use the `read_xlsx()` and `read_xls()` functions of the `readxl` package to import the data from the `.xlsx` and `.xls` files, respectively. 
 
 ```{r}
-# xlsx files:
-CO2_emissions <- readxl::read_xlsx(here("docs/yearly_co2_emissions_1000_tonnes.xlsx"))
-gdp_growth <- readxl::read_xlsx(here("docs/gdp_per_capita_yearly_growth.xlsx"))
-energy_use <- readxl::read_xlsx(here("docs/energy_use_per_person.xlsx"))
-
-# xls file:
-mortality <- readxl::read_xls(here("docs/API_SP.DYN.CDRT.IN_DS2_en_excel_v2_804384.xls"))
+CO2_emissions <- readxl::read_xlsx(here("data/yearly_co2_emissions_1000_tonnes.xlsx"))
+gdp_growth    <- readxl::read_xlsx(here("data/gdp_per_capita_yearly_growth.xlsx"))
+energy_use    <- readxl::read_xlsx(here("data/energy_use_per_person.xlsx"))
+mortality     <- readxl::read_xls(here("data/API_SP.DYN.CDRT.IN_DS2_en_excel_v2_804384.xls"))
 ```
 
-For our csv data files, there are some lines that we would like to not import - in fact, we will get an error if we try to import them because our table structure will be as r expects. We can do so using the `skip =` argument of the `read_csv()` function. 
+We will use the `read_csv()` function of the `readr` package to import the data from the `.csv` files.
+However, for these files there are some lines that we would like to not import - in fact, we will get an error if we try to import them because our table structure will be as R expects. (AVOCADO: not sure what "because our table structure will be as R expects" means.) 
 
-Here you can see that the first two rows of the data about US Disasters doesn't have the same number of columns as the subsequent rows. So we want to skip these first two lines, we will use `skip = 2` for this.
+In the first 5 rows shown below in the `data/diasters.csv` file, you can see that the first two rows does not have the same number of columns as the subsequent rows and are just (sub)titles. 
 
 ```{r, echo = FALSE, out.width = "800 px"}
 knitr::include_graphics(here::here("img", "Disasters.png"))
 ```
-Now looking at the temperature data, we can see that  the first four lines do not have the same number of columns as the subsequent lines. We will skip importing all 4 lines by using `skip = 4`. We can also specify that `NA` values are encoded as `"-99"`. This will replace all instances of `"-99"` with `NA`. We can do this using the `na = ` argument of the `read_csv()` function. We will do so as: `na = "-99"`. The "-99" needs to be in quotation marks because this argument expects characters.
+
+To do this, we can skip rows using the `skip = 2` argument of the `read_csv()` function. 
+
+```{r}
+us_disaster <- readr::read_csv(here("data/diasters.csv"), skip = 2)
+```
+
+Now looking at the `data/temperature.csv` file, we see that the first four lines do not have the same number of columns as the subsequent lines. 
 
 ```{r, echo = FALSE, out.width = "800 px"}
 knitr::include_graphics(here::here("img", "tempdata.png"))
 ```
 
+We will skip importing all 4 lines by using `skip = 4`. 
+We can also replace all instances of `"-99"` with `NA` using the `na = ` argument of the `read_csv()` function.
+We will do so as: `na = "-99"`. The "-99" needs to be in quotation marks because this argument expects characters.
+
+
+
+e c
+
+So we want to skip these first two lines, we will use `skip = 2` for this.
+
+
+
 ```{r}
 #csv files:
-us_disaster <- readr::read_csv(here("docs/time-series-US.csv"), skip = 2)
-us_temperature <- readr::read_csv(here("docs/temperature.csv"), skip = 4, na ="-99")
-mortality2 <-readr::read_csv(here("docs/mortality.csv"), skip = 5)
+
+us_temperature <- readr::read_csv(here("data/temperature.csv"), skip = 4, na ="-99")
+mortality2 <-readr::read_csv(here("data/mortality.csv"), skip = 5)
 ```
 
 Great! now we have imported all of the data that we will need.
@@ -520,7 +572,7 @@ mortality %>%
 ####
 
 
-That is looking better! However, we also want to remove some variables like: `Country Code`, `Indicator Name`, and `Indicator Code`. We can do that using the `select()` function of the `dplyr` package. We can use the minus sign `-` to indicate what variables we don't want to keep. Otherwise, we will perform similar modifications as we performed on the other datasets. Note that these variable names need quotation marks around them because they have spaces. 
+That is looking better! However, we also want to remove some variables like: `Country Code`, `Indicator Name`, and `Indicator Code`. We can do that using the `select()` function of the `dplyr` package. We can use the minus sign `-` to indicate what variables we don't want to keep. Otherwise, we will perform similar modifications as we performed on the other data sets. Note that these variable names need quotation marks around them because they have spaces. 
 
 ```{r}
 mortality %<>%
@@ -631,7 +683,7 @@ us_temperature %>%
 ```
 OK, so we want to remove the `Anomaly` variable which is an indicator of how different the national average temperature for that year was from the average temperature from 1901-2000 which was 52.02&deg;F. 
 
-We also want to change the date values, which are currently listed as the year followed by the number 12. To do so we want to just keep the first 4 characters in the `Date` variable string values. We can use the `str_sub()` function of the `stringr` package to do this. We just need to indicate the start and stop characters. In this case the start would be 1 and the 4th character would be where we want to stop, so we would use `start = 1, stop = 4`. Again we will create a `Country` variable. We will also change the name of the `Date` variable to `Year` so that it will be consistent with our other datasets. Furthermore, we also what it to be numeric. We can accomplish both renaming and changing to numeric by using the `mutate()` function. We can then remove the `Date` variable and also order the columns just like the other us data using the `select()` function.
+We also want to change the date values, which are currently listed as the year followed by the number 12. To do so we want to just keep the first 4 characters in the `Date` variable string values. We can use the `str_sub()` function of the `stringr` package to do this. We just need to indicate the start and stop characters. In this case the start would be 1 and the 4th character would be where we want to stop, so we would use `start = 1, stop = 4`. Again we will create a `Country` variable. We will also change the name of the `Date` variable to `Year` so that it will be consistent with our other data sets. Furthermore, we also what it to be numeric. We can accomplish both renaming and changing to numeric by using the `mutate()` function. We can then remove the `Date` variable and also order the columns just like the other us data using the `select()` function.
 
 ```{r}
 us_temperature %<>%
@@ -651,7 +703,7 @@ us_temperature %>%
 
 ## Joining data
 
-Now we would like to join the different datasets together into one tibble. To do so it is often necessary to have at least one column or variable with the same name to be used as a key for putting your data together. To put all of our data together there are several `*_join()` functions available in the `dplyr` package. 
+Now we would like to join the different data sets together into one tibble. To do so it is often necessary to have at least one column or variable with the same name to be used as a key for putting your data together. To put all of our data together there are several `*_join()` functions available in the `dplyr` package. 
 
 
 ```{r, echo = FALSE, out.width = "800 px"}
@@ -668,7 +720,7 @@ summary(mortality)
 
 ```
 
-Indeed, `Country`, and `Year` variables are present in all of the datasets. We can see that the minimum and maximum year is different for nearly all the datasets.
+Indeed, `Country`, and `Year` variables are present in all of the data sets. We can see that the minimum and maximum year is different for nearly all the data sets.
 
 We need to specify what columns/variables we will be joining by using the `by =` argument in the `full_join()` function.
 
@@ -1838,7 +1890,7 @@ data_long %>%
        plot.caption = element_text(size = 12),
          plot.title = element_text(size = 16))
 ```
-It looks like the overlapping time spans for the different datasets is from 1980 to 2014.
+It looks like the overlapping time spans for the different data sets is from 1980 to 2014.
 
 
 
@@ -1971,7 +2023,7 @@ US_Indicators_point
 
 ```
 
-If we want to really look at how two indicators may relate to each other, it is important that both datasets span the same amount of time. Therefore, we will limit this plot to only the years where the data overlaps for both CO2 emissions and temperature.
+If we want to really look at how two indicators may relate to each other, it is important that both data sets span the same amount of time. Therefore, we will limit this plot to only the years where the data overlaps for both CO2 emissions and temperature.
 
 ```{r}
 data_long %>%
@@ -2272,7 +2324,7 @@ summary(lm(data = wide_US, Disasters ~ Emissions))
 
 Both temperature and the number of disasters per year appear to increase with increased CO2 emissions, as the p value is less than 0.05 in both regressions. However, the multiple R-squared value, and Pearson's correlation coefficients were moderate for both relationships. Suggesting that the relationship is not very strong and that there are likely other factors that influence temperature and disasters besides C02 emissions. This makes sense with what we know about the earth's atmosphere. There are other greenhouse gases that contribute to warming temperatures, and the existing CO2 already in the atmosphere also traps heat and greatly impacts the temperature. Furthermore we are looking at US emissions and how they influence US temperatures, but there are also CO2 emissions produced by other countries. There are other aspects that influence disaster rate as well, such the rate of humidity levels and rainfall for fires. 
 
-While the analyses that we performed give us some indication of how these different datasets relate to one another, one would realistically want to perform a mixed effects model or growth curve analysis to account for the fact that these data are paired across time points and may vary differently with time and to include these other factors that we just discussed. ... AVOCADO needs links etc.  feel free to help this section.
+While the analyses that we performed give us some indication of how these different data sets relate to one another, one would realistically want to perform a mixed effects model or growth curve analysis to account for the fact that these data are paired across time points and may vary differently with time and to include these other factors that we just discussed. ... AVOCADO needs links etc.  feel free to help this section.
 
 
 
