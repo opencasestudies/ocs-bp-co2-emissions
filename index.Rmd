@@ -308,7 +308,7 @@ However, for these files there are some lines that we would like to not import -
 
 In the first 5 rows shown below in the `data/diasters.csv` file, you can see that the first two rows does not have the same number of columns as the subsequent rows and are just (sub)titles. 
 
-```{r, echo = FALSE, out.width = "800 px"}
+```{r, echo = FALSE, out.width = "600 px"}
 knitr::include_graphics(here::here("img", "Disasters.png"))
 ```
 
@@ -320,7 +320,7 @@ us_disaster <- readr::read_csv(here("data/diasters.csv"), skip = 2)
 
 Now looking at the `data/temperature.csv` file, we see that the first four lines do not have the same number of columns as the subsequent lines. 
 
-```{r, echo = FALSE, out.width = "800 px"}
+```{r, echo = FALSE, out.width = "600 px"}
 knitr::include_graphics(here::here("img", "tempdata.png"))
 ```
 
@@ -328,19 +328,14 @@ We will skip importing all 4 lines by using `skip = 4`.
 We can also replace all instances of `"-99"` with `NA` using the `na = ` argument of the `read_csv()` function.
 We will do so as: `na = "-99"`. The "-99" needs to be in quotation marks because this argument expects characters.
 
+```{r}
+us_temperature <- readr::read_csv(here("data/temperature.csv"), skip = 4, na ="-99")
+```
 
-
-e c
-
-So we want to skip these first two lines, we will use `skip = 2` for this.
-
-
+Finally, we will read in the `data/mortality.csv` file containing mortality data. 
 
 ```{r}
-#csv files:
-
-us_temperature <- readr::read_csv(here("data/temperature.csv"), skip = 4, na ="-99")
-mortality2 <-readr::read_csv(here("data/mortality.csv"), skip = 5)
+mortality <- readr::read_csv(here("data/mortality.csv"), skip = 5)
 ```
 
 Great! now we have imported all of the data that we will need.
@@ -349,26 +344,37 @@ Great! now we have imported all of the data that we will need.
 # **Data Wrangling**
 *** 
 
-Now we will take a look at our data and wrangle it until it is easy to use to allow us to evaluate how CO2 emissions have changed over time and how emissions may relate to energy use, mortality, GDP etc. 
+Next, we take a look at our data that we just imported. 
+We will need to do some data wrangling to use to allow us to evaluate how CO2 emissions have changed over time and how emissions may relate to energy use, mortality, GDP etc.
+Let's explore how to do that with useful functions and packages from the `tidyverse`. 
 
 ## Yearly CO~2~ Emissions
 
-First let's take a look at the CO2 data. We can use the base `slice_head()` function of the `dplyr` package to see just the first rows of our data. We can specify how many rows we would like to see by using the `n =` argument. It is also useful to use the `slice_sample()` function to look at a selection of random rows.
+First let's take a look at the CO2 data (`CO2_emissions`). 
+We can use the `slice_head()` function of the `dplyr` package to see just the first rows of our data. 
+We can specify how many rows we would like to see by using the `n =` argument. 
 
-We will use the `%>%` pipe which can be used to define the input for later sequential steps. This will make more sense when we have multiple sequential steps using the same data object. To use the pipe notation we need to install and load  the `dplyr` package.
+We will use the `%>%` pipe from the `magrittr` package, which can be used to define the input for later sequential steps. 
+This will make more sense when we have multiple sequential steps using the same data object. 
 
 ```{r}
 CO2_emissions %>%
   slice_head(n = 6)
+```
 
+Another useful function is `slice_sample()` to look at a **selection of random rows**.
+
+```{r}
 CO2_emissions %>%
   slice_sample(n = 10)
 ```
 
-OK, we can see that our country data makes of the rows and the yearly data makes up the columns. We also see that we have a lot of `NA` values.
+OK, we see each country is represented along one row and each column contains yearly CO2 emissions. 
+We also see that there are a lot of `NA` values.
 
-
-We can also use the `glimpse()` function of the `dplyr` package to view our data. This allows us to see more of our data at once. We will see a tiny bit of each variable/column. To do so our data will be displayed with the column names listed on the right.
+We can also use the `glimpse()` function of the `dplyr` package to view our data. 
+This allows us to see more of our data at once. 
+We will see a tiny bit of each variable/column with the data displayed on the right.
 
 #### {.scrollable }
 ```{r}
@@ -379,14 +385,24 @@ dplyr::glimpse()
 ####
 
 
+We can see that we have a large [tibble](https://tibble.tidyverse.org/). 
+A tibble is the `tidyverse` version of a data frame. 
+It is essentially a table with variable information arranged as columns, and individual observations arranged as rows. 
+We can see that the tibble gives us information about the class of each variable. 
 
-We can see that we have a large [tibble](https://tibble.tidyverse.org/). A tibble is the tidyverse version of a data frame. It is essentially a table with variable information arranged as columns, and individual observations arranged as rows. We can see that the tibble gives us information about the class of each variable.  For example the `country` variable is made up of character (abbreviated as chr) values. We see that we have 265 different country variables and CO2 emission values for 192 different years (from 1751 to 2014). Recall that the values are emissions in metric tons also called tonnes. We can see that there are fewer `NA` values for later years.
+For example the `country` variable is made up of character (abbreviated as `chr`) values.
+We see that we have 265 different country variables and CO2 emission values for 192 different years (from 1751 to 2014). 
+Recall that the values are emissions in metric tons also called tonnes. 
+We can also see that there are fewer `NA` values for later years.
 
-Now we will modify this data to make it more usable for making visualizations. One thing we will use is the `%<>%` operator which is from the `magrittr` package. This allows us to use our `CO2_emissions` data and reassign it to a modified version at the same time. 
+In this next code chunk, we will introduce the `%<>%` operator from the `magrittr` package. 
+This allows us to use our `CO2_emissions` data and reassign it to a modified version at the same time. 
 
-We will use the `pivot_longer()` function of the `dplyr` package to convert our data into what is called long format. This means that we will have more rows and fewer columns than our current format. This is done by collapsing multiple variables into fewer variables.
+Ok, let's modify `CO2_emissions` to make it more usable for making visualizations. 
+Specifically, we will use the `pivot_longer()` function of the `dplyr` package to convert our data into what is called 'long'format. 
+This means that we will have more rows and fewer columns than our current format. (AVOCADO: I think there is a formal definition for this -- e.g. one row per observation etc?)
 
-We want to collapse all of the values for the emission data across the different individual year variables into one new emission variable and we will identify what year they are from using a new `Year` variable.
+We want to collapse all of the values for the emission data across the different individual year variables into one new emission variable and we will identify what year they are from creating a new `Year` variable.
 
 ```{r}
 CO2_emissions  %<>%
@@ -396,7 +412,10 @@ CO2_emissions %>%
   slice_sample(n = 6)
 ```
 
-We also want to rename the `country` variable to be capitalized.  We can use the `rename()` function of the `dplyr` package to rename this variable. When renaming variables the new name is listed first before the `=`. We will also modify the `Emissions` data by dividing it by 1000 to make the numbers smaller. To do this we will use the `mutate()` function, which is also part of the `dplyr()` package. This function allows us to create and modify variables. You may also note that the `Year` variable is currently of class type character. We would like to change it to be numeric. This can also be accomplished using the `mutate()` function.
+AVOCADO: should we set the seed above for when using `slice_sample()`? I got a different sample than you and not sure if it should be reproducible? 
+
+We also want to rename the `country` variable to be capitalized.
+We can use the `rename()` function of the `dplyr` package to rename this variable. When renaming variables the new name is listed first before the `=`. We will also modify the `Emissions` data by dividing it by 1000 to make the numbers smaller. To do this we will use the `mutate()` function, which is also part of the `dplyr()` package. This function allows us to create and modify variables. You may also note that the `Year` variable is currently of class type character. We would like to change it to be numeric. This can also be accomplished using the `mutate()` function.
 
 ```{r}
   
