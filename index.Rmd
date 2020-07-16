@@ -283,7 +283,7 @@ Importantly, notice that the data we would like to use span different time perio
 Data   | Time span                                                                     
 ---------- |-------------
 **CO2 emissions**  |1751 to 2014 
-**GDP per capita, yearly growth** | 1801 to 2019
+**GDP per capita (yearly growth)** | 1801 to 2019
 **Energy use per person** |1960 to 2015 
 **Crude Mortality Rate** |1960 to 2018 
 **US Natural Disasters** | 1980 to 2019 
@@ -325,8 +325,8 @@ knitr::include_graphics(here::here("img", "tempdata.png"))
 ```
 
 We will skip importing all 4 lines by using `skip = 4`. 
-We can also replace all instances of `"-99"` with `NA` using the `na = ` argument of the `read_csv()` function.
-We will do so as: `na = "-99"`. The "-99" needs to be in quotation marks because this argument expects characters.
+We can also replace all instances of `"-99"` with `NA` using the `na = "-99"` argument of the `read_csv()` function.
+The "-99" needs to be in quotation marks because this argument expects characters.
 
 ```{r}
 us_temperature <- readr::read_csv(here("data/temperature.csv"), skip = 4, na ="-99")
@@ -335,7 +335,7 @@ us_temperature <- readr::read_csv(here("data/temperature.csv"), skip = 4, na ="-
 Finally, we will read in the `data/mortality.csv` file containing mortality data. 
 
 ```{r}
-mortality <- readr::read_csv(here("data/mortality.csv"), skip = 5)
+mortality <- readr::read_csv(here("data/mortality.csv"), skip = 3)
 ```
 
 Great! now we have imported all of the data that we will need.
@@ -350,7 +350,7 @@ Let's explore how to do that with useful functions and packages from the `tidyve
 
 ## Yearly CO~2~ Emissions
 
-First let's take a look at the CO2 data (`CO2_emissions`). 
+First, let's take a look at the CO2 data (`CO2_emissions`). 
 We can use the `slice_head()` function of the `dplyr` package to see just the first rows of our data. 
 We can specify how many rows we would like to see by using the `n =` argument. 
 
@@ -359,14 +359,14 @@ This will make more sense when we have multiple sequential steps using the same 
 
 ```{r}
 CO2_emissions %>%
-  slice_head(n = 6)
+  slice_head(n = 3)
 ```
 
 Another useful function is `slice_sample()` to look at a **selection of random rows**.
 
 ```{r}
 CO2_emissions %>%
-  slice_sample(n = 10)
+  slice_sample(n = 3)
 ```
 
 OK, we see each country is represented along one row and each column contains yearly CO2 emissions. 
@@ -380,33 +380,50 @@ We will see a tiny bit of each variable/column with the data displayed on the ri
 ```{r}
 # Scroll through the output!
 CO2_emissions %>%
-dplyr::glimpse()
+  dplyr::glimpse()
 ```
 ####
 
 
-We can see that we have a large [tibble](https://tibble.tidyverse.org/). 
-A tibble is the `tidyverse` version of a data frame. 
-It is essentially a table with variable information arranged as columns, and individual observations arranged as rows. 
-We can see that the tibble gives us information about the class of each variable. 
+We can also see that we have a large [tibble](https://tibble.tidyverse.org/). 
+```{r}
+CO2_emissions %>%
+  class()
+```
+
+This is the object that is created when we read in the data with `readr`. 
+A tibble (or `tbl_df`) is the `tidyverse` version of a `data.frame` object. 
+Similar to `data.frame`, it is a table with variable information arranged as columns, and individual observations arranged as rows. 
+However some nice differences are they do not change variable names or data types and they give more messages when something is wrong (e.g. when a variable does not exist), which forces the analyst to confront problems earlier. 
+Tibbles also give us information about the class of each variable. 
 
 For example the `country` variable is made up of character (abbreviated as `chr`) values.
-We see that we have 265 different country variables and CO2 emission values for 192 different years (from 1751 to 2014). 
-Recall that the values are emissions in metric tons also called tonnes. 
-We can also see that there are fewer `NA` values for later years.
+```{r}
+CO2_emissions %>% 
+  select(country)
+```
+
+We see that we have `r nrow(CO2_emissions)` rows different country variables and CO2 emission values for `r ncol(CO2_emissions) - 1` different years (from 1751 to 2014). 
+```{r}
+names(CO2_emissions)
+```
+
+Recall, the values are emissions in metric tons also called tonnes.
+Scrolling through the `glimpse()` function above, we can also see that there are fewer `NA` values for later years.
 
 In this next code chunk, we will introduce the `%<>%` operator from the `magrittr` package. 
 This allows us to use our `CO2_emissions` data and reassign it to a modified version at the same time. 
-
-Ok, let's modify `CO2_emissions` to make it more usable for making visualizations. 
-Specifically, we will use the `pivot_longer()` function of the `dplyr` package to convert our data into what is called 'long'format. 
+Let's modify `CO2_emissions` to make it more usable for making visualizations. 
+Specifically, we will use the `pivot_longer()` function of the `dplyr` package to convert our data into what is called 'long' format. 
 This means that we will have more rows and fewer columns than our current format. (AVOCADO: I think there is a formal definition for this -- e.g. one row per observation etc?)
 
 We want to collapse all of the values for the emission data across the different individual year variables into one new emission variable and we will identify what year they are from creating a new `Year` variable.
 
 ```{r}
 CO2_emissions  %<>%
-  pivot_longer(cols = -country, names_to = "Year", values_to = "Emissions")
+  pivot_longer(cols = -country, 
+               names_to = "Year", 
+               values_to = "Emissions")
 
 CO2_emissions %>%
   slice_sample(n = 6)
@@ -414,39 +431,45 @@ CO2_emissions %>%
 
 AVOCADO: should we set the seed above for when using `slice_sample()`? I got a different sample than you and not sure if it should be reproducible? 
 
-We also want to rename the `country` variable to be capitalized.
-We can use the `rename()` function of the `dplyr` package to rename this variable. When renaming variables the new name is listed first before the `=`. We will also modify the `Emissions` data by dividing it by 1000 to make the numbers smaller. To do this we will use the `mutate()` function, which is also part of the `dplyr()` package. This function allows us to create and modify variables. You may also note that the `Year` variable is currently of class type character. We would like to change it to be numeric. This can also be accomplished using the `mutate()` function.
+Let's say we also want to rename the `country` variable to be capitalized.
+To do this, we can use the `rename()` function of the `dplyr` package to rename this variable. 
+When renaming variables the syntax is `new-name=old-name`, where the new name is listed first before the `=`. 
+
+We will also modify the `Emissions` data by dividing it by 1000 to make the numbers smaller. (AVOCADO: this line has been commented out below. Does the line in the code chunk need to be back or does this sentence need to be deleted?)
+To do this we will use the `mutate()` function, which is also part of the `dplyr` package. 
+This function allows us to create and modify variables. 
+You may also note that the `Year` variable is currently of class type character. We would like to change it to be numeric. 
+This can also be accomplished using the `mutate()` function.
+
+AVOCADO: does the `rename(`CO2 Emissions (Mg)`= Emissions)` need to be removed or do we discuss it here? 
 
 ```{r}
-  
- CO2_emissions  %<>% 
+CO2_emissions  %<>% 
    dplyr::rename(Country=country) %>%
-#   dplyr::mutate(Emissions = Emissions/1000, 
-         dplyr::mutate(Year = as.numeric(Year),
-          Label = "CO2 Emissions (Metric Tons)")
-     #rename(`CO2 Emissions (Mg)`= Emissions)
-
+#  dplyr::mutate(Emissions = Emissions/1000, 
+   dplyr::mutate(Year = as.numeric(Year), 
+                 Label = "CO2 Emissions (Metric Tons)")
+#  rename(`CO2 Emissions (Mg)`= Emissions)
 ```
 
 Now let's take a look to see how our data has changed:
 
 ```{r}
-
 CO2_emissions %>%
-slice_sample(n = 6)
-
+  slice_sample(n = 6)
 ```
 Great, we can see that now the `Year` variable is of class double (abbreviated `dbl`), which is a numeric class.
 
-
-Now let's take a look at the `Country` variable just to check if there is anything unexpected. We will use the `distinct()` function of the `dplyr` package to view the unique values only.
+Now, let's take a look at the `Country` variable to check if there is anything unexpected. 
+We will use the `distinct()` function of the `dplyr` package to view the unique values only.
+Finally, we use the `pull()` function of the `dplyr` package to extract the values from the column (this is similar to using the `$` base R syntax e.g. `CO2_emission$Country`). 
 
 #### {.scrollable }
 ```{r}
 #Scroll through the output!
-CO2_emissions %>%
-       distinct(Country)
-
+CO2_emissions %>% 
+  distinct(Country) %>% 
+  pull()
 ```
 ####
 
@@ -455,26 +478,31 @@ These all look as expected!
 
 ## Yearly Growth in GDP per Capita
 
+Let's take a look at the next data set (`gdp_growth`) that we imported. 
+
 ```{r}
 gdp_growth %>%
-  slice_head(n = 6)
+  slice_head(n = 3)
 ```
+
+How many rows and columns are there are there? 
+
+```{r}
+dim(gdp_growth)
+```
+
+Interesting, it's `r nrow(gdp_growth)` rows (as opposed to `r nrow(CO2_emissions)` above). 
+We will deal with this and other differences in the sets of countries a bit later on.
+There are also `r ncol(gdp_growth)` columns with a `country` column and a set of columns corresponding to different years. 
 
 ```{r}
 names(gdp_growth)
 ```
 
-#### {.scrollable}
-```{r}
-# Scroll through the output!
-gdp_growth %>%
-glimpse()
-```
-####
+Yes, no other columns in this data set. 
 
-Again, we will use the `pivot_longer()` to transform the data to long format. We will also again change the `country` variable to be `Country` by using the `rename()` function , and we will make the `Year` variable numeric using the `mutate()` function. 
-
-
+Next, we will use the `pivot_longer()` to transform the data to long format, similar to what we did in the previous section.
+We will also again change the `country` variable to be `Country` by using the `rename()` function , and we will make the `Year` variable numeric using the `mutate()` function. 
 
 ```{r}
 gdp_growth %<>%
@@ -497,15 +525,14 @@ gdp_growth %>%
   count(Year)
 ```
 
-
 Again let's check that the `Country` variable only contains values we would expect.
 
 #### {.scrollable }
 ```{r}
 #Scroll through the output!
-gdp_growth %>%
-       distinct(Country)
-
+gdp_growth %>% 
+  distinct(Country) %>% 
+  pull()
 ```
 ####
 
@@ -513,11 +540,11 @@ Also looks good!
 
 ## Energy Use per Person
 
-Now let's take a look at the energy use per person data:
+Now let's take a look at the energy use per person data (`energy_use`) using `slice_head()` and `glimpse()`. 
 
 ```{r}
 energy_use %>%
-  slice_head(n = 6)
+  slice_head(n = 3)
 ```
 
 #### {.scrollable}
@@ -527,24 +554,24 @@ energy_use %>%
 ```
 ####
 
+Looks like we have `r nrow(energy_use)` rows and `r ncol(energy_use)` columns where we have a `country` column and again a set of years. 
 To wrangle the `energy_use` data, we will again convert the data to long format, rename some variables, and mutate the `Year` data to be numeric.
 
 ```{r}
 energy_use %<>%
   pivot_longer(cols = -country, 
-           names_to = "Year", 
-          values_to = "energy_use") %>%
+               names_to = "Year", 
+               values_to = "energy_use") %>%
   rename(Country = country) %>%
   mutate(Year = as.numeric(Year),
          Label = "Energy Use (kg, oil-eq./capita)") %>%
   rename(Energy = energy_use)
-
 ```
 
 
 ```{r}
 energy_use %>%
-slice_sample(n = 10)
+  slice_sample(n = 3)
 ```
 
 Now we will check the `Country` variable:
@@ -552,46 +579,41 @@ Now we will check the `Country` variable:
 #### {.scrollable }
 ```{r}
 #Scroll through the output!
-energy_use %>%
-       distinct(Country)
-
+energy_use %>% 
+  distinct(Country) %>% 
+  pull()
 ```
 ####
-
 
 Looks good!
 
 
 ## Crude Mortality Rate
 
+Next, we look at the crude mortality rate (`mortality`) data.
+
 ```{r}
 mortality %>%
-  slice_head(n = 6)
+  slice_head(n = 10)
 ```
-
-
-We can see that there are a couple of empty rows which indicate when the data was updated.
-We can also see that the columns really start at the 3rd row. So first we will replace the column names with the 3rd row. Then we will remove the first 3 rows.
-
-```{r}
-colnames(mortality)
-colnames(mortality) <- mortality[3,]
-colnames(mortality)
-mortality <- mortality[-c(1:3),]
-```
-
 
 
 #### {.scrollable}
 ```{r}
 mortality %>%
   glimpse()
-
 ```
 ####
 
+AVOCADO: there is a column called `X65`. Unclear if I messed something up? 
 
-That is looking better! However, we also want to remove some variables like: `Country Code`, `Indicator Name`, and `Indicator Code`. We can do that using the `select()` function of the `dplyr` package. We can use the minus sign `-` to indicate what variables we don't want to keep. Otherwise, we will perform similar modifications as we performed on the other data sets. Note that these variable names need quotation marks around them because they have spaces. 
+We see there are `r nrow(mortality)` rows and `r ncol(mortality)` columns. 
+
+That is looking better! However, we also want to remove some variables like: `Country Code`, `Indicator Name`, and `Indicator Code`. 
+We can do that using the `select()` function of the `dplyr` package. 
+We can use the minus operator `-` to indicate what variables we do not want to keep. 
+Otherwise, we will perform similar modifications as we performed on the other data sets. 
+Note that these variable names need quotation marks around them because they have spaces. 
 
 ```{r}
 mortality %<>%
@@ -605,7 +627,6 @@ mortality %<>%
   mutate(Year = as.numeric(Year),
        Deaths = as.numeric(Deaths),
        Label = "Deaths/1000 People")
-
 ```
 
 ```{r}
@@ -618,28 +639,24 @@ Let's check the `Country` variable:
 #### {.scrollable }
 ```{r}
 #Scroll through the output!
-mortality %>%
-       distinct(Country)
-
+mortality %>% 
+  distinct(Country) %>% 
+  pull()
 ```
 ####
 
-OK, in this case it looks like there are some regions included as well, like:
+OK, in this case it looks like there are some regions included as well such as `"East Asia & Pacific (excluding high income)"`.
 
-"East Asia & Pacific (excluding high income)", "Early-demographic dividend", "East Asia & Pacific", "Europe & Central Asia (excluding high income)", "Europe & Central Asia", "Euro area", "Fragile and conflict affected situations", "European Union", "Heavily indebted poor countries (HIPC)", "IBRD only", "IDA & IBRD total", "IDA total", "IDA blend", "IDA only", "Not classified", "Latin America & Caribbean (excluding high income)", "Latin America & Caribbean", "Least developed countries: UN classification","Low income"," Lower middle income", "Low & middle income", "Late-demographic dividend", "Middle East & North Africa", "Middle income", "Middle East & North Africa (excluding high income)", "North America", "OECD members", "Other small states", "Pre-demographic dividend", "West Bank and Gaza", "Pacific island small states", "Post-demographic dividend", "French Polynesia", "South Asia", 
-"Sub-Saharan Africa (excluding high income)", "Sub-Saharan Africa", "East Asia & Pacific (IDA & IBRD countries)", "Europe & Central Asia (IDA & IBRD countries)", "Latin America & the Caribbean (IDA & IBRD countries)", "Middle East & North Africa (IDA & IBRD countries)", "South Asia (IDA & IBRD)", "Sub-Saharan Africa (IDA & IBRD countries)", "Upper middle income". 
+Unfortunately, we do not know of a less manual way of doing this, so we do this in the following way: 
 
-
-Let's remove these regions:
-```{r}
+```{r, echo=FALSE}
 mortality %<>% 
-filter(!Country %in% c("East Asia & Pacific (excluding high income)", "Early-demographic dividend", "East Asia & Pacific", "Europe & Central Asia (excluding high income)", "Europe & Central Asia", "Euro area", "Fragile and conflict affected situations", "European Union", "Heavily indebted poor countries (HIPC)", "IBRD only", "IDA & IBRD total", "IDA total", "IDA blend", "IDA only", "Not classified", "Latin America & Caribbean (excluding high income)", "Latin America & Caribbean", "Least developed countries: UN classification", "Low income"," Lower middle income", "Low & middle income", "Late-demographic dividend", "Middle East & North Africa", "Middle income", "Middle East & North Africa (excluding high income)", "North America", "OECD members", "Other small states", "Pre-demographic dividend", "West Bank and Gaza", "Pacific island small states", "Post-demographic dividend", "French Polynesia", "South Asia", 
+  filter(!Country %in% c("East Asia & Pacific (excluding high income)", "Early-demographic dividend", "East Asia & Pacific", "Europe & Central Asia (excluding high income)", "Europe & Central Asia", "Euro area", "Fragile and conflict affected situations", "European Union", "Heavily indebted poor countries (HIPC)", "IBRD only", "IDA & IBRD total", "IDA total", "IDA blend", "IDA only", "Not classified", "Latin America & Caribbean (excluding high income)", "Latin America & Caribbean", "Least developed countries: UN classification", "Low income"," Lower middle income", "Low & middle income", "Late-demographic dividend", "Middle East & North Africa", "Middle income", "Middle East & North Africa (excluding high income)", "North America", "OECD members", "Other small states", "Pre-demographic dividend", "West Bank and Gaza", "Pacific island small states", "Post-demographic dividend", "French Polynesia", "South Asia", 
 "Sub-Saharan Africa (excluding high income)", "Sub-Saharan Africa", "East Asia & Pacific (IDA & IBRD countries)", "Europe & Central Asia (IDA & IBRD countries)", "Latin America & the Caribbean (IDA & IBRD countries)", "Middle East & North Africa (IDA & IBRD countries)", "South Asia (IDA & IBRD)", "Sub-Saharan Africa (IDA & IBRD countries)", "Upper middle income"))  
-
 ```
 
 
-
+AVOCADO: could we do a left join with this data set below so that these regions don't get joined? instead of the code chunk above? 
 
 ## US Specific Data
 
@@ -647,11 +664,15 @@ Now we will take a look at the US data about disasters and temperature.
 
 ### Disasters
 
+First, we consider the diasters that have occurred in the US. 
 ```{r}
 us_disaster 
 ```
 
-We are specifically interested in the `Year` and  the variables that contain the word `"Count"` so we will select them using the `select()` and `contains()` functions in the `dplyr` package. Since we are selecting for variables with the word `"Count"` we need to use quotation marks around it. Selecting for the variable `year` does not require this as that is actually the name of one of the existing variables.
+We are specifically interested in the `Year` and  the variables that contain the word `"Count"`. 
+We will select them using the `select()` and `contains()` functions in the `dplyr` package. 
+Since we are selecting for variables with the word `"Count"` we need to use quotation marks around it. 
+Selecting for the variable `year` does not require this as that is actually the name of one of the existing variables.
 
 
 ```{r}
@@ -664,7 +685,8 @@ us_disaster %>%
 
 Now we want to create a new variable that will be the sum of all the different types of disasters for each year. 
 
-We can create this new variable using the `mutate()` function of `dplyr` and we will use the base `rowSums()` function to perform the calculation. We don't want to include the `Year` variable in our sum, so we can exclude it using the `select`function within the `rowSums()` function. However, to do so we need to indicate that we are using the data that we already used as input to our `mutate()` and `rowSums()` functions. We can do so by using a `.`. 
+We can create this new variable using the `mutate()` function of `dplyr` and we will use the base `rowSums()` function to perform the calculation. 
+We don't want to include the `Year` variable in our sum, so we can exclude it using the `select`function within the `rowSums()` function. However, to do so we need to indicate that we are using the data that we already used as input to our `mutate()` and `rowSums()` functions. We can do so by using a `.`. 
 
 
 ```{r}
@@ -675,44 +697,57 @@ us_disaster %>%
   glimpse()
 ```
 
-Great, now we are going to remove some of these variables and just keep or select using the `select()` function the variables we are interested in. We will keep the `Flooding Count` because as you may recall from earlier in this case study, events of extreme precipitation levels appear to be associated with global warming. We will use this as a proxy for that.
+Great, now we are going to remove some of these variables and just keep or select using the `select()` function the variables we are interested in. 
+We will keep the `Flooding Count` because as you may recall from earlier in this case study, events of extreme precipitation levels appear to be associated with global warming. 
+We will use this as a proxy for that.
 
-We are also going to add a new variable called `Country` to indicate that this data is from the United States. This will create a new variable where every value is `United States`.
+We are also going to add a new variable called `Country` to indicate that this data is from the United States. 
+This will create a new variable where every value is `United States`.
 ```{r}
 us_disaster %<>%
-  dplyr::select(Year,
-                Disasters) %>%
+  dplyr::select(Year, Disasters) %>%
   mutate(Country = "United States") %>%
-  pivot_longer(cols = c(- Country, - Year),
-           names_to = "Indicator",
-          values_to = "Value") %>%
+  pivot_longer(cols = c(-Country, -Year),
+               names_to = "Indicator",
+               values_to = "Value") %>%
   mutate(Label = "Number of Disasters")
 
 us_disaster %>%
   slice_head(n = 6)
 ```
-
-
+Great, this looks good now. 
 
 ### Temperature
 
+Next, we consider the temperature in the US over time.  
 ```{r}
 us_temperature %>%
   slice_head(n = 6)
 ```
-OK, so we want to remove the `Anomaly` variable which is an indicator of how different the national average temperature for that year was from the average temperature from 1901-2000 which was 52.02&deg;F. 
+So a few things need to be fixed here. 
 
-We also want to change the date values, which are currently listed as the year followed by the number 12. To do so we want to just keep the first 4 characters in the `Date` variable string values. We can use the `str_sub()` function of the `stringr` package to do this. We just need to indicate the start and stop characters. In this case the start would be 1 and the 4th character would be where we want to stop, so we would use `start = 1, stop = 4`. Again we will create a `Country` variable. We will also change the name of the `Date` variable to `Year` so that it will be consistent with our other data sets. Furthermore, we also what it to be numeric. We can accomplish both renaming and changing to numeric by using the `mutate()` function. We can then remove the `Date` variable and also order the columns just like the other us data using the `select()` function.
+First, there is a `Date` column, which it looks like it is currently listed as the year followed by the number 12. 
+We want change this to only keep the first 4 characters in the `Date` variable string values. 
+We can use the `str_sub()` function of the `stringr` package to do this. 
+We just need to indicate the start and stop characters. 
+In this case the start would be 1 and the 4th character would be where we want to stop, so we would use `start = 1, stop = 4`. 
+
+Next, we want to remove the `Anomaly` variable, which is an indicator of how different the national average temperature for that year was from the average temperature from 1901-2000 which was 52.02&deg;F. 
+
+Then, we will create a `Country` variable. 
+We will also change the name of the `Date` variable to `Year` so that it will be consistent with our other data sets. We also also want the `Year` to be numeric. 
+We can accomplish both renaming and changing to numeric by using the `mutate()` function.
+
+Finally, we remove the `Date` variable and also order the columns just like the other us data using the `select()` function.
 
 ```{r}
 us_temperature %<>%
   dplyr::select(-Anomaly) %>%
-  mutate(Date = str_sub(Date, start = 1, end = 4))%>%
-  rename() %>%
-  mutate(Year = as.numeric(Date), 
-      Country = "United States",
-    Indicator = "Temperature",
-        Label = "Temperature (Fahrenheit)") %>%
+  mutate(Date = str_sub(Date, start = 1, end = 4)) %>%
+  mutate(Country = "United States",
+         Year = as.numeric(Date), 
+         Indicator = "Temperature",
+         Label = "Temperature (Fahrenheit)") %>%
   select(Year, Country, Indicator, Value, Label)
 
 us_temperature %>%
@@ -722,48 +757,60 @@ us_temperature %>%
 
 ## Joining data
 
-Now we would like to join the different data sets together into one tibble. To do so it is often necessary to have at least one column or variable with the same name to be used as a key for putting your data together. To put all of our data together there are several `*_join()` functions available in the `dplyr` package. 
+Now that we have wrangled the individual data sets, we are ready to put everything together now. 
+Specifically, we will _join_ the individual data sets into one tibble using `*_join()` functions available in the `dplyr` package. 
 
+Before we begin though, we will need to have at least one column or variable with the same name to be used as a key for putting your data together. 
+These are the `by="x1"` arguments below where `x1` is the name of the column in both the `a` and `b` data sets that we will join together. 
 
 ```{r, echo = FALSE, out.width = "800 px"}
 knitr::include_graphics(here::here("img", "join.png"))
 ```
+AVOCADO: add source
 
-We will use the `full_join()` function as we have different time spans for each dataset and we would like to retain as much data as possible. The`full_join()` function will simply create `NA` values for any of the years that are not in one of the data sets. We can check by using the base `summary()` function. This will also allow us to check that there are column names that are consistent in each dataset that we wish to combine.
+There are several types of `*_join()` functions to consider. 
+We primarily use the `full_join()` function as we have different time spans for each data set and we would like to retain as much data as possible. 
+The`full_join()` function will simply create `NA` values for any of the years that are not in one of the data sets. 
+
+However, for the `mortality` data, we will use `left_join()` so that the extra regions in the `mortality` that we don't want (e.g. `"East Asia & Pacific (excluding high income)"`) will be excluded. 
+
+First, we check using the base `summary()` function that there are column names that are consistent in each data set that we wish to combine.
 
 ```{r}
 summary(CO2_emissions)
 summary(gdp_growth)
 summary(energy_use)
 summary(mortality)
-
 ```
 
 Indeed, `Country`, and `Year` variables are present in all of the data sets. We can see that the minimum and maximum year is different for nearly all the data sets.
 
-We need to specify what columns/variables we will be joining by using the `by =` argument in the `full_join()` function.
+
+Next, we need to specify what columns/variables we will be joining by using the `by =` argument in the `full_join()` and `left_join()` functions.
 
 ```{r}
 
 data_wide <- CO2_emissions %>%
   full_join(gdp_growth, by = c("Country", "Year", "Label")) %>%
   full_join(energy_use, by = c("Country", "Year", "Label")) %>%
-  full_join(mortality, by = c("Country", "Year", "Label"))
+  left_join(mortality, by = c("Country", "Year", "Label"))
 
 data_wide %>%
   slice_sample(n = 6)
-
 ```
 
-We can also do the same thing using by using the`reduce()` function of the `purrr` package. This is a good option if you have many dasasets to combine.
+We can also do the same thing using by using the`reduce()` function of the `purrr` package. 
+This is a good option if you have many data sets to combine.
 
 
 ```{r}
-data_wide <- list(CO2_emissions, 
-                gdp_growth, 
-                energy_use, 
-                mortality) %>% 
+data_wide <- 
+  list(CO2_emissions, gdp_growth, energy_use) %>% 
   reduce(full_join, by = c("Country", "Year", "Label"))
+
+data_wide <- 
+  list(data_wide, mortality) %>% 
+  reduce(left_join, by = c("Country", "Year", "Label"))
 
 data_wide %>%
   slice_head(n = 6)
@@ -776,8 +823,7 @@ data_wide %>%
 
 Nice, looks good!
 
-We will also make a long version of this data, where we will create an new variable called `Indicator` that will indicate what dataset the data came from and we will collapse the values from the columns called ` Emissions` (`CO2 Emissions (Mg)`), `GDP`(`GDP Growth/Capita (%)`), `Energy`(`Energy Use (kg, oil-eq./capita)`), and `Deaths` (`Deaths/1000 People`). 
-
+We will also make a long version of this data, where we will create an new variable called `Indicator` that will indicate what data set the data came from and we will collapse the values from the columns called ` Emissions` (`CO2 Emissions (Mg)`), `GDP`(`GDP Growth/Capita (%)`), `Energy`(`Energy Use (kg, oil-eq./capita)`), and `Deaths` (`Deaths/1000 People`). 
 
 ```{r}
 data_long <- data_wide %>%
@@ -788,25 +834,25 @@ data_long %>%
   slice_sample(n = 6)
 ```
 
-
-
 We will now combine this data with the US data about disasters and temperatures.
-
-We will now use the `bind_rows()` function which will just append the `us_temperature` data and the `us_disaster` data after the `data_long` data. 
-
 
 ```{r}
 us_disaster %>%
   slice_head(n = 6)     
 us_temperature %>%
-  slice_head(n = 6)    
-
-data_long <-list(data_long, 
-               us_disaster,
-               us_temperature) %>%
-  bind_rows()
-data_long$Country <- as.factor(data_long$Country)
+  slice_head(n = 6)
 ```
+
+We will now use the `bind_rows()` function which will just append the `us_temperature` data and the `us_disaster` data after the `data_long` data. 
+
+```{r}
+data_long <- 
+  list(data_long, us_disaster, us_temperature) %>%
+  bind_rows() %>% 
+  mutate(Country = as.factor(Country))
+```
+
+We also convert the `Country` column to a factor in the last line of the code chunk. 
 
 We can check the top and bottom of the new `data_long` tibble to see that our `us_temperature` data is at the bottom. To see the end of our tibble we can use `slice_tail()` function of the `dplyr` package.
 
@@ -824,34 +870,37 @@ data_long %>%
 
 <details> <summary> Click here for details about the difference between `full_join()` and `bind_rows()` </summary>
 
-The difference between this function and the `full_join()` function is that the `bind_rows()` function will essentially just append each dataset to each other, whereas the `full_join()` function collapses data that is comparable. Here you will see an example of what the data would have been like for `data_wide` if we had made it using `bind_rows()` and if `full_join()` had been used but was not joined by the `Label` variable. Since the `Label` variable has unique values for each type of `Indicator`, this causes the `full_join()` result to be the same as `bind_rows()`. We will specifically look at the values for China in the year of 1980.
+The difference between this function and the `full_join()` function is that the `bind_rows()` function will essentially just append each data set to each other, whereas the `full_join()` function collapses data that is comparable. 
+Here, you will see an example of what the data would have been like for `data_wide` if we had made it using `bind_rows()` and if `full_join()` had been used but was not joined by the `Label` variable.
+Since the `Label` variable has unique values for each type of `Indicator`, this causes the `full_join()` result to be the same as `bind_rows()`. 
+
+Let's consider an example and look at the values for China in the year of 1980.
+
+AVOCADO: could more text be added below here in between the code chunks describing what we see? 
 
 ```{r}
-data_wide_br <- list(CO2_emissions, 
-                gdp_growth, 
-                energy_use, 
-                mortality) %>% 
+data_wide_br <- 
+  list(CO2_emissions, gdp_growth, energy_use) %>% 
   bind_rows()
 
-
-data_wide_fj <- list(CO2_emissions, 
-                gdp_growth, 
-                energy_use, 
-                mortality) %>% 
+data_wide_fj <- 
+  list(CO2_emissions, gdp_growth, energy_use) %>% 
   reduce(full_join, by = c("Country", "Year"))
 
-data_wide_fj_label <- list(CO2_emissions, 
-                gdp_growth, 
-                energy_use, 
-                mortality) %>% 
+data_wide_fj_label <- 
+  list(CO2_emissions, gdp_growth, energy_use) %>% 
   reduce(full_join, by = c("Country", "Year", "Label"))
+```
 
-
+```{r}
 dim(data_wide_fj)
 dim(data_wide_br)
+dim(data_wide_fj_label)
 
 identical(data_wide_fj_label, data_wide_br)
+```
 
+```{r}
 data_wide_fj %>%
   filter(Country == "China", Year == "1980")
 
@@ -861,11 +910,15 @@ data_wide_br %>%
 data_wide_fj_label %>%
   filter(Country == "China", Year == "1980")
 ```
-</detials>
+</details>
 
 
+A few more things to do before we leave the data wrangling section. 
 
-We will also create a new variable called `Region` that will indicate if the data is about the United States or a different country based on the values in the `Country` variable. We will use the `case_when()` function of the `dplyr` package to do this. If the `Country` variable is equal to `"United States"` the value for the new variable will also be "United States", where as if the `Country` variable is not equal to `"United States"` but is some other character string value, such as `"Afghanistan"`, then the value for the new variable will be `"Rest of the World"`.
+We will create a new variable called `Region` that will indicate if the data is about the United States or a different country based on the values in the `Country` variable. 
+To do this, we will use the `case_when()` function of the `dplyr` package. 
+
+For example, if the `Country` variable is equal to `"United States"` the value for the new variable will also be `"United States"`, where as if the `Country` variable is not equal to `"United States"` but is some other character string value, such as `"Afghanistan"`, then the value for the new variable will be `"Rest of the World"`.
 The new values for the new variable `Region` are indicated after the specific conditional statements by using the `~` symbol. 
 
 
@@ -874,30 +927,27 @@ The new values for the new variable `Region` are indicated after the specific co
   mutate(Region = case_when(Country == "United States" ~ "United States",
                             Country != "United States" ~ "Rest of the World"))
 
-
-data_long %>%
+data_long  %>% 
+  arrange(Country) %>%
   slice_head(n = 6)
 ```
-
-To remove entries for countries with NA values we can use the `drop_na()` function of the `tidyr` package to drop all years with missing data.
+We can also remove rows for countries with NA values using the `drop_na()` function of the `tidyr` package to drop all years with missing data.
 
 ```{r}
-data_long_with_miss <- data_long %>%
+data_long_with_miss <- 
+  data_long %>% 
   arrange(Country)
 
 data_long %<>%
   drop_na() %>%
   arrange(Country)
-
 ```
 
 You can see that by removing the NA values the data for Afghanistan starts at 1949 instead of 1751.
 
 ```{r}
-
 data_long %>%
   slice_head(n = 6)
-
 ```
 
 # **Data Exploration**
