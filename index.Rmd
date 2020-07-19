@@ -874,28 +874,83 @@ Using only data from the US, calculate the first and last year that a value was 
 # **Data Visualization**
 *** 
 
-Now we will create some simple plots to examine the data using the `ggplot2` package.
-Recall, there are different time spans for each of the variables of interest (refer to  [**What are the data?**] section as a reminder). 
+Now we will create some simple plots to examine the CO2 emissions over time using the `ggplot2` package.
 
-The first step in creating a plot is to define what data we intend to use and what data will be plotted on the x-axis, the y-axis, and if any columns in the data set will be used to determine the color or group. 
-All of these are defined using the `aes()` argument (which is short for aesthetic mappings) inside of the `ggplot()` function. 
+As you may have already seen, there are many functions available in base R that can create plots (e.g. `plot()`, `boxplot()`). 
+Others include: `hist()`, `qqplot()`, etc. 
+These functions are great because they come with a basic installation of R and can be quite powerful when you need a quick visualization of something when you are exploring data. 
 
-Let's start with the CO2 emission data.
+We are choosing to introduce `ggplot2` because, in our opinion, it is one of the simplest ways for beginners to create relatively complicated plots that are intuitive and aesthetically pleasing. 
 
-## CO2 Emissions (by country)
+## The `ggplot2` R package
 
-We first need to give the correct data input. We will filter our data to only include the CO2 emissions data by using the `filter()` function of the `dplyr` package. 
-To use this function we need to specify what value  (e.g. `Emissions`) we want for a given variable or column (e.g. `Indicator`).  
+The reasons [`ggplot2`](http://ggplot2.tidyverse.org) is generally intuitive for beginners is the use of [grammar of graphics](http://vita.had.co.nz/papers/layered-grammar.html) or the `gg` in `ggplot2`. 
+The idea is that you can construct many sentences by learning just a few nouns, adjectives, and verbs. 
+There are specific "words" that we will need to learn and once we do, you will be able to create (or "write") hundreds of different plots. 
+
+The critical part to making graphics using `ggplot2` is the data needs to be in a _tidy_ format. 
+Given that we have just spend the last two lectures learning about how to work with _tidy_ data, we are primed to take advantage of all that `ggplot2` has to offer! 
+
+We will show how it is easy to pipe _tidy_ data (output) as input to other functions that creates plots. 
+This all works because we are working 
+within the _tidyverse_. 
+
+#### What is the `ggplot()` function? 
+
+As explained by Hadley Wickham: 
+
+> the grammar tells us that a statistical graphic is a mapping from data to aesthetic attributes (colour, shape, size) of geometric objects (points, lines, bars). The plot may also contain statistical transformations of the data and is drawn on a specific coordinates system.
+
+#### `ggplot2` Terminology 
+
+* **ggplot** - the main function where you specify the data set and variables to plot (this is where we define the `x` and
+`y` variable names)
+* **geoms** - geometric objects
+    * e.g. `geom_point()`, `geom_bar()`, `geom_line()`, `geom_histogram()`
+* **aes** - aesthetics
+    * shape, transparency, color, fill, line types
+* **scales** - define how your data will be plotted
+    * continuous, discrete, log, etc
+
+The function `aes()` is an aesthetic mapping function inside the `ggplot()` object. 
+We use this function to specify plot attributes (e.g. `x` and `y` variable names) that will not change as we add more layers.  
+
+Anything that goes in the `ggplot()` object becomes a global setting. 
+From there, we use the `geom` objects to add more layers to the base `ggplot()` object. 
+These will define what we are interested in illustrating using the data.  
+
+## CO2 Emissions
+
+Let's start by plotting the CO2 emissions over time. 
+Because our data set contains other variables, we first need to filter our data to only include the CO2 emissions data by using the `filter()` function of the `dplyr` package. 
+To use this function we need to specify what value (e.g. `Emissions`) we want for a given variable or column (e.g. `Indicator`).  
 
 In this case, we filter to keep all rows where the `Indicator` variable is equal to the word `Emissions`. 
 Notice that this needs to be in quotes, while the variable name does not.
+
+```{r}
+data_long %>%
+  filter(Indicator == "Emissions")
+```
+
+We also need to sum the emissions across countries for each year. 
+Here, we use the `group_by()` and `summarize()` function that we previously learned about. 
+
+```{r}
+data_long %>%
+  filter(Indicator == "Emissions") %>%
+  group_by(Year) %>%
+  summarize(Emissions = sum(Value)) 
+```
 
 Then, we use the `aes()` argument of the `ggplot()` function to define that our x-axis will be the `Year` variable, the y-axis will be the emission `Value` variable, and that our data should be grouped or separated by the `Country` variable. 
 
 ```{r}
 data_long %>%
   filter(Indicator == "Emissions") %>%
-  ggplot(aes(x = Year, y = Value, group = Country))
+  group_by(Year) %>%
+  summarize(Emissions = sum(Value)) %>%
+  ggplot(aes(x = Year, y = Emissions)) 
 ```
 
 Looks like we got a blank plot. 
@@ -906,83 +961,81 @@ We do so by using the `+` sign in between each command.
 
 ### Line plots
 
-Here, we will use the `geom_line()` function because we would like to create a line plot. 
-There are many `geom_*` functions to choose from that create many different types of plots.
-
-```{r}
-data_long %>%
-  filter(Indicator == "Emissions") %>%
-  ggplot(aes(x = Year, y = Value, group = Country)) + 
-  geom_line()
-```
-
-Type `geom` into the RStudio console and you will see many options to scroll through.
+To tell R what type of plot we want, we need to add another _layer_ to our ggplot object. 
+To add a type of plot, we can use one of the many `geom_*` functions in `ggplot2`.
+For example, type `geom` into the RStudio console and you will see many options to scroll through.
 
 ```{r, echo = FALSE, out.width = "800 px"}
 knitr::include_graphics(here::here("img", "geom_.png"))
 ```
 
-Back to our plot. 
-Since we have many overlapping lines, we will make our lines slightly transparent by using the `alpha` argument. 
-This takes values from 0 to 1, where 0 is completely transparent and 1 is completely opaque. 
-We will also add labels using the `labs()` function. 
-
-Again, notice that a plus sign is used between each layer that we add to the plot. 
-To make CO2 appear with a subscript we can use `~CO[2]~`.  
-We will also use the function `theme_linedraw()` of `ggplot2` to change the general appearance of the plot. 
-
+Here, we will use the `geom_line()` function because we would like to create a line plot.
+We also use the `size` argument in `geom_line()` to control the size of the line. 
 
 ```{r}
 data_long %>%
   filter(Indicator == "Emissions") %>%
-  ggplot(aes(x = Year, y = Value, group = Country))+
-  geom_line(alpha = 0.4) + 
-  labs(title = "Country" ~CO[2]~ "Emissions per Year, 1751-2014",
-     caption = "Limited to reporting countries",
-           y = "Emissions (Metric Tons)") +
-  theme_linedraw()
+  group_by(Year) %>%
+  summarize(Emissions = sum(Value)) %>%
+  ggplot(aes(x = Year, y = Emissions)) +
+    geom_line(size = 1.5)
 ```
 
-You can type `theme_` in the RStudio console to see the various plot theme options available.
+Finally, let's make this plot really nice by adding a few final touches. 
+To change title, caption, changing the axis labels, we can use the `labs()` function. 
+Again, notice that a plus sign is used between each layer that we add to the plot. 
+To make CO2 appear with a subscript we can use `~CO[2]~`.  
 
-```{r, echo = FALSE, out.width = "800 px"}
-knitr::include_graphics(here::here("img", "themes.png"))
+```{r}
+data_long %>%
+  filter(Indicator == "Emissions") %>%
+  group_by(Year) %>%
+  summarize(Emissions = sum(Value)) %>%
+  ggplot(aes(x = Year, y = Emissions)) +
+    geom_line(size = 1.5) + 
+    labs(title = "World "~CO[2]~" Emissions per Year (1751-2014)",
+         caption = "Limited to reporting countries", 
+         y = "Emissions (Metric Tonnes)")
 ```
 
 Next, we use the `theme()` function to change the font size of the x-axis, y-axis, axis titles, and the caption as shown below. 
 To know what to call each element of the plot in this function to change the size type `?theme()` in the console. 
+
 You will see a very large list that includes other plot aspects like the background and the legend. 
 This function can be used to modify your plot to your specifications. 
-We will also use it to remove the legend title by using `element_blank()`. 
-In this case, we are also saving the plot to an object called `co2plot`. 
-To show the plot we simply type the name of the object.
 
 ```{r}
-co2plot <- data_long %>%
+data_long %>%
   filter(Indicator == "Emissions") %>%
-  ggplot(aes(x = Year, y = Value, group = Country)) +
-    geom_line(alpha = 0.4) + 
-    labs(title = "Country" ~CO[2]~ "Emissions per Year, 1751-2014",
-         caption = "Limited to reporting countries",
-         y = "Emissions (Metric Tons)") +
+  group_by(Year) %>%
+  summarize(Emissions = sum(Value)) %>%
+  ggplot(aes(x = Year, y = Emissions)) +
+    geom_line(size = 1.5) + 
+    labs(title = "World "~CO[2]~" Emissions per Year (1751-2014)",
+         caption = "Limited to reporting countries", 
+         y = "Emissions (Metric Tonnes)") +
   theme_linedraw() +
   theme(axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12),
         axis.title.x = element_text(size = 12),
         axis.title.y = element_text(size = 12),
         plot.caption = element_text(size = 12),
-        plot.title = element_text(size = 16),
-        legend.title = element_blank())
+        plot.title = element_text(size = 16))
+```
 
-co2plot
+We can clearly see that global CO2 emissions have dramatically risen since 1900.
+
+Notice, we used the function `theme_linedraw()` of `ggplot2` to change the general appearance of the plot. 
+
+**Useful tip**: You can type `theme_` in the RStudio console to see the various plot theme options available.
+
+```{r, echo = FALSE, out.width = "800 px"}
+knitr::include_graphics(here::here("img", "themes.png"))
 ```
 
 Great! We've created our first plot. 
 
-We can see that many countries show a dramatic increase in emissions over time with a handful of countries with particularly high levels. What about the United States? Which line indicates the emissions in the US? 
-
 Before we leave this section, let's save this theme so we do not have to keep typing the same code in future plots. 
-We will save one with a legend and one without a legend
 
 ```{r}
 my_theme <- 
@@ -993,14 +1046,80 @@ my_theme <-
         axis.title.y = element_text(size = 12),
         plot.caption = element_text(size = 12),
         plot.title = element_text(size = 16))
-
-my_theme_no_legend <- 
-  my_theme + 
-  theme(legend.title = element_blank())
 ```
 
+In this way, we can just add another _layer_ to our plot with the `my_theme` we created with the specifications of the sizes of the title and axis labels. 
 
-#### Adding color 
+```{r}
+CO2_world <- 
+  data_long %>%
+  filter(Indicator == "Emissions") %>%
+  group_by(Year) %>%
+  summarize(Emissions = sum(Value)) %>%
+  ggplot(aes(x = Year, y = Emissions)) +
+    geom_line(size = 1.5) + 
+    labs(title = "World "~CO[2]~" Emissions per Year (1751-2014)",
+         caption = "Limited to reporting countries", 
+         y = "Emissions (Metric Tonnes)") +
+  my_theme
+```
+
+We are also saving the plot to an object called `CO2_world`. 
+To show the plot we simply type the name of the object: 
+
+```{r}
+CO2_world
+```
+
+One thing that would be nice to know is which countries are contributing the most or the least to CO2 emissions. 
+Let's continue to explore the data to investigate how CO2 emissions from individual countries have changed over time. 
+
+Next, we go back to using our `data_long` data set. 
+Here, we use the `group` argument in `aes()` which controls whether a line should be drawn 
+
+```{r}
+data_long %>%
+  filter(Indicator == "Emissions") %>%
+  ggplot(aes(x = Year, y = Value, group = Country)) + 
+  geom_line() + 
+  ylab("Emissions")
+```
+
+We can see that many countries show a dramatic increase in emissions over time with a handful of countries with particularly high levels. 
+
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+- What happens when you do not use the `group = Country` argument? 
+- What other aesthetic  (i.e. `aes()` arguments) can be changed?
+
+####
+
+Since we have many overlapping lines, we will make our lines slightly transparent by using the `alpha` argument. 
+This takes values from 0 to 1, where 0 is completely transparent and 1 is completely opaque. 
+
+We also add our `my_theme` controlling the size of the title and axis labels. 
+
+```{r}
+CO2_countries <- 
+  data_long %>%
+  filter(Indicator == "Emissions") %>%
+  ggplot(aes(x = Year, y = Value, group = Country))+
+  geom_line(alpha = 0.4) + 
+  labs(title = "Country" ~CO[2]~ "Emissions per Year (1751-2014)",
+     caption = "Limited to reporting countries",
+           y = "Emissions (Metric Tonnes)") +
+  my_theme
+
+CO2_countries
+```
+
+Our plot is starting to look really good. 
+One question you still might have is which country corresponds to which line? 
+Which line indicates the emissions in the US? 
+
+
+### Adding color 
 
 We can add another "layer" on top of our first plot to add a red line just for the US data. 
 To do this we need to indicate what data we would like to plot, so we need to filter for just the US data and then we need to indicate that it will be colored by Country, even though in this case we only have one line to color. 
@@ -1010,10 +1129,10 @@ Notice how the color name needs to be in quotes and that the argument `values =`
 
 We can add this line to the plot in two ways. 
 
-**Useful tip**: Instead of retyping the original code to create the `co2plot` plot, we can just use the `+` operator: 
+**Useful tip**: Instead of retyping the original code to create the `CO2_countries` plot, we can just use the `+` operator: 
 
 ```{r}
-co2plot + 
+CO2_countries + 
   geom_line(data = data_long %>%
               filter(Indicator == "Emissions",
                      Country == "United States"), 
@@ -1023,7 +1142,7 @@ co2plot +
 
 It looks like the US has long been the largest CO2 emission producing country until recently, when the US was surpassed by another country. 
 
-Let's figure out which country, by seeing what the top 10 emission producing countries were in 2014. 
+Let's figure out who are the top 10 emission producing countries in 2014. 
 Here, we filter the data for the year 2014, which was the final year of the data. 
 Then, we can make a rank variable based on the `Value` variable for the amount of emissions produced. 
 
@@ -1049,16 +1168,24 @@ top_10_count <-
 
 top_10_count
 ```
+
 We can see that China is now the top emission producing country.
+
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+What are the bottom 10 emission producing countries in 2014?
+
+####
+
 Let's make a plot of *just these top ten countries*. 
 
 To do this, we need to filter the data to just these top countries by using the `%in%` operator to only keep countries in our `Country` variable that are also in the `Country` variable within `top_10_count`. 
 We can use the `pull()` function also of the `dplyr` package to specifically grab just the `Country` data out of `top_10_count`.
 
-
 Since we have 10 countries we will want to differentiate them by color. 
 
-To color our plot we will use the `viridis` color palette which is compatible with color-blindness by using the `scale_fill_viridis_d()` function. 
+To color our plot we will use the `viridis` color palette which is compatible with color-blindness by using the `scale_color_viridis_d()` function. 
 This function is available by loading the `ggplot2` package. 
 There are a few variations for discrete values as `_d`, or binned continuous values as `_b`, or continuous values as `_c`. 
 See [here](https://ggplot2.tidyverse.org/reference/scale_viridis.html) for more information.
@@ -1082,7 +1209,7 @@ Top10b
 ```
 
 It's still a bit difficult to tell which line corresponds to which country. 
-So, let's add a label. 
+So, let's add a text label directly to the plot. . 
 
 ### Adding text labels
 
@@ -1185,6 +1312,7 @@ There are many arguments to use to style your labels just the way that you want:
 ```{r, echo = FALSE, out.width = "600 px"}
 knitr::include_graphics(here::here("img", "ggrepel.png"))
 ```
+
 ##### [[source]](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html)
 
 See [the ggrepel vignette](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"} for more details.
@@ -1209,41 +1337,11 @@ Top10b +
 ```
 
 Nice, that looks pretty good.
-
-### Animated plots
-
-We can make an animation of this plot using the `gganimate` package.
-We will use the `shadow_wake()` function to create our animation and the `annimate()` function to show it. 
-
-AVOCADO: Michael -- could you add more text here explaining how to use gganimate? 
-
-```{r, Animation_1, warning=FALSE}
-animation_1 <- data_long %>%
-  filter(Indicator == "Emissions") %>%
-  ggplot(aes(x = Year, 
-             y = Value, 
-         group = Country, 
-         color = Region, 
-          size = Region, 
-         alpha = Region)) +
-  geom_point() +
-  scale_color_manual(values = c("Red","Black")) +
-  scale_alpha_manual(values = c(0.1, 1)) +
-   scale_size_manual(values = c(0.25, 2)) +
-  labs(title = "Distribution of Indicators by Year and Value, 1980-2010",
-           y = "Emissions (Metric Tonnes)") +
-  theme(axis.text.x = element_text(angle = 90)) + 
-  theme_classic() +
-  transition_time(as.integer(Year)) +
-  gganimate::shadow_wake(wake_length = 1, alpha = FALSE)
-
-gganimate::animate(animation_1, fps = 10, duration = 5)
-```
+For fun, let's try showing our data in an entirely different way. 
 
 
 ### Tile plots
 
-Now let's try showing our data in a different way. 
 This time we will create a `geom_tile` plot.
 
 To color our plot we will use the `viridis` color palette again  but this time we will use the `scale_fill_viridis_c()` -- recall that the `_c` indicates a continuous scale. 
@@ -1276,7 +1374,7 @@ Top10t <- Top10t +
                      labels = seq(1900,2014,by=5)) + 
   labs(title = "Top 10 "~CO[2]~"Emission-producing Countries in 2014",
        subtitle = "Ordered by Emissions Produced in 2014",
-       fill = "Ln(CO2 Emissions (Metric Tons))") +
+       fill = "Ln(CO2 Emissions (Metric Tonnes))") +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12, angle = 90),
         axis.text.y = element_text(size = 12),
@@ -1291,41 +1389,6 @@ Top10t
 We see that Germany had very low emission rates at the end of World War II. 
 We also see that the US has consistently had high emission rates since 1900, but that the emission rates in China recently surpassed that of the US. 
 The portions of the plot that are white indicate that there is no emission data for that country.
-
-## CO2 Emissions (globally)
-
-Now, let's take a look at the data in slightly different way. 
-Let's look at overall global emissions by calculating a sum each year of all the emission values for the different countries. 
-Note that this is limited to only the countries included in the data set. 
-
-### Line plots
-
-To calculate this value we will first use the `group_by()` function of the `dplyr` package. 
-This will allow our calculation to be performed on aggregated data by the different values for the `Year` variable. 
-Otherwise, we would simply get a sum of overall emissions across all of the years in the data set.
-
-Then, we will use the `summarize()` function (also in the `dplyr` package) and the base `sum()` function to calculate a sum of the emission values each year.
-
-Since we will be plotting only one value each year, we do not need to assign a `group` in the `aes()` argument.
-This time we will make the size of the line that will be plotted a bit larger using the `size()` argument in the `geom_line()` function.
-
-```{r}
-CO2_world <- 
-  data_long %>%
-  filter(Indicator == "Emissions") %>%
-  group_by(Year) %>%
-  summarize(Value = sum(Value)) %>%
-  ggplot(aes(x = Year, y = Value)) +
-    geom_line(size = 1.5) + 
-    labs(title = "World "~CO[2]~" Emissions per Year , 1751-2014",
-         caption = "Limited to reporting countries", 
-         y = "Emissions (Metric Tonnes)") +
-    my_theme
-
-CO2_world
-```
-
-We can clearly see that global CO2 emissions have dramatically risen since 1900.
 
 
 
