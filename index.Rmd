@@ -1395,81 +1395,66 @@ The portions of the plot that are white indicate that there is no emission data 
 ## Other variables
 
 Now, let's try putting some of the different data types together together. 
-We have previously used `facet_grid()` to plot multiple subplots simultaneously. 
-We will use the `facet_wrap()` function of the `ggplot2` package, which also plots multiple subplots simultaneously, however it also allows for different scales for the y-axis of the subplots. 
-This is preferable in this case because it is difficult to see the data if all the subplots were plotted with the same y-axis scale, as you can see here: 
+We will use the `facet_wrap()` function of the `ggplot2` package, which plots multiple subplots simultaneously. 
+
+To use `facet_wrap()` with the option for a different y-axis scale for each subplot, we need to set the `scales` argument equal to `"free_y"`. 
+We can also indicate where we would like the label for the subplots to be located by using the `strip.position` argument. 
 
 ```{r,fig.width=10, fig.height=10}
 ggplot(data_long, aes(x = Year, y = Value, group = Country)) +
   geom_line(alpha = 0.2) + 
   geom_line(data = data_long %>%
-    filter(Country == "United States"), 
-    aes(x = Year, y = Value, color = Country)) +
-    scale_colour_manual(values = c("red")) +
-    facet_grid(~Indicator, scales = "free_y") +
-    labs(title = "Distribution of Indicators by Year and Value", 
-         y = "Indicator Value") +
-  my_theme + 
-  theme(strip.text = element_text(size = 16, face = "bold"))
-```
-
-To use `facet_wrap()` with the option for a different y-axis scale for each subplot, we need to set the `scales` argument equal to `"free_y"`. We can also indicate where we would like the label for the subplots to be located by using the `strip.position` argument. Notice that we can change the size or style of the font for these labels using the `strip.text =` argument of the `theme()` function. We can also specify how many rows or columns we would like the subplots to be shown. 
-
-
-```{r,fig.width=10, fig.height=10}
-ggplot(data_long, aes(x = Year, y = Value, group = Country)) +
-  geom_line(alpha = 0.2) + 
-  geom_line(data = data_long %>%
-  filter(Country == "United States"), 
-  aes(x = Year, y = Value, color = Country)) +
+              filter(Country == "United States"), 
+              aes(x = Year, y = Value, color = Country)) +
   scale_colour_manual(values = c("red")) +
+  labs(title = "Distribution of Indicators by Year and Value", 
+       y = "Indicator Value") +
+  my_theme +
+  theme(strip.text = element_text(size = 16, face = "bold")) + 
   facet_wrap(Indicator~.,
              scales = "free_y",
              strip.position = "right",
-             ncol = 1) +
-  labs(title = "Distribution of Indicators by Year and Value", 
-           y = "Indicator Value") +
-  my_theme + 
-  theme(strip.text = element_text(size = 16, face = "bold"))
+             ncol = 1)
 ```
 
-Here we will facet by two variables: `Indicator` and `Region` (which is if the data is from the US or other countries). 
-First we will filter out the data about disasters and temperature as this is only for the US, by using the `filter()` function and `!=` which indicates "not equal to". I
-n this case we want to use `facet_grid()` instead of `facet_wrap()` so that the same y-axis will be used across the rows.
+Notice that we can change the size or style of the font for these labels using the `strip.text =` argument of the `theme()` function. 
+We can also specify how many rows or columns we would like the subplots to be shown. 
+
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+- What happens when you use the `facet_grid()` function instead `facet_wrap()`?
+- Why is this less ideal in this plot? 
+
+####
+
+We can also facet by more than one variable (e.g. `Indicator` and `Region` to show the data from the US compared to other countries).
+In this case we want to use `facet_grid()` instead of `facet_wrap()` so that the same y-axis will be used across the rows.
+The syntax here is to put the name of the two variables on the left or right side of the `~` symbol, which tells you to facet by rows (left) or columns (right).  
+
+First, we will filter out the data about disasters and temperature as this is only for the US, by using the `filter()` function and `!=` which indicates "not equal to".
 
 ```{r,fig.width=10, fig.height=10}
 data_long %>%
-  filter(Indicator != "Disasters" ,
-         Indicator != "Temperature")  %>%
-ggplot(aes(x = Year, y = Value, group = Country)) +
-  geom_line() + 
-  facet_grid(Indicator ~ Region,
-             scales = "free_y")+
-  labs(title = "Distribution of Indicators by Year and Value", 
-           y = "Indicator Value") +
-  my_theme + 
-  theme(strip.text = element_text(size = 16, face = "bold"))
+  filter(!(Indicator %in% c("Disasters", "Temperature"))) %>%
+  ggplot(aes(x = Year, y = Value, group = Country)) + 
+    geom_line() + 
+    facet_grid(Indicator ~ Region, scales = "free_y") +
+    labs(title = "Distribution of Indicators by Year and Value", 
+         y = "Indicator Value") +
+    my_theme + 
+    theme(strip.text = element_text(size = 16, face = "bold"))
 ```
-
-We can also use `scales = "free"` with `facet_wrap()` to have a different axis for each plot.
-```{r,fig.width=10, fig.height=10}
-data_long %>%
-  filter(Indicator != "Disasters" ,
-         Indicator != "Temperature")  %>%
-ggplot(aes(x = Year, y = Value, group = Country)) +
-  geom_line() + 
-  facet_wrap(Indicator ~ Region,
-             scales = "free", 
-               ncol = 2)+
-  labs(title = "Distribution of Indicators by Year and Value", 
-           y = "Indicator Value") +
-  my_theme + 
-  theme(strip.text = element_text(size = 16, face = "bold"))
-```
-
 
 From these plots we can see that each type of data spans a different time span.
 
+
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+What happens when you use the `scales = "free"` with `facet_wrap()`?
+
+####
 
 #### {.question_block}
 <b><u> Question Opportunity </u></b>
@@ -1484,45 +1469,21 @@ What do you see?
 
 
 
-## US-specific
+### Scatter plots
 
-
-Let's plot all of the US indicators together.
-
-```{r}
-US_Indicators <- data_long %>%
-  filter(Country == "United States")%>%
-  filter(Year >= 1980) %>%
-  ggplot(aes(x=Year, y=Value)) + 
-  geom_line() + 
-  geom_smooth(method = "loess", se = FALSE) +
-  facet_wrap(Label~., ncol=2, nrow=3, scales = "free_y") + 
-  my_theme + 
-  theme(axis.text.x = element_text(angle = 90, size = 12),
-        strip.text.x = element_text(face = "bold", size = 12),
-        axis.title.y = element_blank()) + 
-  labs(title = "US-specific Indicators")
-US_Indicators
-```
-
-
-#### {.question_block}
-<b><u> Question Opportunity </u></b>
-
-How would you plot the data with points for the individual values rather than a line as above? What does that look like? 
-
-####
-
-If we want to really look at how two indicators may relate to each other, it is important that both data sets span the same amount of time. 
-Therefore, we will limit this plot to only the years where the data overlaps for both CO2 emissions and temperature.
+Next, let's compare how two variables relate to each other (e.g. CO2 emissions and temperature). 
+For simplicity, let's focus only on the data from the US. 
+We know that the data sets do not span the same amount of time. 
+So let's limit this plot to only the years where the data overlaps for both CO2 emissions and temperature.
 
 ```{r}
 data_long %>%
-  filter(Country == "United States") %>%
-  filter(Year>=1980) %>%
-  filter(Year<=2010) %>%
+  filter(Country == "United States", Year >= 1980, Year <= 2010, 
+         Indicator %in% c("Emissions", "Temperature")) %>%
+  filter() %>%
+  filter() %>%
   filter(Indicator == "Emissions"|
-         Indicator == "Temperature") %>%
+         Indicator == "Emissions") %>%
   ggplot(aes(x=Year, y=Value)) +
   geom_line() +
   geom_smooth(method = "loess", se = FALSE) +
@@ -1613,6 +1574,33 @@ wide_US %>%
         axis.title = element_blank()) + 
   labs(title="US Emissions and Temperature (1980-2014)")
 ```
+
+
+Let's plot all of the US indicators together.
+
+```{r}
+US_Indicators <- data_long %>%
+  filter(Country == "United States")%>%
+  filter(Year >= 1980) %>%
+  ggplot(aes(x=Year, y=Value)) + 
+  geom_line() + 
+  geom_smooth(method = "loess", se = FALSE) +
+  facet_wrap(Label~., ncol=2, nrow=3, scales = "free_y") + 
+  my_theme + 
+  theme(axis.text.x = element_text(angle = 90, size = 12),
+        strip.text.x = element_text(face = "bold", size = 12),
+        axis.title.y = element_blank()) + 
+  labs(title = "US-specific Indicators")
+US_Indicators
+```
+
+
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+How would you plot the data with points for the individual values rather than a line as above? What does that look like? 
+
+####
 
 # **Data Analysis**
 ***
