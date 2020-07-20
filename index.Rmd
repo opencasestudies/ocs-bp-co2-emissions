@@ -1372,7 +1372,7 @@ Finally, let's clean up the axes and the axes labels:
 Top10t <- Top10t + 
   scale_x_continuous(breaks = seq(1900,2014,by=5),
                      labels = seq(1900,2014,by=5)) + 
-  labs(title = "Top 10 "~CO[2]~"Emission-producing Countries in 2014",
+  labs(title = "Top 10 "~CO[2]~"Emission-producing Countries",
        subtitle = "Ordered by Emissions Produced in 2014",
        fill = "Ln(CO2 Emissions (Metric Tonnes))") +
   theme_classic() +
@@ -1392,10 +1392,14 @@ The portions of the plot that are white indicate that there is no emission data 
 
 
 
-## Other variables
+## More than one variable
 
-Now, let's try putting some of the different data types together together. 
-We will use the `facet_wrap()` function of the `ggplot2` package, which plots multiple subplots simultaneously. 
+Now, we will visualize all the variables in our data set.
+
+
+### Faceted plots
+
+Here, we use the `facet_wrap()` function of the `ggplot2` package, which plots multiple subplots simultaneously. 
 
 To use `facet_wrap()` with the option for a different y-axis scale for each subplot, we need to set the `scales` argument equal to `"free_y"`. 
 We can also indicate where we would like the label for the subplots to be located by using the `strip.position` argument. 
@@ -1411,7 +1415,7 @@ ggplot(data_long, aes(x = Year, y = Value, group = Country)) +
        y = "Indicator Value") +
   my_theme +
   theme(strip.text = element_text(size = 16, face = "bold")) + 
-  facet_wrap(Indicator~.,
+  facet_wrap(Indicator ~ .,
              scales = "free_y",
              strip.position = "right",
              ncol = 1)
@@ -1467,74 +1471,46 @@ What do you see?
 
 ####
 
+### Line segment plots
 
+There are also some other common visualization techniques that are good for showing the difference between a set of observations and a mean value across time. 
 
-### Scatter plots
-
-Next, let's compare how two variables relate to each other (e.g. CO2 emissions and temperature). 
+One of those is a line segment plot. 
+Let's calculate the mean across all years for the CO2 emission and temperature from 1980 to 2010. 
 For simplicity, let's focus only on the data from the US. 
-We know that the data sets do not span the same amount of time. 
-So let's limit this plot to only the years where the data overlaps for both CO2 emissions and temperature.
+We call this new variable `Mean`. 
+Then, we calculate the difference between each observation and the mean and create a new variable for these values called `Diff_from_mean`. 
+Finally, we will also create a factor variable about the sign of the `Diff_from_mean` value to distinguish positive or negative changes. 
+We will use this to color our plots.
 
 ```{r}
-data_long %>%
-  filter(Country == "United States", Year >= 1980, Year <= 2010, 
-         Indicator %in% c("Emissions", "Temperature")) %>%
-  filter() %>%
-  filter() %>%
-  filter(Indicator == "Emissions"|
-         Indicator == "Emissions") %>%
-  ggplot(aes(x=Year, y=Value)) +
-  geom_line() +
-  geom_smooth(method = "loess", se = FALSE) +
-  scale_x_continuous(breaks = seq(1980,2010,by=5),
-                     labels = seq(1980,2010,by=5)) + 
-  facet_wrap(Indicator~., scales = "free_y", ncol=1) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 90),
-        axis.title = element_blank()) + 
-  labs(title="US Emissions and Temperatures (1980-2010)")
-```
-
-We can see that there are very similar patterns of CO2 emission levels an average annual temperatures.
-We will analyze this further in a bit.
-There are also some other common visualization techniques that utilize the mean of a set of values over a time span to show how values are changing over time in a different way.
-
-
-To create such a visualization, we will first calculate the mean of our Emission and temperature values from 1980 to 2010 and create a new variable called `Mean`. Then we will calculate the difference of each value from the mean and create a new variable for these values called `Diff_from_mean`. Finally we will also create a factor variable about the sign of the `Diff_from_mean` value to distinguish positive or negative changes. We will use this to color our plots.
-
-```{r}
-data_long_us <- data_long %>%
-  filter(Country == "United States") %>%
-  filter(Year >= 1980,
-         Year <= 2010) %>%
+data_long_us <- 
+  data_long %>%
+  filter(Country == "United States", Year >= 1980, Year <= 2010) %>%
   group_by(Indicator) %>%
-  mutate(Mean = mean(Value),
-      Diff_from_mean= Value-Mean) %>%
+  mutate(Mean = mean(Value), Diff_from_mean = Value - Mean) %>%
   ungroup() %>%
   mutate(Diff_color = sign(Diff_from_mean)) %>%
   mutate(Diff_color = as.factor(Diff_color))
 ```
 
-
 ```{r}
 glimpse(data_long_us)
 ```
 
-
-
-OK, now we will create a plot that shows a bar for the change in each indicator from the mean value across the time span for each year.
+Next, we use the `geom_segment()` function to draw a straight line between points (`x`, `y`) and (`xend`, `yend`). 
+In our case, this creates a plot that shows a bar for the difference between the observation and the mean across all the years.
 
 ```{r, fig.width=6, fig.height=6}
 data_long_us %>%
-  filter(Indicator == "Emissions"|
-         Indicator == "Temperature"|
-         Indicator == "Disasters") %>%
-  ggplot(aes(x=Year, y=Value)) +
-  geom_segment(aes(x=Year, y=Value, xend=Year, yend=Mean, color=Diff_color), size=3.25) +
+  filter(Indicator %in% c("Emissions", "Temperature", "Disasters")) %>%
+  ggplot(aes(x = Year, y = Value)) +
+    geom_segment(aes(x = Year, y = Value, xend = Year, 
+                     yend = Mean, color = Diff_color), 
+                 size=3.25) +
   scale_color_manual(values = c("blue","red")) + 
-  geom_hline(aes(yintercept=Mean), linetype=1, color="black") +
-  facet_wrap(Indicator~., scales = "free_y", ncol=1) + 
+  geom_hline(aes(yintercept = Mean), linetype = 1, color = "black") +
+  facet_wrap(Indicator ~ ., scales = "free_y", ncol = 1) + 
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90),
          axis.title = element_blank(),
@@ -1542,9 +1518,7 @@ data_long_us %>%
   labs(title = "US Disasters, Emissions, and Temperatures (1990-2010)",
     subtitle = "Indicator Mean of 1990-2010 Represented by Solid Black Line")
 ```
-We can see from this plot that overall there has been an increase in Disasters, Emissions and Temperature in the most recent years. 
-
-
+We can see from this plot that overall there has been an increase in disasters, emissions and temperature in the most recent years. 
 
 #### {.question_block}
 <b><u> Question Opportunity </u></b>
@@ -1554,53 +1528,85 @@ What trends do you see in GDP and energy use across time?
 ####
 
 
+### Scatter plots
+
+Next, let's zoom in on two of the variables: CO2 emissions and temperature. 
+We use years between 1980 and 2014 as we have values for all of those years for these two variables. 
+
+We know that the data sets do not span the same amount of time. 
+So let's limit this plot to only the years where the data overlaps for both CO2 emissions and temperature.
+
+We use the `geom_point()` function to create a scatter plot between the `x` and `y` variable defined in `aes()` where `x` is time and `y` is one of the two variables. 
+We also add a line on top of the scatter plot that smooths the trend from the points. The smoother we used here is `loess` or local polynomial regression fitting. 
+
+```{r}
+CO2_temp_US_facet <- 
+  data_long %>%
+  filter(Country == "United States", Year >= 1980, Year <= 2014,
+         Indicator %in% c("Emissions", "Temperature")) %>%
+  ggplot(aes(x = Year, y = Value)) +
+  geom_point() +
+  geom_smooth(method = "loess", se = FALSE) +
+  scale_x_continuous(breaks = seq(1980, 2014, by = 5),
+                     labels = seq(1980, 2014, by = 5)) + 
+  facet_wrap(Indicator ~ ., scales = "free_y", ncol = 1) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90),
+        axis.title = element_blank()) + 
+  labs(title = "US Emissions and Temperatures (1980-2014)")
+
+CO2_temp_US_facet
+```
+
+Note, we are showing a different `theme` here, namely the `theme_classic()` theme. 
+We can see that there are similar patterns of CO2 emission levels an average annual temperatures.
+
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+- Try show a similar plot without filtering by years and faceting by the other three variables: energy use, GDP and disasters. Are there other variables that look like they might have a similar pattern to CO2 emissions? 
+- Try using a different smoother in `geom_smooth()`. 
+
+####
+
+Next, instead of looking at the variables separately in faceted plots, let's look at the relationship between CO2 emissions and other variables directly. 
+
+We begin by using `pivot_wider()` to transform our long data table into a wide format. 
+
 ```{r}
 wide_US <- 
   data_long %>%
-  filter(Country == "United States") %>%
-  filter(Year>=1980) %>%
-  # filter(Year<=2010) %>%
+  filter(Country == "United States", Year >= 1980, Year <= 2014) %>%
   select(-Label) %>%
   pivot_wider(names_from = Indicator, values_from = Value)
 ```
 
 ```{r}
-wide_US %>%
-  ggplot(aes(x=Emissions, y=Temperature)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 90),
-        axis.title = element_blank()) + 
-  labs(title="US Emissions and Temperature (1980-2014)")
+CO2_temp_US <- 
+  wide_US %>%
+  ggplot(aes(x = Emissions, y = Temperature)) +
+    geom_point() +
+    geom_smooth(method = "lm", se = FALSE) +
+    theme_classic() +
+    theme(axis.text.x = element_text(angle = 90)) + 
+    labs(title = "US Emissions and Temperature (1980-2014)", 
+         x = "Emissions (Metric Tonnes)", 
+         y = "Temperature (Fahrenheit)")
+
+CO2_temp_US
 ```
 
-
-Let's plot all of the US indicators together.
-
-```{r}
-US_Indicators <- data_long %>%
-  filter(Country == "United States")%>%
-  filter(Year >= 1980) %>%
-  ggplot(aes(x=Year, y=Value)) + 
-  geom_line() + 
-  geom_smooth(method = "loess", se = FALSE) +
-  facet_wrap(Label~., ncol=2, nrow=3, scales = "free_y") + 
-  my_theme + 
-  theme(axis.text.x = element_text(angle = 90, size = 12),
-        strip.text.x = element_text(face = "bold", size = 12),
-        axis.title.y = element_blank()) + 
-  labs(title = "US-specific Indicators")
-US_Indicators
-```
+Indeed, it does look like there is a positive trend. 
 
 
 #### {.question_block}
 <b><u> Question Opportunity </u></b>
 
-How would you plot the data with points for the individual values rather than a line as above? What does that look like? 
+- Make similar plots for between CO2 emissions and other variables. Are there other pairs variables that look like they might have a similar pattern to CO2 emissions? Does this match what we saw above? 
 
 ####
+
+Now that we see that there might be a linear relationship between CO2 emissions and temperature, let's learn about some statistical techniques to measure the strength of that relationship. 
 
 # **Data Analysis**
 ***
@@ -1835,16 +1841,20 @@ While the analyses that we performed give us some indication of how these differ
 
 
 
-Now we will create a plot that summarizes our major findings. We will use the `plot_layout()` function of the `patchwork` package.
+Now we will create a plot that summarizes our major findings. We will use the `plot_layout()` function of the `patchwork` R package.
 
 ```{r, out.width= "9000px", "out.height= 7000px"}
-(CO2_world | Top10t)/ US_Indicators
-(CO2_world | Top10t)/ US_Indicators +
-  plot_layout(widths = c(1, 2), heights = unit(c(4, 5), c('cm', 'null')))
+# (CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US)
+(CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US) +
+  plot_layout(widths = unit(c(9, 9), c('in', 'in')),
+              heights = unit(c(2, 4), c('in', 'in')))
+```
 
-png(here::here("img", "mainplot.png"), width = 900, height = 700)
-(CO2_world | Top10t)/ US_Indicators +
-    plot_layout(widths = c(1, 2), heights = unit(c(4, 5), c('cm', 'null')))
+```{r, eval = FALSE}
+png(here::here("img", "mainplot.png"), width = 800, height = 700)
+(CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US) +
+  plot_layout(widths = unit(c(10, 10), c('in', 'in')),
+              heights = unit(c(2, 4), c('in', 'in')))
 dev.off()
 ```
 
