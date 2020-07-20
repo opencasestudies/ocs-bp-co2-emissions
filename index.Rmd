@@ -1596,28 +1596,46 @@ CO2_temp_US <-
 CO2_temp_US
 ```
 
-Indeed, it does look like there is a positive trend. 
+Indeed, it does look like there is a positive, linear trend. 
 
 
 #### {.question_block}
 <b><u> Question Opportunity </u></b>
 
-- Make similar plots for between CO2 emissions and other variables. Are there other pairs variables that look like they might have a similar pattern to CO2 emissions? Does this match what we saw above? 
+- Make similar plots for between CO2 emissions and other variables. 
+- Are there other pairs variables that look like they might have a similar pattern to CO2 emissions?
+- Does this match what we saw above? 
+- Do these trend look linear or non-linear? 
 
 ####
 
 Now that we see that there might be a linear relationship between CO2 emissions and temperature, let's learn about some statistical techniques to measure the strength of that relationship. 
 
+
 # **Data Analysis**
 ***
+ 
+In this section, we are going to introduce some ways to better understand how two variables move together. 
+We will focus on the CO2 emissions and temperature, but you will be encouraged to explore the relationship between CO2 emissions and the other variables. 
 
-We see that CO2 emission levels, annual average national temperatures, and disasters counts appear to be increasing over time, but how can we assess this statistically?
+### Basic summary statistics
 
-### Correlation
+We can always calculate the sample mean and variance for two variables. 
 
-We can use [correlation](https://www.mathsisfun.com/data/correlation.html){target="_blank"}. 
-Correlation is a measure of strength the of a relationship between two variables. 
-Often when we describe correlation we are referring to linear correlation and therefore the linear relationship between variables.
+```{r}
+wide_US %>% 
+  summarize(mean(Emissions), mean(Temperature), sd(Emissions), sd(Temperature))
+```
+
+These are useful, but on their own they do not summarize whether or not there is a relationship between `Emissions` and `Temperature` (also these are on different scales entirely. 
+
+What else could we use? 
+Next, we are going to learn about the correlation coefficient, which is a summary statistic that describes how two variables are related or move together. 
+
+### Correlation coefficient
+
+We can use the [correlation coefficient](https://rafalab.github.io/dsbook/regression.html). 
+Here, we are using this summary statistic to measure the strength of a _linear_ relationship between two variables. 
 
 If we plot one variable on the x-axis and the other variable on the y-axis, we can see:
 
@@ -1643,29 +1661,30 @@ The sign of the coefficient indicates the direction of the relationship.
 If there is a negative relationship then the variables show opposing changes from each other - as one gets larger the other gets smaller. 
 If the sign is positive, then the variables increase similarly. 
 
+Recall the plot we made above: 
 
 ```{r}
-wide_US <- 
-  data_long %>%
-  filter(Country == "United States") %>%
-  filter(Year>=1980) %>%
-  # filter(Year<=2010) %>%
-  select(-Label) %>%
-  pivot_wider(names_from = Indicator, values_from = Value)
+CO2_temp_US
 ```
+
+Let's calculate the correlation coefficient between CO2 emissions and temperature in the US. 
+
+Formally, if we have a pair of observations $(x_1, y_1), \dots, (x_n,y_n)$, the correlation coefficient between $x$ and $y$ is defined as 
+
+$$
+\rho = \frac{1}{n} \sum_{i=1}^n \left( \frac{x_i-\mu_x}{\sigma_x} \right)\left( \frac{y_i-\mu_y}{\sigma_y} \right)
+$$
+where $\mu_x, \mu_y$ are the means of $x_1,\dots, x_n$ and $y_1, \dots, y_n$, respectively, and $\sigma_x, \sigma_y$ the standard deviations. 
+
+Therefore, we can standardize the two variables and average the standardize values to calculate the correlation coefficient `rho`: 
 
 ```{r}
-wide_US %>%
-  ggplot(aes(x=Emissions, y=Temperature)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 90),
-        axis.title = element_blank()) + 
-  labs(title="US Emissions and Temperature (1980-2014)")
+wide_US %>% 
+  summarize(rho = mean(scale(Emissions) * scale(Temperature))) %>% 
+  pull(rho)
 ```
 
-
+Alternatively, you can use the `cor()` function in base R
 
 ```{r}
 wide_US %>% 
@@ -1674,190 +1693,135 @@ wide_US %>%
 ```
 
 
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
 
-Let's take a look at our data now.
-We have already plotted our US indicators across time, but we did not look at the linear trend. 
-We will do that now using geom_point() to plot the individual data points and this time we will use the `"lm"` method which stands for linear method for our `geom_smooth()` layer. 
+Why do these two numbers not match?
 
-```{r}
-US_Indicators_lm <- data_long %>%
-  filter(Country=="United States")%>%
-  filter(Year>=1980) %>%
-  ggplot(aes(x=Year, y=Value)) + 
-  geom_point() + 
-  geom_smooth(method = "lm", se = FALSE) +
-  facet_wrap(Label~., ncol=2, nrow=3, scales = "free_y") + 
-  labs(title = "US-specific Indicators")+ 
-  my_theme + 
-  theme(axis.text.x = element_text(angle = 90, size = 12),
-        strip.text.x = element_text(face = "bold", size = 12),
-        axis.title.y = element_blank())
-US_Indicators_lm
-```
-
-First let's create a wide tibble for our US data so that we can similarly plot our data. 
-To do this we will create a wide tibble using the `pivot_wider()` function of the `dplyr` package. 
-This function requires values for two arguments, `names_from` and `values_from`. 
-The variable that has the identity or labels for the values that you wish to create multiple new variables names from is used for the `names_from` argument. 
-The variable that contains the corresponding values for the new variables is used for the `values_from` argument.
+####
 
 
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
 
-```{r}
-wide_US <- data_long %>%
-  filter(Country == "United States") %>%
-  filter(Year>=1980) %>%
-  filter(Year<=2010) %>%
-  select(-Label) %>%
-  pivot_wider(names_from = Indicator, values_from = Value)
-```
+There are different types of correlation coefficients. Look at the help file for the `cor()` function and try a different `method`. 
 
+What are the differences? 
+
+####
+
+
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+- Try calculating the correlation coefficient between CO2 emissions and the other variables. 
+- Do you think calculating a correlation coefficient between CO2 emissions and the other variables is a meaningful thing to do -- why or why not? 
+
+####
+
+To test if the association between a pair of variables is statistically significant, you can use the `cor.test()` of the `stats` package to calculate the correlation coefficient, as well as confidence intervals for correlation coefficients.
+
+AVOCADO: could we make this more broom-friendly? 
 
 ```{r}
-wide_US %>%
-glimpse()
+cor.test(pull(wide_US, Emissions), 
+         pull(wide_US, Temperature))
 ```
 
-We can use the `cor.test()` of the `stats` package to calculate Pearson's correlation estimates, as well as confidence intervals for correlation estimates. 
-This function allows for a few different methods to calculate correlation estimates. 
-The default is the [Pearson's product-moment method](http://onlinestatbook.com/2/describing_bivariate_data/pearson.html){target="_blank"}. 
-All three methods result in a correlation coefficient that ranges from -1 to 1 that indicate the strength of the association or relationship between the variables. However, each method has a slightly different calculation.
+We see that the correlation coefficient quantifying the strength of the linear relationship between C02 emissions and temperature is statistically significant. 
 
-See [here](https://www.statisticshowto.com/probability-and-statistics/correlation-coefficient-formula/){target="_blank"} and [here](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3576830/){target="_blank"} for more information.
+### Relationship between correlation and linear regression
 
-In the case of our data, individual points would be the measurements for each variable at each year.
+Let's briefly discuss the relationship between correlation and linear regression.
+This section is taken from Rafael Irizarry's [Introduction to Data Science book](https://rafalab.github.io/dsbook/regression.html). 
+
+If we are predicting a random variable $Y$ knowing the value of another $X=x$ using a regression line, then we predict that for every standard deviation, $\sigma_X$, that $x$ increases above the average $\mu_X$, $Y$ increase $\rho$ standard deviations $\sigma_Y$ above the average $\mu_Y$ with $\rho$ the correlation between $X$ and $Y$. The formula for the regression is therefore:
+
+$$ 
+\left( \frac{Y-\mu_Y}{\sigma_Y} \right) = \rho \left( \frac{x-\mu_X}{\sigma_X} \right)
+$$
+
+We can rewrite it like this:
+
+$$ 
+Y = \mu_Y + \rho \left( \frac{x-\mu_X}{\sigma_X} \right) \sigma_Y
+$$
+
+If there is perfect correlation, the regression line predicts an increase that is the same number of SDs. 
+If there is 0 correlation, then we don't use $x$ at all for the prediction and simply predict the average $\mu_Y$.
+For values between 0 and 1, the prediction is somewhere in between. If the correlation is negative, we predict a reduction instead of an increase. 
+
+Thinking about father's and son's heights -- note that if the correlation is positive and lower than 1, our prediction is closer, in standard units, to the average height than the value used to predict, $x$, is to the average of the $x$s. 
+This is why we call it _regression_: the son regresses to the average height. In fact, the title of Galton's paper was: _Regression toward mediocrity in hereditary stature_.
+To add regression lines to plots, we will need the above formula in the form: 
+
+$$
+y= b + mx \mbox{ with slope } m = \rho \frac{\sigma_y}{\sigma_x} \mbox{ and intercept } b=\mu_y - m \mu_x
+$$
+
+Here, we add the regression line to the original data:
 
 ```{r}
-cor(pull(wide_US, Temperature), pull(wide_US, Year))
-cor(pull(wide_US, Emissions), pull(wide_US, Year))
-cor(pull(wide_US, Disasters),pull(wide_US, Year))
+wide_US_summary <- 
+  wide_US %>% 
+  summarize(mu_x = mean(Emissions), sd_x = sd(Emissions), 
+            mu_y = mean(Temperature), sd_y = sd(Temperature), 
+            rho = cor(Emissions, Temperature), 
+            slope = rho * sd_y/sd_x, 
+            intercept = mu_y - rho * sd_y/sd_x * mu_x)
+
+wide_US %>% 
+  ggplot(aes(x = Emissions, y = Temperature)) + 
+    geom_point() + 
+    geom_abline(slope = wide_US_summary$slope, 
+                intercept = wide_US_summary$intercept) 
 ```
 
-We can see that in all cases, there appears to be a positive linear relationship between the tested US indicators and time. We see the relationship is positive because the correlation estimates are positive (as well as the fact that our plots show upward linear relationships). 
+The regression formula implies that if we first standardize the variables, that is subtract the average and divide by the standard deviation, then the regression line has intercept 0 and slope equal to the correlation $\rho$. You can make same plot, but using standard units like this:
 
-We can assess the strength of the relationship based on this table which provides general guidelines:
+```{r} 
+wide_US %>% 
+  ggplot(aes(x = scale(Emissions), y = scale(Temperature))) + 
+    geom_point() + 
+    geom_smooth(method = "lm", se = FALSE)
+```
+
+Notice that we also use the `geom_smooth(method = "lm")` function which adds a line corresponding to the slope and intercept from the `lm()` function from the `stats` R package. 
+
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+What does `se = FALSE` mean? Try turning it to TRUE. What happens? 
+
+####
+
+
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+Try creating the similar plots, but comparing CO2 emissions with the other variables and add a linear regression line. 
+
+What do you see? 
+
+####
+
+
+The last thing we will do here is to create a plot that summarizes our major findings. 
+We will use the `plot_layout()` function of the `patchwork` R package.
 
 ```{r}
-knitr::include_graphics(here("img", "guides.png"))
-```
-We also see that the correlation of temperature with time is low, it is very strong for the emissions data, and moderate for the disaster data.
-
-### Linear Regression
-
-We can also use a [linear regression](http://sites.utexas.edu/sos/guided/inferential/numeric/bivariate/cor/#:~:text=A%20correlation%20analysis%20provides%20information,variable%20based%20on%20the%20other.){target="_blank"} to evaluate the relationship between our variables. 
-This helps us to answer slightly deeper questions like:  
-
-Do changes in time predict or explain changes in temperature, emission, or disaster values?  
-
-We can get the results from a linear model by using the base `summary()` function and the `lm()` function of the `stats` package. 
-
-The variable on the left of the `~` indicates what we are trying to predict also known as the dependent variable, while the variable(s) on the right are independent.
-
-```{r}
-summary(lm(data = wide_US, Temperature ~ Year))
-summary(lm(data = wide_US, Emissions ~ Year))
-summary(lm(data = wide_US, Disasters ~ Year))
-```
-In all cases, yes it appears that all of these indicators show a positive association (due to positive t value) with time - meaning they show an increase over time.
-
-Notice that the `Multiple R-squared` value in the output is equal to the correlation coefficient squared! 
-
-Since CO2 emission levels an average annual temperatures appear to have similar patterns over time, we might want to analyze if these values are correlated with one another.
-
-We might also ask:
-
-Are emission levels associated with temperature levels or disaster levels? Can we predict or explain temperature or disaster levels based on emission levels?
-
-Let's first plot both on the same plot, where emissions will be plotted on one axis and temperatures on the other.
-
-```{r}
-wide_US %>%
-  ggplot(aes(x=Emissions, y=Temperature)) +
-  geom_line() +
-  geom_smooth(method = "lm", se = FALSE) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 90),
-        axis.title = element_blank()) + 
-  labs(title="US Emissions and Temperature (1980-2010)")
+(CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US)
 ```
 
-```{r}
-wide_US %>%
-  ggplot(aes(x=Temperature, y=Disasters)) +
-  geom_line() +
-  geom_smooth(method = "lm", se = FALSE) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 90),
-        axis.title = element_blank()) + 
-  labs(title="US Disasters and Temperatures (1980-2010)")
-```
-
-
-```{r}
-wide_US %>%
-  ggplot(aes(x=Emissions, y=Disasters)) +
-  geom_line() +
-  geom_smooth(method = "lm", se = FALSE) +
-   
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 90),
-        axis.title = element_blank()) + 
-  labs(title="US Emissions and Disasters (1980-2010)")
-```
-
-
-Now we can calculate  Pearson correlation coefficients. 
-
-```{r}
-  
-cor(pull(wide_US, Emissions),
-    pull(wide_US, Temperature))
-
-cor(pull(wide_US, Temperature),
-    pull(wide_US, Disasters))
-
-cor(pull(wide_US, Emissions),
-    pull(wide_US, Disasters))
-
-```
-
-
-
-And finally perform linear regression analysis:
-
-
-
-```{r}
-summary(lm(data = wide_US, Temperature ~ Emissions))
-summary(lm(data = wide_US, Disasters ~ Temperature))
-summary(lm(data = wide_US, Disasters ~ Emissions))
-```
-
-Both temperature and the number of disasters per year appear to increase with increased CO2 emissions, as the p value is less than 0.05 in both regressions. However, the multiple R-squared value, and Pearson's correlation coefficients were moderate for both relationships. Suggesting that the relationship is not very strong and that there are likely other factors that influence temperature and disasters besides C02 emissions. This makes sense with what we know about the earth's atmosphere. There are other greenhouse gases that contribute to warming temperatures, and the existing CO2 already in the atmosphere also traps heat and greatly impacts the temperature. Furthermore we are looking at US emissions and how they influence US temperatures, but there are also CO2 emissions produced by other countries. There are other aspects that influence disaster rate as well, such the rate of humidity levels and rainfall for fires. 
-
-While the analyses that we performed give us some indication of how these different data sets relate to one another, one would realistically want to perform a mixed effects model or growth curve analysis to account for the fact that these data are paired across time points and may vary differently with time and to include these other factors that we just discussed. ... AVOCADO needs links etc.  feel free to help this section.
-
-
-
-
-
-Now we will create a plot that summarizes our major findings. We will use the `plot_layout()` function of the `patchwork` R package.
-
-```{r, out.width= "9000px", "out.height= 7000px"}
-# (CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US)
-(CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US) +
-  plot_layout(widths = unit(c(9, 9), c('in', 'in')),
-              heights = unit(c(2, 4), c('in', 'in')))
-```
-
-```{r, eval = FALSE}
+```{r, echo = FALSE}
 png(here::here("img", "mainplot.png"), width = 800, height = 700)
 (CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US) +
-  plot_layout(widths = unit(c(10, 10), c('in', 'in')),
-              heights = unit(c(2, 4), c('in', 'in')))
+  plot_layout(widths = c(1,2),
+              heights = unit(c(4, 10), c('cm', 'cm')))
 dev.off()
 ```
 
+AVOCADO: the image looks really fuzzy / granular. I have no idea why... should we try a jpeg? 
 
 ## **Homework**
 

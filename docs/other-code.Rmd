@@ -568,3 +568,51 @@ animation_1 <- data_long %>%
 
 gganimate::animate(animation_1, fps = 10, duration = 5)
 ```
+
+Let's take a look at our data now.
+We have already plotted our US indicators across time, but we did not look at the linear trend. 
+We will do that now using geom_point() to plot the individual data points and this time we will use the `"lm"` method which stands for linear method for our `geom_smooth()` layer. 
+
+```{r}
+US_Indicators_lm <- data_long %>%
+  filter(Country=="United States")%>%
+  filter(Year>=1980) %>%
+  ggplot(aes(x=Year, y=Value)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(Label~., ncol=2, nrow=3, scales = "free_y") + 
+  labs(title = "US-specific Indicators")+ 
+  my_theme + 
+  theme(axis.text.x = element_text(angle = 90, size = 12),
+        strip.text.x = element_text(face = "bold", size = 12),
+        axis.title.y = element_blank())
+US_Indicators_lm
+```
+
+First let's create a wide tibble for our US data so that we can similarly plot our data. 
+To do this we will create a wide tibble using the `pivot_wider()` function of the `dplyr` package. 
+This function requires values for two arguments, `names_from` and `values_from`. 
+The variable that has the identity or labels for the values that you wish to create multiple new variables names from is used for the `names_from` argument. 
+The variable that contains the corresponding values for the new variables is used for the `values_from` argument.
+
+
+
+```{r}
+wide_US <- data_long %>%
+  filter(Country == "United States") %>%
+  filter(Year>=1980) %>%
+  filter(Year<=2010) %>%
+  select(-Label) %>%
+  pivot_wider(names_from = Indicator, values_from = Value)
+```
+
+
+```{r}
+wide_US %>%
+glimpse()
+```
+
+
+Both temperature and the number of disasters per year appear to increase with increased CO2 emissions, as the p value is less than 0.05 in both regressions. However, the multiple R-squared value, and Pearson's correlation coefficients were moderate for both relationships. Suggesting that the relationship is not very strong and that there are likely other factors that influence temperature and disasters besides C02 emissions. This makes sense with what we know about the earth's atmosphere. There are other greenhouse gases that contribute to warming temperatures, and the existing CO2 already in the atmosphere also traps heat and greatly impacts the temperature. Furthermore we are looking at US emissions and how they influence US temperatures, but there are also CO2 emissions produced by other countries. There are other aspects that influence disaster rate as well, such the rate of humidity levels and rainfall for fires. 
+
+While the analyses that we performed give us some indication of how these different data sets relate to one another, one would realistically want to perform a mixed effects model or growth curve analysis to account for the fact that these data are paired across time points and may vary differently with time and to include these other factors that we just discussed. ... AVOCADO needs links etc.  feel free to help this section.
