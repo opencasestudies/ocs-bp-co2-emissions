@@ -34,7 +34,7 @@ library(knitr)
 ```
 
 #### {.outline }
-```{r, echo = FALSE, out.width = "800 px"}
+```{r, echo = FALSE, out.width = "800 px", dpi=300}
 knitr::include_graphics(here::here("img", "mainplot.png"))
 ```
 
@@ -44,13 +44,15 @@ knitr::include_graphics(here::here("img", "mainplot.png"))
 
 **Disclaimer**: The purpose of the [Open Case Studies](https://opencasestudies.github.io){target="_blank"} project is **to demonstrate the use of various data science methods, tools, and software in the context of messy, real-world data**. A given case study does not cover all aspects of the research process, is not claiming to be the most appropriate way to analyze a given data set, and should not be used in the context of making policy decisions without external consultation from scientific experts. 
 
+## {.license_block}
+
+This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 [(CC BY-NC 3.0)](https://creativecommons.org/licenses/by-nc/3.0/us/){target="_blank"}  United States License.
+
 # **Motivation**
 *** 
 
 This case study explores how different countries have contributed to Carbon Dioxide (CO2) emissions over time and how CO2 emission rates may relate to increasing global temperatures and increased rates of natural disasters and storms.
-We used this [report from the EPA](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"} as the basis for motivating this case study. 
-
-AVODCADO: the sentence right above, i couldn't tell if you saying this is the report that contains the data or just "click for more info" type thing? 
+We used this [report from the EPA](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"} as the basis for motivating this case study, as it provides background information about how CO2 emissions and other greenhouse gases have influenced the climate and weather patterns.
 
 CO2 makes up the largest proportion of greenhouse gas emissions in the United States:
 
@@ -59,21 +61,26 @@ CO2 makes up the largest proportion of greenhouse gas emissions in the United St
 knitr::include_graphics(here::here("img", "emissions.jpg"))
 ```
 
-AVODCADO: add source
+#### [[Source]](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"}
 
-A variety of sources and sectors contribute to greenhouse gas emissions, with transportation contributing the most metric tons of CO2:
+A variety of sources and sectors contribute to greenhouse gas emissions:
 
-AVODCADO: is that true? it looks like electricty generation contributes more? 
 
 ```{r, echo = FALSE, out.width="400px"}
 knitr::include_graphics(here::here("img", "sector.png"))
 ```
 
-AVODCADO: add source
+#### [[Source]](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"}
+
+Transportation and Electricity contribute the most metric tons of CO2:
+
+```{r, echo = FALSE, out.width="400px"}
+knitr::include_graphics('https://www.epa.gov/sites/production/files/styles/medium/public/2020-04/sources-of-greenhouse-gas-emissions-in-2018.jpg')
+```
 
 So why should we pay attention to greenhouse gases?
 
-According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"}: 
+According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}: 
 
 > Greenhouse gases absorb infrared radiation, thereby trapping heat in the atmosphere and making the planet warmer. The most important greenhouse gases directly emitted by humans include carbon dioxide (CO2), methane (CH4), nitrous oxide (N2O), and several fluorine-containing halogenated substances. Although CO2, CH4, and N2O occur naturally in the atmosphere, human activities have changed their atmospheric concentrations. From the pre- industrial era (i.e., ending about 1750) to 2018, concentrations of these greenhouse gases have increased globally by 46, 165, and 23 percent, respectively (IPCC 2013; NOAA/ESRL 2019a, 2019b, 2019c). 
 
@@ -85,7 +92,7 @@ In fact, there are many signs that our planet is experiencing warmer temperature
 knitr::include_graphics(here::here("img", "warming.png"))
 ```
 
-AVODCADO: add source
+#### [[Source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
 
 The connection between greenhouse gas levels and global temperatures and the influence of increased global temperatures on human health are motivated by these reports:
 
@@ -98,15 +105,12 @@ The connection between greenhouse gas levels and global temperatures and the inf
 
 ####
 
-AVODCADO: could we link to the national climate assessement report? I set up the link below
-
-The [National Climate Assessment Report](){target="_blank"} states that:
+The [National Climate Assessment Report](https://data.globalchange.gov/report/nca3-overview){target="_blank"} states that:
 
 > Heat-trapping gases already in the atmosphere have committed us to a hotter future with more climate-related impacts over the next few decades. The magnitude of climate change beyond the next few decades depends primarily on the amount of heat-trapping gases that human activities emit globally, now and in the future.
 
-See [here](https://www.epa.gov/report-environment/greenhouse-gases) and [here](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations) for more information.
+See [here](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"}  [here](https://nca2014.globalchange.gov/){target="_blank"}, and [here](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"}  for more information about how greehouse gases have influenced global temperatures.
 
-AVODCADO: more information about what? 
 
 # **Main Questions**
 *** 
@@ -125,19 +129,27 @@ AVODCADO: more information about what?
 In this case study, we will explore CO2 emission data from around the world. 
 We will also focus on the US specifically to evaluate patterns of temperatures and storm activity. 
 
-AVODCADO: Could we break this up into more bulleted learning objectives? Also we should mention the analysis learning objectives. As it stands, we seem to suggest our only goal is to teach tidyverse packages? I started a few below, but would appreciate your help formalizing it
-
-Our learning objectives are: 
-
-- Create data visualizations across time 
-- Introduce concepts of correlation
-- Demonstrate how to use packages in the `tidyverse`
-
-
 This case study will particularly focus on how to use different data sets that span different ranges of time, as well as how to create visualizations of patterns over time. 
 We will especially focus on using packages and functions from the [`Tidyverse`](https://www.tidyverse.org/){target="_blank"}, such as `dplyr`, `tidyr`, `ggplot2`and `gganimate`. 
+
 The tidyverse is a library of packages created by RStudio. 
 While some students may be familiar with previous R programming packages, these packages make data science in R especially efficient.
+
+The skills, methods, and concepts that students will be familiar with by the end of this case study are:
+
+Data science skills:
+
+1. Importing data from various types of Excel files and csv files
+2. Merging data with different time spans
+3. How to create effective longitudinal data visualizations with `ggplot2`
+4. How to add labels to `ggplot2` plots
+
+Statistical methods:
+
+1. Define and recognize the difference between populations and samples # avocado comment - I think this may have gotten deleated - this is also why I used cor instead of cor.test -if you think that these are indeed samples... then maybe we should not supress the gray lines for the loess trend lines
+2. Basic understanding of correlation 
+3. Difference between correlation and causation
+3. Difference between correlation and linear regression association
 
 
 *** 
@@ -157,6 +169,7 @@ library(gganimate)
 library(directlabels)
 library(ggrepel)
 library(RColorBrewer)
+library(broom)
 library(patchwork)
 ```
 
@@ -174,6 +187,7 @@ library(patchwork)
 [ggrepel](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"} | to add labels that don't overlap to plots
 [gganimate](https://gganimate.com/){target="_blank"}  | to make the plots interactive
 [RColorBrewer](https://cran.r-project.org/web/packages/RColorBrewer/index.html){target="_blank"}  | to have greater control over the color in our plots
+[broom](https://www.tidyverse.org/blog/2018/07/broom-0-5-0/) | to make the output form statistical tests easier to work with
 [patchwork](https://github.com/thomasp85/patchwork){target="_blank"}  | to combine plots
 The first time we use a function, we will use the `::` to indicate which package we are using. Unless we have overlapping function names, this is not necessary, but we will include it here to be informative about where the functions we will use come from.
 
@@ -181,7 +195,7 @@ The first time we use a function, we will use the `::` to indicate which package
 # **Context**
 *** 
 
-AVOCADO: I'm not sure I get the difference between the Motivation and Context section here? 
+Now we will describe a bit more background about greenhouse gas emissions and the potential influence of these emissions on public health. 
 
 Greenhouse gas emissions are due to both natural processes and anthropogenic (human-derived) activities. 
 
@@ -191,40 +205,45 @@ These emissions are one of the contributing factors to rising global temperature
 knitr::include_graphics(here::here("img", "health.png"))
 ```
 
-AVOCADO: add source 
+#### [[Source]](https://www.epa.gov/climate-indicators/understanding-connections-between-climate-change-and-human-health){target="_blank"}
 
-> Gases in the atmosphere can contribute to climate change both directly and indirectly. Direct effects occur when the gas itself absorbs radiation. Indirect radiative forcing occurs when chemical transformations of the substance produce other greenhouse gases, when a gas influences the atmospheric lifetimes of other gases, and/or when a gas affects atmospheric processes that alter the radiative balance of the earth (e.g., affect cloud formation or albedo). The IPCC developed the Global Warming Potential (GWP) concept to compare the ability of a greenhouse gas to trap heat in the atmosphere relative to another gas.
-The GWP of a greenhouse gas is defined as the ratio of the accumulated radiative forcing within a specific time horizon caused by emitting 1 kilogram of the gas, relative to that of the reference gas CO2 (IPCC 2013). Therefore GWP-weighted emissions are provided in million metric tons of CO2 equivalent (MMT CO2 Eq.)
 
-AVOCADO: add link or source? Unclear purpose of text above? I know the definition of GWP is in the text, but can we remove the text and just state the definition? 
+According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}
 
-CO2 is actually the least capable of the greenhouse gases for trapping heat:
+> Gases in the atmosphere can contribute to climate change both directly and indirectly. Direct effects occur when the gas itself absorbs radiation. Indirect radiative forcing occurs when chemical transformations of the substance produce other greenhouse gases, when a gas influences the atmospheric lifetimes of other gases, and/or when a gas affects atmospheric processes that alter the radiative balance of the earth (e.g., affect cloud formation or albedo). 
+
+The  **Global Warming Potential (GWP)** compares the **ability of a greenhouse gas to trap heat in the atmosphere relative to another gas**.
+
+>The GWP of a greenhouse gas is defined as the ratio of the accumulated radiative forcing within a specific time horizon caused by emitting 1 kilogram of the gas, relative to that of the reference gas CO2 (IPCC 2013). Therefore GWP-weighted emissions are provided in million metric tons of CO2 equivalent (MMT CO2 Eq.)
+
+AVOCADO: Unclear purpose of text above? I know the definition of GWP is in the text, but can we remove the text and just state the definition? 
+Avocado comment: I thought that the explanation of how gases actually conrtibute to climate change by trapping heat was really useful for introducing what GWP is. I reduced and separted this a bit, but feel free to change as you see fit.
+
+CO2 is actually the least heat-trapping gas of the greenhouse gases:
 
 ```{r, echo = FALSE, out.width="800px"}
 knitr::include_graphics(here::here("img", "GWP.png"))
 ```
 
-AVOCADO: add source. also not sure how to interepret the table above in terms of the comment of "least capable? 
+#### [[Source]](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}
 
 However, because CO2 is so much more abundant and stays in the atmosphere so much longer than other greenhouse gases, it has been the largest contributor to global warming.
 See [here](https://www.ucsusa.org/resources/why-does-co2-get-more-attention-other-gases#:~:text=CO2%20sticks%20around,oxide%20(N2O)){target="_blank"} for more details.
 
-Furthermore, sizing CO2 levels also influence ocean acidity:
+Furthermore, rizing CO2 levels also influence ocean acidity:
 
-AVOCADO: what does sizing CO2 levels mean? 
 
 ```{r, echo = FALSE, out.width="500px"}
 knitr::include_graphics(here::here("img", "oceans.png"))
 ```
 
-AVOCADO: add source
-
-This makes it difficult for organisms to maintain their shells or skeletons that are made of calcium carbonate, thus making it more difficult for these organisms to survive and impacting their role in the ecosystem and food chain. 
+#### [[Source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
 
 
-Furthermore, greenhouse gas emissions are believed to influence storm rates. 
+As CO2 levels rize in the ocean, the pH becomes more acidic, which makes it difficult for organisms to maintain their shells or skeletons that are made of calcium carbonate, thus making it more difficult for these organisms to survive and impacting their role in the ecosystem and food chain. 
 
-AVOCADO: should we cite a paper for the statement above? 
+
+Furthermore, greenhouse gas emissions are believed to influence weather patterns as shown in this [report](https://data.globalchange.gov/report/nca3-overview){target="_blank"}. 
 
 Indeed, events with high levels of precipitation which can induce flooding and property damage are generally increasing around the country:
 
@@ -232,7 +251,8 @@ Indeed, events with high levels of precipitation which can induce flooding and p
 knitr::include_graphics(here::here("img", "storms.png"))
 ```
 
-AVOCADO: add source
+#### [[Source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
+
 
 # **Limitations**
 *** 
@@ -244,12 +264,13 @@ There are some important considerations regarding this data analysis to keep in 
 2. [Correlation or association does not imply causation](https://dfrieds.com/math/correlation-does-not-imply-causation.html){target="_blank"}. We will be showing how different data sets show similar trends across time. This does not imply that one caused the other. However, in the case of some of the data we will show, there is additional scientific evidence to suggest that for example, increased CO2 emissions may cause increased temperatures or increased rates of disasters. However, simply showing a similar trend over time does not in itself prove that two variables are causally related. As you can see from this plot, often data may show a similar pattern over time by random chance.  See this [website](https://www.tylervigen.com/spurious-correlations){target="_blank"} for more examples.
 
 AVOCADO: point 2 seems more like this would be a learning objective?
+avocado comment: I added this to the learning objectives... do you want to also move this somewhere in the analysis section or keep this here?
 
-```{r, echo = FALSE, out.width="500px"}
+```{r, echo = FALSE, out.width="600px"}
 knitr::include_graphics(here::here("img", "causation.png"))
 ```
 
-AVOCADO: add source
+#### [[Source]](http://tylervigen.com/spurious-correlations){target="_blank"}
 
 
 # **What are the data?**
@@ -260,15 +281,15 @@ Most of our data is from [Gapminder](https://www.gapminder.org/data/){target="_b
 
 In addition, we will use some data that is specific to the United States from the [National Oceanic and Atmospheric Administration (NOAA)](https://www.noaa.gov/){target="_blank"}, which is an agency that collects weather and climate data.
 
-AVOCADO: could we make the description column wider? 
+
 
 Data   | Time span | Source  | Orginal Source   | Description | Citation                                                                    
----------- |-------------|-------------|-------------|--------|-------
-**CO2 emissions**  |1751 to 2014 | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [Carbon Dioxide Information Analysis Center (CDIAC)](https://cdiac.ess-dive.lbl.gov/){target="_blank"}  |  CO2 emissions in tonnes or metric tons (equivalent to approximately 2,204.6 pounds) per person by country| NA
-**GDP per capita, percent yearly growth** | 1801 to 2019| [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD.ZG){target="_blank"}  |  [Growth Domestic Product](https://www.investopedia.com/terms/g/gdp.asp#:~:text=Gross%20Domestic%20Product%20(GDP)%20is%20the%20monetary%20value%20of%20all,expenditures%2C%20production%2C%20or%20incomes.){target="_blank"}  (which is an overall measure of the health of nation's economy) per person by country| NA
-**Energy use per person** |1960 to 2015 | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/EG.USE.PCAP.KG.OE){target="_blank"}  |  Use of primary energy before transformation to other end-use fuels, by country | NA
-**US Natural Disasters** | 1980 to 2019 | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}| [The National Oceanic and Atmospheric Administration (NOAA) ](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}|  US data about: <br> -- Droughts <br> -- Floods <br> -- Freezes <br> -- Severe Storms <br> -- Tropical Cyclones <br> -- Wildfires<br> -- Winter Storms | NOAA National Centers for Environmental Information (NCEI) U.S. Billion-Dollar Weather and Climate Disasters (2020). https://www.ncdc.noaa.gov/billions/, DOI: 10.25921/stkw-7w73
-**Temperature**  | 1895 to 2019|  [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/national/time-series){target="_blank"}  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/national/time-series){target="_blank"} | US National yearly average temperature (in Fahrenheit) from 1895 to 2019 | NOAA National Centers for Environmental information, Climate at a Glance: National Time Series, published June 2020, retrieved on June 26, 2020 from https://www.ncdc.noaa.gov/cag/
+-----------|---------------|-------------|-------------|----------------------------|--------
+**CO2 emissions**  |1751-2014 | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [Carbon Dioxide Information Analysis Center (CDIAC)](https://cdiac.ess-dive.lbl.gov/){target="_blank"}  |  CO2 emissions in tonnes or metric tons (equivalent to approximately 2,204.6 pounds) per person by country| NA
+**GDP per capita (percent yearly growth)** | 1801-2019| [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD.ZG){target="_blank"}  |  [Growth Domestic Product](https://www.investopedia.com/terms/g/gdp.asp#:~:text=Gross%20Domestic%20Product%20(GDP)%20is%20the%20monetary%20value%20of%20all,expenditures%2C%20production%2C%20or%20incomes.){target="_blank"}  (which is an overall measure of the health of nation's economy) per person by country| NA
+**Energy use per person** |1960-2015 | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/EG.USE.PCAP.KG.OE){target="_blank"}  |  Use of primary energy before transformation to other end-use fuels, by country | NA
+**US Natural Disasters** | 1980-2019 | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}| [The National Oceanic and Atmospheric Administration (NOAA) ](https://www.ncdc.noaa.gov/billions/time-series){target="_blank"}|  US data about: <br> -- Droughts <br> -- Floods <br> -- Freezes <br> -- Severe Storms <br> -- Tropical Cyclones <br> -- Wildfires<br> -- Winter Storms | NOAA National Centers for Environmental Information (NCEI) U.S. Billion-Dollar Weather and Climate Disasters (2020). https://www.ncdc.noaa.gov/billions/, DOI: 10.25921/stkw-7w73
+**Temperature**  | 1895-2019|  [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/national/time-series){target="_blank"}  | [The National Oceanic and Atmospheric Administration (NOAA)](https://www.ncdc.noaa.gov/cag/national/time-series){target="_blank"} | US National yearly average temperature (in Fahrenheit) from 1895 to 2019 | NOAA National Centers for Environmental information, Climate at a Glance: National Time Series, published June 2020, retrieved on June 26, 2020 from https://www.ncdc.noaa.gov/cag/
 
 
 To obtain the temperature data, the annual average temperatures were selected as shown in this image:
@@ -301,7 +322,8 @@ energy_use    <- readxl::read_xlsx(here("data/energy_use_per_person.xlsx"))
 ```
 
 We will use the `read_csv()` function of the `readr` package to import the data from the `.csv` files.
-However, for these files there are some lines that we would like to not import - in fact, we will get an error if we try to import them because our table structure will be as R expects. (AVOCADO: not sure what "because our table structure will be as R expects" means.) 
+
+However, for these files there are some lines that we would like to not import because the number of columns differ for some rows. If we dont account for this, then we may end up importing fewer columns of the data that we would like.
 
 In the first 5 rows shown below in the `data/diasters.csv` file, you can see that the first two rows does not have the same number of columns as the subsequent rows and are just (sub)titles. 
 
@@ -353,9 +375,11 @@ CO2_emissions %>%
   slice_head(n = 3)
 ```
 
-Another useful function is `slice_sample()` to look at a **selection of random rows**.
+Another useful function is `slice_sample()` to look at a **selection of random rows**. To continue to get the same random values or for others to get the same values we need to set a seed first. We can do this with the `set.seed()` base function. We just specify a number with this function and that will allow us to get the same subset of values from the `slice_sample()` function.
 
 ```{r}
+set.seed(123)
+
 CO2_emissions %>%
   slice_sample(n = 3)
 ```
@@ -405,34 +429,36 @@ Scrolling through the `glimpse()` function above, we can also see that there are
 In this next code chunk, we will introduce the `%<>%` operator from the `magrittr` package. 
 This allows us to use our `CO2_emissions` data and reassign it to a modified version at the same time. 
 Let's modify `CO2_emissions` to make it more usable for making visualizations. 
-Specifically, we will use the `pivot_longer()` function of the `dplyr` package to convert our data into what is called 'long' format. 
-This means that we will have more rows and fewer columns than our current format. (AVOCADO: I think there is a formal definition for this -- e.g. one row per observation etc?)
+Specifically, we will use the `pivot_longer()` function of the `dplyr` package to convert our data into what is called **"long"** format. This is also sometimes referred to as **"narrow"** format.
 
-We want to collapse all of the values for the emission data across the different individual year variables into one new emission variable and we will identify what year they are from creating a new `Year` variable.
+This means that we will have more rows and fewer columns than our current format.
+
+Right now our data is in what is called **"wide"** format. In wide format, each varaible is listed as its own column. In contrast, in long format, variables maybe collapsed into a column that identifies the variables and a column of values. See [here](https://en.wikipedia.org/wiki/Wide_and_narrow_data){target="_blank"} for more information about the difference bewteen the two formats.
+
+We want to collapse all of the values for the emission data across the different individual year variables into one new emission variable and we will identify what year they are from creating a new `Year` variable. 
+
+(AVOCADO: I think there is a formal definition for this -- e.g. one row per observation etc?)
+avocado comment: is this better?
 
 ```{r}
+
 CO2_emissions  %<>%
   pivot_longer(cols = -country, 
                names_to = "Year", 
                values_to = "Emissions")
 
+set.seed(123)
+
 CO2_emissions %>%
   slice_sample(n = 6)
 ```
 
-AVOCADO: should we set the seed above for when using `slice_sample()`? I got a different sample than you and not sure if it should be reproducible? 
-
 Let's say we also want to rename the `country` variable to be capitalized.
 To do this, we can use the `rename()` function of the `dplyr` package to rename this variable. 
-When renaming variables the syntax is `new-name=old-name`, where the new name is listed first before the `=`. 
+When renaming variables the syntax is `new-name = old-name`, where the new name is listed first before the `=`. 
+ 
+You may also note that the `Year` variable is currently of class type character. We would like to change it to be numeric. To do this we will use the `mutate()` function, which is also part of the `dplyr` package. This function allows us to create and modify variables.
 
-We will also modify the `Emissions` data by dividing it by 1000 to make the numbers smaller. (AVOCADO: this line has been commented out below. Does the line in the code chunk need to be back or does this sentence need to be deleted?)
-To do this we will use the `mutate()` function, which is also part of the `dplyr` package. 
-This function allows us to create and modify variables. 
-You may also note that the `Year` variable is currently of class type character. We would like to change it to be numeric. 
-This can also be accomplished using the `mutate()` function.
-
-AVOCADO: does the `rename(`CO2 Emissions (Mg)`= Emissions)` need to be removed or do we discuss it here? 
 
 ```{r}
 CO2_emissions  %<>% 
@@ -444,6 +470,8 @@ CO2_emissions  %<>%
 Now let's take a look to see how our data has changed:
 
 ```{r}
+set.seed(123)
+
 CO2_emissions %>%
   slice_sample(n = 6)
 ```
@@ -559,6 +587,8 @@ energy_use %<>%
 
 
 ```{r}
+set.seed(123)
+
 energy_use %>%
   slice_sample(n = 3)
 ```
@@ -684,7 +714,7 @@ These are the `by="x1"` arguments below where `x1` is the name of the column in 
 ```{r, echo = FALSE, out.width = "800 px"}
 knitr::include_graphics(here::here("img", "join.png"))
 ```
-AVOCADO: add source
+#### [[Source]](https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf){target="_blank"}
 
 There are several types of `*_join()` functions to consider. 
 We use the `full_join()` function as we have different time spans for each data set and we would like to retain as much data as possible. 
@@ -704,10 +734,11 @@ Indeed, `Country`, and `Year` variables are present in all of the data sets. We 
 Next, we need to specify what columns/variables we will be joining by using the `by =` argument in the `full_join()` and `left_join()` functions.
 
 ```{r}
-
 data_wide <- CO2_emissions %>%
   full_join(gdp_growth, by = c("Country", "Year", "Label")) %>%
   full_join(energy_use, by = c("Country", "Year", "Label"))
+
+set.seed(123)
 
 data_wide %>%
   slice_sample(n = 6)
@@ -740,6 +771,9 @@ data_long <- data_wide %>%
   pivot_longer(cols = c(-Country, -Year, -Label), 
                names_to = "Indicator", 
                values_to = "Value")
+
+set.seed(123)
+
 data_long %>%
   slice_sample(n = 6)
 ```
@@ -773,6 +807,8 @@ data_long %>%
 data_long %>%
   slice_tail(n = 6)
 
+set.seed(123)
+
 data_long %>%
   slice_sample(n = 10)
 ```
@@ -786,40 +822,52 @@ Since the `Label` variable has unique values for each type of `Indicator`, this 
 
 Let's consider an example and look at the values for China in the year of 1980.
 
-AVOCADO: could more text be added below here in between the code chunks describing what we see? 
-
+First we will use the `bind_rows()` function which automatically creates `NA` values for any variable that is missing from a data object that is added by combining the data object with another that contains that missing varaible using this function.
 ```{r}
 data_wide_br <- 
   list(CO2_emissions, gdp_growth, energy_use) %>% 
   bind_rows()
 
-data_wide_fj <- 
-  list(CO2_emissions, gdp_growth, energy_use) %>% 
-  reduce(full_join, by = c("Country", "Year"))
+data_wide_br %>%
+ filter(Country == "China", 
+           Year == 1980)
+```
 
+We see that we have three rows of data.
+
+Now we will use the `full_join()` function two ways. First we will combine by `Country` and `Year` and `Label`. 
+
+```{r}
 data_wide_fj_label <- 
   list(CO2_emissions, gdp_growth, energy_use) %>% 
   reduce(full_join, by = c("Country", "Year", "Label"))
-```
-
-```{r}
-dim(data_wide_fj)
-dim(data_wide_br)
-dim(data_wide_fj_label)
-
-identical(data_wide_fj_label, data_wide_br)
-```
-
-```{r}
-data_wide_fj %>%
-  filter(Country == "China", Year == "1980")
-
-data_wide_br %>%
-  filter(Country == "China", Year == "1980")
 
 data_wide_fj_label %>%
   filter(Country == "China", Year == "1980")
 ```
+
+Again we have 3 rows of data. The data produced by  `bind_rows()` and `full_join()` is identical (which we can check by using the `setequal()` function of the `dplyr` package) and has the same dimensions (which we can check by using the `dim()` base function).
+
+```{r}
+dim(data_wide_br)
+dim(data_wide_fj_label)
+setequal(data_wide_fj_label, data_wide_br)
+```
+
+However, now we will join by only `Country` and `Year`:
+
+```{r}
+data_wide_fj <- 
+  list(CO2_emissions, gdp_growth, energy_use) %>% 
+  reduce(full_join, by = c("Country", "Year"))
+
+data_wide_fj %>%
+  filter(Country == "China", Year == "1980")
+```
+Now we see that we have only a single row. The data that corresponds to the same year and country has been collapsed into a single but wider row. 
+
+This is something to keep in mind when you are wranglign your data. The choice of what function to use and how should depend on how you want the data to be after you combine the different sources of data together.
+
 </details>
 
 
@@ -1313,7 +1361,7 @@ There are many arguments to use to style your labels just the way that you want:
 knitr::include_graphics(here::here("img", "ggrepel.png"))
 ```
 
-##### [[source]](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html)
+##### [[Source]](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html)target="_blank"
 
 See [the ggrepel vignette](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"} for more details.
 
@@ -1344,8 +1392,17 @@ For fun, let's try showing our data in an entirely different way.
 
 This time we will create a `geom_tile` plot.
 
-To color our plot we will use the `viridis` color palette again  but this time we will use the `scale_fill_viridis_c()` -- recall that the `_c` indicates a continuous scale. 
+To create this plot we will filter our data to include only the Countries included in the `Country` variable of the `top_10_count`. 
+
+avocado comment: I made this section hopefully more clear about how to use `fct_reorder()`
+
+Then, we will use the `fct_reorder()` function of the `forcats` package to order our countries based on the last emission value in 2014.
+
+To use this function, the variable that is to be reordered is listed first. The variable that is that is being used to determine the order is listed second. Finally a function to apply to the variable listed second is listed third. This function is used to determine the order.  In this case we want to determine the last value of the `Value` variable using the `last()` function (recall that this is also a function of the `dplyr` package). Then the `Country` variable will be ordered by the last value of the `Value` variable.
+
+To color our plot we will use the `viridis` color palette again but this time we will use the `scale_fill_viridis_c()` -- recall that the `_c` indicates a continuous scale. 
 See [the scale_viridis reference](https://ggplot2.tidyverse.org/reference/scale_viridis.html) for more information.
+
 
 ```{r}
 Top10t <- 
@@ -1358,13 +1415,6 @@ Top10t <-
     scale_fill_viridis_c() 
 ```
 
-
-*Note*, we will filter our data to include only the Countries included in the `Country` variable of the `top_10_count`. 
-Then, we used the `fct_reorder()` function of the `forcats` package to order our countries based on the last emission value in 2014.
-
-AVOCADO: I think the  this paragraph below is confusing. Could it be clarified? 
-
-To use this function, the variable that is to be reordered is listed first, then the variable that is being used to determine the order, followed by a function to determine the order, in this case the last value using the `last()` function (recall that this is also a function of the `dplyr` package).
 
 Finally, let's clean up the axes and the axes labels: 
 
@@ -1387,10 +1437,8 @@ Top10t
 ```
 
 We see that Germany had very low emission rates at the end of World War II. 
-We also see that the US has consistently had high emission rates since 1900, but that the emission rates in China recently surpassed that of the US. 
+We also see that the US has consistently had high emission rates since 1900, but the emission rates in China recently surpassed that of the US. 
 The portions of the plot that are white indicate that there is no emission data for that country.
-
-
 
 ## More than one variable
 
@@ -1549,10 +1597,13 @@ CO2_temp_US_facet <-
   geom_smooth(method = "loess", se = FALSE) +
   scale_x_continuous(breaks = seq(1980, 2014, by = 5),
                      labels = seq(1980, 2014, by = 5)) + 
-  facet_wrap(Indicator ~ ., scales = "free_y", ncol = 1) +
+  facet_wrap(Label ~ ., scales = "free_y", ncol = 1) +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 90),
-        axis.title = element_blank()) + 
+  theme(axis.text.x = element_text(size = 12, angle = 90),
+        axis.text.y = element_text(size = 12),
+        strip.text.x = element_text(size = 14),
+         axis.title = element_blank(),
+         plot.title = element_text(size = 16))
   labs(title = "US Emissions and Temperatures (1980-2014)")
 
 CO2_temp_US_facet
@@ -1582,16 +1633,21 @@ wide_US <-
 ```
 
 ```{r}
+
 CO2_temp_US <- 
   wide_US %>%
   ggplot(aes(x = Emissions, y = Temperature)) +
     geom_point() +
     geom_smooth(method = "lm", se = FALSE) +
     theme_classic() +
-    theme(axis.text.x = element_text(angle = 90)) + 
+    theme(axis.text.x = element_text(size = 12, angle = 90),
+          axis.text.y = element_text(size = 12),
+           axis.title = element_text(size = 14),
+           plot.title = element_text(size = 16))+
     labs(title = "US Emissions and Temperature (1980-2014)", 
          x = "Emissions (Metric Tonnes)", 
          y = "Temperature (Fahrenheit)")
+  
 
 CO2_temp_US
 ```
@@ -1651,7 +1707,7 @@ If the points form a downward sloping line, then there is a negative relationshi
 knitr::include_graphics('https://www.mathsisfun.com/data/images/correlation-examples.svg')
 ```
 
-##### [[source]](https://www.mathsisfun.com/data/correlation.html){target="_blank"}
+##### [[Source]](https://www.mathsisfun.com/data/correlation.html){target="_blank"}
 
 The numbers below each plot above are called correlation coefficients. 
 They range from -1 to 1. 
@@ -1721,14 +1777,18 @@ What are the differences?
 
 To test if the association between a pair of variables is statistically significant, you can use the `cor.test()` of the `stats` package to calculate the correlation coefficient, as well as confidence intervals for correlation coefficients.
 
-AVOCADO: could we make this more broom-friendly? 
+We can use the `tidy()` function of the `broom` package to make the output more usable for working with in R.
 
 ```{r}
+
 cor.test(pull(wide_US, Emissions), 
          pull(wide_US, Temperature))
+
+broom::tidy(cor.test(pull(wide_US, Emissions), 
+         pull(wide_US, Temperature)))
 ```
 
-We see that the correlation coefficient quantifying the strength of the linear relationship between C02 emissions and temperature is statistically significant. 
+We see that the correlation coefficient quantifying the strength of the linear relationship between C02 emissions and temperature is statistically significant.
 
 ### Relationship between correlation and linear regression
 
@@ -1809,8 +1869,29 @@ What do you see?
 The last thing we will do here is to create a plot that summarizes our major findings. 
 We will use the `plot_layout()` function of the `patchwork` R package.
 
-```{r}
-(CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US)
+```{r, out.width = "500px" , out.height = "400px"}
+(CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US)+
+  plot_layout( widths = c(4, 6), heights = c(20, 20))
+  # plot_layout(widths = c(2,4),
+  #             heights = unit(c(4 , 4), c('cm', 'cm')))
+
+library(cowplot)
+
+plot_grid(CO2_world, Top10t, CO2_temp_US_facet, CO2_temp_US, ncol = 2, rel_widths=c(0.8,.8),rel_heights=c(0.9,0.8))
+
+
+#reduce margins
+margins_left <- c(0.4,0.2,0.4,0.2)
+margins_right <- c(0.4,0.4,0.4,0.4)
+
+CO2_world <- CO2_world + theme(plot.margin=unit(margins_left, "cm"))
+Top10t <- Top10t + theme(plot.margin=unit(margins_left, "cm"))
+CO2_temp_US_facet <- CO2_temp_US_facet+ theme(plot.margin=unit(margins_right, "cm"))
+CO2_temp_US <- CO2_temp_US + theme(plot.margin=unit(margins_right, "cm"))
+
+#plot
+plot_grid(CO2_world, Top10t, CO2_temp_US_facet, CO2_temp_US, ncol = 2)
+
 ```
 
 ```{r, echo = FALSE}
@@ -1821,7 +1902,6 @@ png(here::here("img", "mainplot.png"), width = 800, height = 700)
 dev.off()
 ```
 
-AVOCADO: the image looks really fuzzy / granular. I have no idea why... should we try a jpeg? 
 
 ## **Homework**
 
