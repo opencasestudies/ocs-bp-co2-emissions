@@ -1871,31 +1871,27 @@ We will use the `plot_layout()` function of the `patchwork` R package.
 
 ```{r, out.width = "500px" , out.height = "400px"}
 (CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US)+
-  plot_layout( widths = c(4, 6), heights = c(20, 20))
+  plot_layout( widths = c(4, 6), heights = c(6, 6))
   # plot_layout(widths = c(2,4),
   #             heights = unit(c(4 , 4), c('cm', 'cm')))
 
-library(cowplot)
-
-plot_grid(CO2_world, Top10t, CO2_temp_US_facet, CO2_temp_US, ncol = 2, rel_widths=c(0.8,.8),rel_heights=c(0.9,0.8))
-
-
-#reduce margins
-margins_left <- c(0.4,0.2,0.4,0.2)
-margins_right <- c(0.4,0.4,0.4,0.4)
-
-CO2_world <- CO2_world + theme(plot.margin=unit(margins_left, "cm"))
-Top10t <- Top10t + theme(plot.margin=unit(margins_left, "cm"))
-CO2_temp_US_facet <- CO2_temp_US_facet+ theme(plot.margin=unit(margins_right, "cm"))
-CO2_temp_US <- CO2_temp_US + theme(plot.margin=unit(margins_right, "cm"))
 
 #plot
-plot_grid(CO2_world, Top10t, CO2_temp_US_facet, CO2_temp_US, ncol = 2)
+#plot_grid(CO2_world, Top10t, CO2_temp_US_facet, CO2_temp_US, ncol = 2)
+
+```
+```{r, units = "in", width = 12, height = 11, res = 300}
+(CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US) +
+  plot_layout(widths = c(1,2),
+              heights = unit(c(4, 10), c('cm', 'cm')))
 
 ```
 
+
+
+
 ```{r, echo = FALSE}
-png(here::here("img", "mainplot.png"), width = 800, height = 700)
+png(here::here("img", "mainplot.png"), units = "in", width = 12, height = 11, res = 300)
 (CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US) +
   plot_layout(widths = c(1,2),
               heights = unit(c(4, 10), c('cm', 'cm')))
@@ -1912,11 +1908,12 @@ Ask students to create a plot with labels showing the countries with the lowest 
 Ask students to plot energy use and emissions on a scatter plot, calculate the Pearson's correlation coefficient, and discuss what the results mean. 
 
 ## **Summary**
+***
 
 Even though  there is quite a bit of scientific evidence to indicate that in fact CO2 emissions trap heat and lead to increased global temperatures, it is important to realize that there are other factors involved in the relationship between US CO2 emissions and US annual average temperatures. However, it is vital that we work around the globe to reduce greenhouse gas emissions to mitigate the increased temperatures that we will experience due to the existing CO2 already in the atmosphere so that the warming temperatures aren't as extreme as they could be. Furthermore, we need to prepare for increased rates of natural disasters and how these may influence people around the world. Evidence suggests that impoverished people are the [most affected by diasters](https://ourworldindata.org/natural-disasters){target="_blank"}. We need to be particularly mindful of this as we prepare.  
 
 ## **Helpful Links**
-
+***
 
 confidence intervals linear reg.
 https://rstudio-pubs-static.s3.amazonaws.com/195401_20b3272a8bb04615ae7ee4c81d18ffb5.html
