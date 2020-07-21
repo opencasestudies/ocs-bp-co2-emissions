@@ -1,5 +1,5 @@
 ---
-title: "Open Case Studies: Exploring CO2 emissions acorss time"
+title: "Open Case Studies: Exploring CO2 emissions across time"
 css: style.css
 output:
   html_document:
@@ -61,7 +61,7 @@ CO2 makes up the largest proportion of greenhouse gas emissions in the United St
 knitr::include_graphics(here::here("img", "emissions.jpg"))
 ```
 
-#### [[Source]](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"}
+##### [[source]](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"}
 
 A variety of sources and sectors contribute to greenhouse gas emissions:
 
@@ -70,7 +70,7 @@ A variety of sources and sectors contribute to greenhouse gas emissions:
 knitr::include_graphics(here::here("img", "sector.png"))
 ```
 
-#### [[Source]](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"}
+##### [[source]](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"}
 
 Transportation and Electricity contribute the most metric tons of CO2:
 
@@ -78,7 +78,11 @@ Transportation and Electricity contribute the most metric tons of CO2:
 knitr::include_graphics('https://www.epa.gov/sites/production/files/styles/medium/public/2020-04/sources-of-greenhouse-gas-emissions-in-2018.jpg')
 ```
 
+AVOCADO: The image above isn't showing up in the html?
+
 So why should we pay attention to greenhouse gases?
+
+
 
 According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}: 
 
@@ -92,7 +96,7 @@ In fact, there are many signs that our planet is experiencing warmer temperature
 knitr::include_graphics(here::here("img", "warming.png"))
 ```
 
-#### [[Source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
+##### [[source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
 
 The connection between greenhouse gas levels and global temperatures and the influence of increased global temperatures on human health are motivated by these reports:
 
@@ -130,7 +134,7 @@ In this case study, we will explore CO2 emission data from around the world.
 We will also focus on the US specifically to evaluate patterns of temperatures and storm activity. 
 
 This case study will particularly focus on how to use different data sets that span different ranges of time, as well as how to create visualizations of patterns over time. 
-We will especially focus on using packages and functions from the [`Tidyverse`](https://www.tidyverse.org/){target="_blank"}, such as `dplyr`, `tidyr`, `ggplot2`and `gganimate`. 
+We will especially focus on using packages and functions from the [`tidyverse`](https://www.tidyverse.org/){target="_blank"}, such as `dplyr`, `tidyr`, and `ggplot2`. 
 
 The tidyverse is a library of packages created by RStudio. 
 While some students may be familiar with previous R programming packages, these packages make data science in R especially efficient.
@@ -139,17 +143,19 @@ The skills, methods, and concepts that students will be familiar with by the end
 
 Data science skills:
 
-1. Importing data from various types of Excel files and csv files
-2. Merging data with different time spans
-3. How to create effective longitudinal data visualizations with `ggplot2`
-4. How to add labels to `ggplot2` plots
+1. Importing data from various types of Excel files and CSV files
+2. Apply action verbs in `dplyr` for data wrangling
+3. How to pivot between "long" and "wide" data sets
+4. Joining together multiple data sets using `dplyr`
+5. How to create effective longitudinal data visualizations with `ggplot2`
+6. How to add text, color, and labels to `ggplot2` plots
+7. How to create faceted `ggplot2` plots
 
-Statistical methods:
+Statistical concepts and methods:
 
-1. Define and recognize the difference between populations and samples # avocado comment - I think this may have gotten deleated - this is also why I used cor instead of cor.test -if you think that these are indeed samples... then maybe we should not supress the gray lines for the loess trend lines
-2. Basic understanding of correlation 
-3. Difference between correlation and causation
-3. Difference between correlation and linear regression association
+1. Introduction to correlation coefficient as a summary statistic
+2. Relationship between correlation and linear regression
+3. Correlation is not causation
 
 
 *** 
@@ -165,7 +171,6 @@ library(dplyr)
 library(magrittr)
 library(tidyverse)
 library(ggplot2)
-library(gganimate)
 library(directlabels)
 library(ggrepel)
 library(RColorBrewer)
@@ -185,7 +190,6 @@ library(patchwork)
 [ggplot2](https://ggplot2.tidyverse.org/){target="_blank"} | to make visualizations
 [directlabels](http://directlabels.r-forge.r-project.org/docs/index.html){target="_blank"} | to add labels to plots easily
 [ggrepel](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"} | to add labels that don't overlap to plots
-[gganimate](https://gganimate.com/){target="_blank"}  | to make the plots interactive
 [RColorBrewer](https://cran.r-project.org/web/packages/RColorBrewer/index.html){target="_blank"}  | to have greater control over the color in our plots
 [broom](https://www.tidyverse.org/blog/2018/07/broom-0-5-0/) | to make the output form statistical tests easier to work with
 [patchwork](https://github.com/thomasp85/patchwork){target="_blank"}  | to combine plots
@@ -205,7 +209,7 @@ These emissions are one of the contributing factors to rising global temperature
 knitr::include_graphics(here::here("img", "health.png"))
 ```
 
-#### [[Source]](https://www.epa.gov/climate-indicators/understanding-connections-between-climate-change-and-human-health){target="_blank"}
+##### [[source]](https://www.epa.gov/climate-indicators/understanding-connections-between-climate-change-and-human-health){target="_blank"}
 
 
 According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}
@@ -216,16 +220,13 @@ The  **Global Warming Potential (GWP)** compares the **ability of a greenhouse g
 
 >The GWP of a greenhouse gas is defined as the ratio of the accumulated radiative forcing within a specific time horizon caused by emitting 1 kilogram of the gas, relative to that of the reference gas CO2 (IPCC 2013). Therefore GWP-weighted emissions are provided in million metric tons of CO2 equivalent (MMT CO2 Eq.)
 
-AVOCADO: Unclear purpose of text above? I know the definition of GWP is in the text, but can we remove the text and just state the definition? 
-Avocado comment: I thought that the explanation of how gases actually conrtibute to climate change by trapping heat was really useful for introducing what GWP is. I reduced and separted this a bit, but feel free to change as you see fit.
-
 CO2 is actually the least heat-trapping gas of the greenhouse gases:
 
 ```{r, echo = FALSE, out.width="800px"}
 knitr::include_graphics(here::here("img", "GWP.png"))
 ```
 
-#### [[Source]](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}
+##### [[source]](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}
 
 However, because CO2 is so much more abundant and stays in the atmosphere so much longer than other greenhouse gases, it has been the largest contributor to global warming.
 See [here](https://www.ucsusa.org/resources/why-does-co2-get-more-attention-other-gases#:~:text=CO2%20sticks%20around,oxide%20(N2O)){target="_blank"} for more details.
@@ -237,7 +238,7 @@ Furthermore, rizing CO2 levels also influence ocean acidity:
 knitr::include_graphics(here::here("img", "oceans.png"))
 ```
 
-#### [[Source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
+##### [[source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
 
 
 As CO2 levels rize in the ocean, the pH becomes more acidic, which makes it difficult for organisms to maintain their shells or skeletons that are made of calcium carbonate, thus making it more difficult for these organisms to survive and impacting their role in the ecosystem and food chain. 
@@ -251,26 +252,15 @@ Indeed, events with high levels of precipitation which can induce flooding and p
 knitr::include_graphics(here::here("img", "storms.png"))
 ```
 
-#### [[Source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
+##### [[source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
 
 
 # **Limitations**
 *** 
 
-There are some important considerations regarding this data analysis to keep in mind: 
-
-1. The data sets only include countries and years in which countries were reporting such information to the agencies that collected the data. Thus, the data are incomplete. For example, while we have a fairly good sense of CO2 emissions globally for later years, additional emissions were also produced by countries that are not included in the data.
-
-2. [Correlation or association does not imply causation](https://dfrieds.com/math/correlation-does-not-imply-causation.html){target="_blank"}. We will be showing how different data sets show similar trends across time. This does not imply that one caused the other. However, in the case of some of the data we will show, there is additional scientific evidence to suggest that for example, increased CO2 emissions may cause increased temperatures or increased rates of disasters. However, simply showing a similar trend over time does not in itself prove that two variables are causally related. As you can see from this plot, often data may show a similar pattern over time by random chance.  See this [website](https://www.tylervigen.com/spurious-correlations){target="_blank"} for more examples.
-
-AVOCADO: point 2 seems more like this would be a learning objective?
-avocado comment: I added this to the learning objectives... do you want to also move this somewhere in the analysis section or keep this here?
-
-```{r, echo = FALSE, out.width="600px"}
-knitr::include_graphics(here::here("img", "causation.png"))
-```
-
-#### [[Source]](http://tylervigen.com/spurious-correlations){target="_blank"}
+An important limitation regarding this data analysis to keep in mind is the data sets only include countries and years in which countries were reporting such information to the agencies that collected the data. 
+Thus, the data are incomplete. 
+For example, while we have a fairly good sense of CO2 emissions globally for later years, additional emissions were also produced by countries that are not included in the data.
 
 
 # **What are the data?**
@@ -433,12 +423,12 @@ Specifically, we will use the `pivot_longer()` function of the `dplyr` package t
 
 This means that we will have more rows and fewer columns than our current format.
 
-Right now our data is in what is called **"wide"** format. In wide format, each varaible is listed as its own column. In contrast, in long format, variables maybe collapsed into a column that identifies the variables and a column of values. See [here](https://en.wikipedia.org/wiki/Wide_and_narrow_data){target="_blank"} for more information about the difference bewteen the two formats.
+Right now our data is in what is called **"wide"** format. 
+In wide format, each variable is listed as its own column. 
+In contrast, in long format, variables maybe collapsed into a column that identifies the variables and a column of values. 
+See [here](https://en.wikipedia.org/wiki/Wide_and_narrow_data){target="_blank"} for more information about the difference between the two formats.
 
 We want to collapse all of the values for the emission data across the different individual year variables into one new emission variable and we will identify what year they are from creating a new `Year` variable. 
-
-(AVOCADO: I think there is a formal definition for this -- e.g. one row per observation etc?)
-avocado comment: is this better?
 
 ```{r}
 
@@ -714,7 +704,7 @@ These are the `by="x1"` arguments below where `x1` is the name of the column in 
 ```{r, echo = FALSE, out.width = "800 px"}
 knitr::include_graphics(here::here("img", "join.png"))
 ```
-#### [[Source]](https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf){target="_blank"}
+##### [[source]](https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf){target="_blank"}
 
 There are several types of `*_join()` functions to consider. 
 We use the `full_join()` function as we have different time spans for each data set and we would like to retain as much data as possible. 
@@ -1361,7 +1351,7 @@ There are many arguments to use to style your labels just the way that you want:
 knitr::include_graphics(here::here("img", "ggrepel.png"))
 ```
 
-##### [[Source]](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html)target="_blank"
+##### [[source]](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html)target="_blank"
 
 See [the ggrepel vignette](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"} for more details.
 
@@ -1394,11 +1384,14 @@ This time we will create a `geom_tile` plot.
 
 To create this plot we will filter our data to include only the Countries included in the `Country` variable of the `top_10_count`. 
 
-avocado comment: I made this section hopefully more clear about how to use `fct_reorder()`
-
 Then, we will use the `fct_reorder()` function of the `forcats` package to order our countries based on the last emission value in 2014.
 
-To use this function, the variable that is to be reordered is listed first. The variable that is that is being used to determine the order is listed second. Finally a function to apply to the variable listed second is listed third. This function is used to determine the order.  In this case we want to determine the last value of the `Value` variable using the `last()` function (recall that this is also a function of the `dplyr` package). Then the `Country` variable will be ordered by the last value of the `Value` variable.
+To use this function, the variable that is to be reordered is listed first. 
+The variable that is that is being used to determine the order is listed second. 
+Finally, a function to apply to the variable listed second is listed third.
+This function is used to determine the order. 
+In this case, we want to determine the last value of the `Value` variable using the `last()` function (recall that this is also a function of the `dplyr` package). 
+Then, the `Country` variable will be ordered by the last value of the `Value` variable.
 
 To color our plot we will use the `viridis` color palette again but this time we will use the `scale_fill_viridis_c()` -- recall that the `_c` indicates a continuous scale. 
 See [the scale_viridis reference](https://ggplot2.tidyverse.org/reference/scale_viridis.html) for more information.
@@ -1707,7 +1700,7 @@ If the points form a downward sloping line, then there is a negative relationshi
 knitr::include_graphics('https://www.mathsisfun.com/data/images/correlation-examples.svg')
 ```
 
-##### [[Source]](https://www.mathsisfun.com/data/correlation.html){target="_blank"}
+##### [[source]](https://www.mathsisfun.com/data/correlation.html){target="_blank"}
 
 The numbers below each plot above are called correlation coefficients. 
 They range from -1 to 1. 
@@ -1811,8 +1804,8 @@ If there is perfect correlation, the regression line predicts an increase that i
 If there is 0 correlation, then we don't use $x$ at all for the prediction and simply predict the average $\mu_Y$.
 For values between 0 and 1, the prediction is somewhere in between. If the correlation is negative, we predict a reduction instead of an increase. 
 
-Thinking about father's and son's heights -- note that if the correlation is positive and lower than 1, our prediction is closer, in standard units, to the average height than the value used to predict, $x$, is to the average of the $x$s. 
-This is why we call it _regression_: the son regresses to the average height. In fact, the title of Galton's paper was: _Regression toward mediocrity in hereditary stature_.
+Thinking about CO2 emissions ($X$) and temperature ($Y$) -- note that if the correlation is positive and lower than 1, our prediction is closer, in standard units, to the average temperature ($\mu_Y$) than the value used to predict, $x$, is to the average of the $x$s. 
+This is why we call it _regression_: observed temperatures regresses to the average temperature.
 To add regression lines to plots, we will need the above formula in the form: 
 
 $$
@@ -1855,15 +1848,24 @@ What does `se = FALSE` mean? Try turning it to TRUE. What happens?
 
 ####
 
+### Correlation does not imply causation 
 
-#### {.question_block}
-<b><u> Question Opportunity </u></b>
+While correlation is useful in many settings to understand how two variables move together, correlation is not always a useful summary. 
+For example, here are ways it might not be useful: 
 
-Try creating the similar plots, but comparing CO2 emissions with the other variables and add a linear regression line. 
+- A linear relationship might not be the best way to capture the relationship
+- If an individual were interested in understanding a _causal_ relationship between two variables, [correlation does not imply causation](https://dfrieds.com/math/correlation-does-not-imply-causation.html){target="_blank"}. Another way of stating this is that simply showing there is a linear trend over time does not imply there is a causal relationship between these two variables.  
 
-What do you see? 
+As you can see from this plot, often data may show a similar pattern over time by random chance. 
+See this [website](https://www.tylervigen.com/spurious-correlations){target="_blank"} for more examples.
 
-####
+```{r, echo = FALSE, out.width="600px"}
+knitr::include_graphics(here::here("img", "causation.png"))
+```
+
+##### [[source]](http://tylervigen.com/spurious-correlations){target="_blank"}
+
+
 
 
 The last thing we will do here is to create a plot that summarizes our major findings. 
@@ -1884,10 +1886,7 @@ We will use the `plot_layout()` function of the `patchwork` R package.
 (CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US) +
   plot_layout(widths = c(1,2),
               heights = unit(c(4, 10), c('cm', 'cm')))
-
 ```
-
-
 
 
 ```{r, echo = FALSE}
@@ -1903,9 +1902,11 @@ dev.off()
 
 ***
 
+AVOCADO: when I compile the HTML, I see the HW in the data viz section. do you see the same? 
+
 Ask students to create a plot with labels showing the countries with the lowest CO2 emission levels.
 
-Ask students to plot energy use and emissions on a scatter plot, calculate the Pearson's correlation coefficient, and discuss what the results mean. 
+Ask students to plot CO2 emissions and other variables (e.g. energy use) on a scatter plot, calculate the Pearson's correlation coefficient, and discuss results. 
 
 ## **Summary**
 ***
@@ -1915,5 +1916,5 @@ Even though  there is quite a bit of scientific evidence to indicate that in fac
 ## **Helpful Links**
 ***
 
-confidence intervals linear reg.
+- Confidence intervals linear reg.
 https://rstudio-pubs-static.s3.amazonaws.com/195401_20b3272a8bb04615ae7ee4c81d18ffb5.html
