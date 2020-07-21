@@ -42,7 +42,7 @@ knitr::include_graphics(here::here("img", "mainplot.png"))
 
 ## {.disclaimer_block}
 
-**Disclaimer**: The purpose of the [Open Case Studies](https://opencasestudies.github.io){target="_blank"} project is **to demonstrate the use of various data science methods, tools, and software in the context of messy, real-world data**. A given case study does not cover all aspects of the research process, is not claiming to be the most appropriate way to analyze a given data set, and should not be used in the context of making policy decisions without external consultation from scientific experts. 
+**Disclaimer**: The purpose of the [Open Case Studies](https://opencasestudies.github.io){target="_blank"} project is **to demonstrate the use of various data science methods, tools, and software in the context of messy, real-world data**. A given case study does not cover all aspects of the research process, is not claiming to be the most appropriate way to analyze a given dataset, and should not be used in the context of making policy decisions without external consultation from scientific experts. 
 
 ## {.license_block}
 
@@ -57,7 +57,7 @@ We used this [report from the EPA](https://www.epa.gov/report-environment/greenh
 CO2 makes up the largest proportion of greenhouse gas emissions in the United States:
 
 
-```{r, echo = FALSE, out.width="300px"}
+```{r, echo = FALSE, out.width="500px"}
 knitr::include_graphics(here::here("img", "emissions.jpg"))
 ```
 
@@ -66,7 +66,7 @@ knitr::include_graphics(here::here("img", "emissions.jpg"))
 A variety of sources and sectors contribute to greenhouse gas emissions:
 
 
-```{r, echo = FALSE, out.width="400px"}
+```{r, echo = FALSE, out.width="500px"}
 knitr::include_graphics(here::here("img", "sector.png"))
 ```
 
@@ -74,15 +74,12 @@ knitr::include_graphics(here::here("img", "sector.png"))
 
 Transportation and Electricity contribute the most metric tons of CO2:
 
-```{r, echo = FALSE, out.width="400px"}
-knitr::include_graphics('https://www.epa.gov/sites/production/files/styles/medium/public/2020-04/sources-of-greenhouse-gas-emissions-in-2018.jpg')
+```{r, echo = FALSE, out.width="500px"}
+knitr::include_graphics(here::here("img", "sources_pie.jpg"))
 ```
 
-AVOCADO: The image above isn't showing up in the html?
 
 So why should we pay attention to greenhouse gases?
-
-
 
 According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}: 
 
@@ -92,7 +89,7 @@ According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Gre
 
 In fact, there are many signs that our planet is experiencing warmer temperatures:
 
-```{r, echo = FALSE, out.width="400px"}
+```{r, echo = FALSE, out.width="500px"}
 knitr::include_graphics(here::here("img", "warming.png"))
 ```
 
@@ -113,7 +110,7 @@ The [National Climate Assessment Report](https://data.globalchange.gov/report/nc
 
 > Heat-trapping gases already in the atmosphere have committed us to a hotter future with more climate-related impacts over the next few decades. The magnitude of climate change beyond the next few decades depends primarily on the amount of heat-trapping gases that human activities emit globally, now and in the future.
 
-See [here](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"}  [here](https://nca2014.globalchange.gov/){target="_blank"}, and [here](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"}  for more information about how greehouse gases have influenced global temperatures.
+See [here](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"},  [here](https://nca2014.globalchange.gov/){target="_blank"}, and [here](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"}  for more information about how greenhouse gases have influenced global temperatures.
 
 
 # **Main Questions**
@@ -123,7 +120,7 @@ See [here](https://www.epa.gov/report-environment/greenhouse-gases){target="_bla
 <b><u> Our main questions: </u></b>
 
 1. How have global CO2 emission rates changed over time? In particular for the US, and how does the US compare to other countries? 
-2. Are CO2 emissions in the US, global temperatures, and storm rates in the US associated? 
+2. Are CO2 emissions in the US, global temperatures, and natural disaster rates in the US associated? 
 
 ####
 
@@ -131,9 +128,9 @@ See [here](https://www.epa.gov/report-environment/greenhouse-gases){target="_bla
 *** 
 
 In this case study, we will explore CO2 emission data from around the world. 
-We will also focus on the US specifically to evaluate patterns of temperatures and storm activity. 
+We will also focus on the US specifically to evaluate patterns of temperatures and natural disaster activity. 
 
-This case study will particularly focus on how to use different data sets that span different ranges of time, as well as how to create visualizations of patterns over time. 
+This case study will particularly focus on how to use different datasets that span different ranges of time, as well as how to create visualizations of patterns over time. 
 We will especially focus on using packages and functions from the [`tidyverse`](https://www.tidyverse.org/){target="_blank"}, such as `dplyr`, `tidyr`, and `ggplot2`. 
 
 The tidyverse is a library of packages created by RStudio. 
@@ -145,8 +142,8 @@ Data science skills:
 
 1. Importing data from various types of Excel files and CSV files
 2. Apply action verbs in `dplyr` for data wrangling
-3. How to pivot between "long" and "wide" data sets
-4. Joining together multiple data sets using `dplyr`
+3. How to pivot between "long" and "wide" datasets
+4. Joining together multiple datasets using `dplyr`
 5. How to create effective longitudinal data visualizations with `ggplot2`
 6. How to add text, color, and labels to `ggplot2` plots
 7. How to create faceted `ggplot2` plots
@@ -216,7 +213,7 @@ According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Gre
 
 > Gases in the atmosphere can contribute to climate change both directly and indirectly. Direct effects occur when the gas itself absorbs radiation. Indirect radiative forcing occurs when chemical transformations of the substance produce other greenhouse gases, when a gas influences the atmospheric lifetimes of other gases, and/or when a gas affects atmospheric processes that alter the radiative balance of the earth (e.g., affect cloud formation or albedo). 
 
-The  **Global Warming Potential (GWP)** compares the **ability of a greenhouse gas to trap heat in the atmosphere relative to another gas**.
+The **Global Warming Potential (GWP)** compares the **ability of a greenhouse gas to trap heat in the atmosphere relative to another gas**.
 
 >The GWP of a greenhouse gas is defined as the ratio of the accumulated radiative forcing within a specific time horizon caused by emitting 1 kilogram of the gas, relative to that of the reference gas CO2 (IPCC 2013). Therefore GWP-weighted emissions are provided in million metric tons of CO2 equivalent (MMT CO2 Eq.)
 
@@ -231,7 +228,7 @@ knitr::include_graphics(here::here("img", "GWP.png"))
 However, because CO2 is so much more abundant and stays in the atmosphere so much longer than other greenhouse gases, it has been the largest contributor to global warming.
 See [here](https://www.ucsusa.org/resources/why-does-co2-get-more-attention-other-gases#:~:text=CO2%20sticks%20around,oxide%20(N2O)){target="_blank"} for more details.
 
-Furthermore, rizing CO2 levels also influence ocean acidity:
+Furthermore, rising CO2 levels also influence ocean acidity:
 
 
 ```{r, echo = FALSE, out.width="500px"}
@@ -241,7 +238,7 @@ knitr::include_graphics(here::here("img", "oceans.png"))
 ##### [[source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
 
 
-As CO2 levels rize in the ocean, the pH becomes more acidic, which makes it difficult for organisms to maintain their shells or skeletons that are made of calcium carbonate, thus making it more difficult for these organisms to survive and impacting their role in the ecosystem and food chain. 
+As CO2 levels rise in the ocean, the pH becomes more acidic, which makes it difficult for organisms to maintain their shells or skeletons that are made of calcium carbonate, thus making it more difficult for these organisms to survive and impacting their role in the ecosystem and food chain. 
 
 
 Furthermore, greenhouse gas emissions are believed to influence weather patterns as shown in this [report](https://data.globalchange.gov/report/nca3-overview){target="_blank"}. 
@@ -258,7 +255,7 @@ knitr::include_graphics(here::here("img", "storms.png"))
 # **Limitations**
 *** 
 
-An important limitation regarding this data analysis to keep in mind is the data sets only include countries and years in which countries were reporting such information to the agencies that collected the data. 
+An important limitation regarding this data analysis to keep in mind is the datasets only include countries and years in which countries were reporting such information to the agencies that collected the data. 
 Thus, the data are incomplete. 
 For example, while we have a fairly good sense of CO2 emissions globally for later years, additional emissions were also produced by countries that are not included in the data.
 
@@ -273,7 +270,7 @@ In addition, we will use some data that is specific to the United States from th
 
 
 
-Data   | Time span | Source  | Orginal Source   | Description | Citation                                                                    
+Data   | Time span | Source  | Original Source   | Description | Citation                                                                    
 -----------|---------------|-------------|-------------|----------------------------|--------
 **CO2 emissions**  |1751-2014 | [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [Carbon Dioxide Information Analysis Center (CDIAC)](https://cdiac.ess-dive.lbl.gov/){target="_blank"}  |  CO2 emissions in tonnes or metric tons (equivalent to approximately 2,204.6 pounds) per person by country| NA
 **GDP per capita (percent yearly growth)** | 1801-2019| [Gapminder](https://www.gapminder.org/data/){target="_blank"}  | [World Bank](https://data.worldbank.org/indicator/NY.GDP.PCAP.KD.ZG){target="_blank"}  |  [Growth Domestic Product](https://www.investopedia.com/terms/g/gdp.asp#:~:text=Gross%20Domestic%20Product%20(GDP)%20is%20the%20monetary%20value%20of%20all,expenditures%2C%20production%2C%20or%20incomes.){target="_blank"}  (which is an overall measure of the health of nation's economy) per person by country| NA
@@ -313,9 +310,9 @@ energy_use    <- readxl::read_xlsx(here("data/energy_use_per_person.xlsx"))
 
 We will use the `read_csv()` function of the `readr` package to import the data from the `.csv` files.
 
-However, for these files there are some lines that we would like to not import because the number of columns differ for some rows. If we dont account for this, then we may end up importing fewer columns of the data that we would like.
+However, for these files there are some lines that we would like to not import because the number of columns differ for some rows. If we don't account for this, then we may end up importing fewer columns of the data that we would like.
 
-In the first 5 rows shown below in the `data/diasters.csv` file, you can see that the first two rows does not have the same number of columns as the subsequent rows and are just (sub)titles. 
+In the first 5 rows shown below in the `data/disasters.csv` file, you can see that the first two rows does not have the same number of columns as the subsequent rows and are just (sub)titles. 
 
 ```{r, echo = FALSE, out.width = "600 px"}
 knitr::include_graphics(here::here("img", "Disasters.png"))
@@ -324,7 +321,7 @@ knitr::include_graphics(here::here("img", "Disasters.png"))
 To do this, we can skip rows using the `skip = 2` argument of the `read_csv()` function. 
 
 ```{r}
-us_disaster <- readr::read_csv(here("data/diasters.csv"), skip = 2)
+us_disaster <- readr::read_csv(here("data/disasters.csv"), skip = 2)
 ```
 
 Now looking at the `data/temperature.csv` file, we see that the first four lines do not have the same number of columns as the subsequent lines. 
@@ -357,7 +354,7 @@ First, let's take a look at the CO2 data (`CO2_emissions`).
 We can use the `slice_head()` function of the `dplyr` package to see just the first rows of our data. 
 We can specify how many rows we would like to see by using the `n =` argument. 
 
-We will use the `%>%` pipe from the `magrittr` package, which can be used to define the input for later sequential steps. 
+We will use the `%>%` pipe from the `magrittr` package (although it is also imported by other Tidyverse packages, like `dplyr`), which can be used to define the input for later sequential steps. 
 This will make more sense when we have multiple sequential steps using the same data object. 
 
 ```{r}
@@ -374,11 +371,18 @@ CO2_emissions %>%
   slice_sample(n = 3)
 ```
 
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+What happens if you set a different seed? 
+
+####
+
 OK, we see each country is represented along one row and each column contains yearly CO2 emissions. 
 We also see that there are a lot of `NA` values.
 
 We can also use the `glimpse()` function of the `dplyr` package to view our data. 
-This allows us to see more of our data at once. 
+This allows us to see all of our variables at once. 
 We will see a tiny bit of each variable/column with the data displayed on the right.
 
 #### {.scrollable }
@@ -413,7 +417,7 @@ We see that we have `r nrow(CO2_emissions)` rows different country variables and
 names(CO2_emissions)
 ```
 
-Recall, the values are emissions in metric tons also called tonnes.
+Recall, the values are emissions in metric tons, also called tonnes.
 Scrolling through the `glimpse()` function above, we can also see that there are fewer `NA` values for later years.
 
 In this next code chunk, we will introduce the `%<>%` operator from the `magrittr` package. 
@@ -428,7 +432,7 @@ In wide format, each variable is listed as its own column.
 In contrast, in long format, variables maybe collapsed into a column that identifies the variables and a column of values. 
 See [here](https://en.wikipedia.org/wiki/Wide_and_narrow_data){target="_blank"} for more information about the difference between the two formats.
 
-We want to collapse all of the values for the emission data across the different individual year variables into one new emission variable and we will identify what year they are from creating a new `Year` variable. 
+We want to collapse all of the values for the emission data across the different individual year variables into one new `Emissions` variable and we will identify what year they are from creating a new `Year` variable. The `cols =` argument allows us to specify which columns we want to use or not use to pull from to create these new columns. We want to keep our `country` data so we will exclude it using the `-` sign, by default all other columns will be used.
 
 ```{r}
 
@@ -443,11 +447,22 @@ CO2_emissions %>%
   slice_sample(n = 6)
 ```
 
+
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+Think a moment about what the dimensions of the  `CO2_emissions` tibble are now and why? How would you check this?
+
+<b><u> Hint </u></b>: Checking has something to do with a unique aspect about tibbles. 
+
+####
+
+
 Let's say we also want to rename the `country` variable to be capitalized.
 To do this, we can use the `rename()` function of the `dplyr` package to rename this variable. 
 When renaming variables the syntax is `new-name = old-name`, where the new name is listed first before the `=`. 
  
-You may also note that the `Year` variable is currently of class type character. We would like to change it to be numeric. To do this we will use the `mutate()` function, which is also part of the `dplyr` package. This function allows us to create and modify variables.
+You may also note that the `Year` variable is currently of class type character. We would like to change it to be numeric. To do this we will use the `mutate()` function, which is also part of the `dplyr` package. This function allows us to create and modify variables. We will also use this function to create a variable called `Label` which will have `"CO2 Emissions (Metric Tons)"` as the value for every row, to be used when we create plots later.
 
 
 ```{r}
@@ -485,14 +500,14 @@ These all look as expected!
 
 ## Yearly Growth in GDP per Capita
 
-Let's take a look at the next data set (`gdp_growth`) that we imported. 
+Let's take a look at the next dataset (`gdp_growth`) that we imported. 
 
 ```{r}
 gdp_growth %>%
   slice_head(n = 3)
 ```
 
-How many rows and columns are there are there? 
+How many rows and columns are there are there? We can easily check by using the base `dim()` function, which evaluates the dimensions of an object.
 
 ```{r}
 dim(gdp_growth)
@@ -506,12 +521,22 @@ There are also `r ncol(gdp_growth)` columns with a `country` column and a set of
 names(gdp_growth)
 ```
 
-Yes, no other columns in this data set. 
+Yes, no other columns in this dataset. 
 
 Next, we will use the `pivot_longer()` to transform the data to long format, similar to what we did in the previous section.
-We will also again change the `country` variable to be `Country` by using the `rename()` function , and we will make the `Year` variable numeric using the `mutate()` function. 
 
-```{r}
+We will also again change the `country` variable to be `Country` by using the `rename()` function, and we will make the `Year` variable numeric using the `mutate()` function. 
+
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+Using what you just learned about `pivot_longer()`, `rename()`, and `mutate()` and without scrolling up, try to come up with the code to do the wrangling for this data.
+
+####
+
+<details> <summary> Click here to reveal the code. </summary>
+
+```{r, eval = FALSE}
 gdp_growth %<>%
   pivot_longer(cols = -country, 
                names_to = "Year", 
@@ -519,6 +544,19 @@ gdp_growth %<>%
   rename(Country=country) %>%
   mutate(Year = as.numeric(Year),
          Label = "GDP Growth/Capita (%)") %>%
+  rename(GDP = gdp_growth)
+```  
+
+</details>
+
+```{r, echo = FALSE}
+gdp_growth %<>%
+  pivot_longer(cols = -country, 
+           names_to = "Year", 
+          values_to = "gdp_growth") %>%
+  rename(Country=country) %>%
+  mutate(Year = as.numeric(Year),
+        Label = "GDP Growth/Capita (%)") %>%
   rename(GDP = gdp_growth)
 ```
 
@@ -564,7 +602,29 @@ energy_use %>%
 Looks like we have `r nrow(energy_use)` rows and `r ncol(energy_use)` columns where we have a `country` column and again a set of years. 
 To wrangle the `energy_use` data, we will again convert the data to long format, rename some variables, and mutate the `Year` data to be numeric.
 
-```{r}
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+Again try to come up with the code on your own to wrangle the data.
+
+####
+
+<details> <summary> Click here to reveal the code. </summary>
+
+```{r, eval = FALSE}
+energy_use %<>%
+  pivot_longer(cols = -country, 
+               names_to = "Year", 
+               values_to = "energy_use") %>%
+  rename(Country = country) %>%
+  mutate(Year = as.numeric(Year),
+         Label = "Energy Use (kg, oil-eq./capita)") %>%
+  rename(Energy = energy_use)
+```
+</details>
+
+
+```{r, echo = FALSE}
 energy_use %<>%
   pivot_longer(cols = -country, 
                names_to = "Year", 
@@ -602,15 +662,16 @@ Now we will take a look at the US data about disasters and temperature.
 
 ### Disasters
 
-First, we consider the diasters that have occurred in the US. 
+First, we consider the disasters that have occurred in the US. 
 ```{r}
 us_disaster 
 ```
 
-We are specifically interested in the `Year` and  the variables that contain the word `"Count"`. 
+We are specifically interested in the `Year` and the variables that contain the word `"Count"`. 
 We will select them using the `select()` and `contains()` functions in the `dplyr` package. 
 Since we are selecting for variables with the word `"Count"` we need to use quotation marks around it. 
-Selecting for the variable `year` does not require this as that is actually the name of one of the existing variables.
+
+Selecting for the variable `Year` does not require this as that is actually the name of one of the existing variables.
 
 
 ```{r}
@@ -624,6 +685,7 @@ us_disaster %>%
 Now we want to create a new variable that will be the sum of all the different types of disasters for each year. 
 
 We can create this new variable using the `mutate()` function of `dplyr` and we will use the base `rowSums()` function to perform the calculation. 
+
 We don't want to include the `Year` variable in our sum, so we can exclude it using the `select`function within the `rowSums()` function. However, to do so we need to indicate that we are using the data that we already used as input to our `mutate()` and `rowSums()` functions. We can do so by using a `.`. 
 
 
@@ -636,11 +698,9 @@ us_disaster %>%
 ```
 
 Great, now we are going to remove some of these variables and just keep or select using the `select()` function the variables we are interested in. 
-We will keep the `Flooding Count` because as you may recall from earlier in this case study, events of extreme precipitation levels appear to be associated with global warming. 
-We will use this as a proxy for that.
 
-We are also going to add a new variable called `Country` to indicate that this data is from the United States. 
-This will create a new variable where every value is `United States`.
+We are also going to add a new variable called `Country` to indicate that this data is from the United States. Again this will create a new variable where every value is `United States`.
+
 ```{r}
 us_disaster %<>%
   dplyr::select(Year, Disasters) %>%
@@ -655,6 +715,15 @@ us_disaster %>%
 ```
 Great, this looks good now. 
 
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+This dataset was slightly different from the other datasets and therefore required slightly different wrangling.
+Why was it necessary to exclude the `Year` variable from the `pivot_longer()` function?
+What would happen if we did not exclude `Year`?
+
+####
+
 ### Temperature
 
 Next, we consider the temperature in the US over time.  
@@ -665,6 +734,7 @@ us_temperature %>%
 So a few things need to be fixed here. 
 
 First, there is a `Date` column, which it looks like it is currently listed as the year followed by the number 12. 
+
 We want change this to only keep the first 4 characters in the `Date` variable string values. 
 We can use the `str_sub()` function of the `stringr` package to do this. 
 We just need to indicate the start and stop characters. 
@@ -672,8 +742,8 @@ In this case the start would be 1 and the 4th character would be where we want t
 
 Next, we want to remove the `Anomaly` variable, which is an indicator of how different the national average temperature for that year was from the average temperature from 1901-2000 which was 52.02&deg;F. 
 
-Then, we will create a `Country` variable. 
-We will also change the name of the `Date` variable to `Year` so that it will be consistent with our other data sets. We also also want the `Year` to be numeric. 
+Then, we also want to create a `Country` variable. 
+We will also change the name of the `Date` variable to `Year` so that it will be consistent with our other datasets. We also also want the `Year` to be numeric. 
 We can accomplish both renaming and changing to numeric by using the `mutate()` function.
 
 Finally, we remove the `Date` variable and also order the columns just like the other us data using the `select()` function.
@@ -695,22 +765,24 @@ us_temperature %>%
 
 ## Joining data
 
-Now that we have wrangled the individual data sets, we are ready to put everything together now. 
-Specifically, we will _join_ the individual data sets into one tibble using `*_join()` functions available in the `dplyr` package. 
+Now that we have wrangled the individual datasets, we are ready to put everything together now. 
+Specifically, we will _join_ the individual datasets into one tibble using `*_join()` functions available in the `dplyr` package. 
 
 Before we begin though, we will need to have at least one column or variable with the same name to be used as a key for putting your data together. 
-These are the `by="x1"` arguments below where `x1` is the name of the column in both the `a` and `b` data sets that we will join together. 
 
-```{r, echo = FALSE, out.width = "800 px"}
+These are the `by="x1"` arguments below where `x1` is the name of the column in both the `a` and `b` datasets that we will join together. 
+
+```{r, echo = FALSE, out.width = "500 px"}
 knitr::include_graphics(here::here("img", "join.png"))
 ```
+
 ##### [[source]](https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf){target="_blank"}
 
 There are several types of `*_join()` functions to consider. 
-We use the `full_join()` function as we have different time spans for each data set and we would like to retain as much data as possible. 
-The `full_join()` function will simply create `NA` values for any of the years that are not in one of the data sets. 
+We use the `full_join()` function as we have different time spans for each dataset and we would like to retain as much data as possible. 
+The `full_join()` function will simply create `NA` values for any of the years that are not in one of the datasets. 
 
-First, we check using the base `summary()` function that there are column names that are consistent in each data set that we wish to combine.
+First, we check using the base `summary()` function that there are column names that are consistent in each dataset that we wish to combine.
 
 ```{r}
 summary(CO2_emissions)
@@ -718,7 +790,17 @@ summary(gdp_growth)
 summary(energy_use)
 ```
 
-Indeed, `Country`, and `Year` variables are present in all of the data sets. We can see that the minimum and maximum year is different for nearly all the data sets.
+#### {.question_block}
+<b><u> Question Opportunity </u></b>
+
+What variable or variables might we want to use to join our data by?
+
+####
+
+<details> <summary> Click here to see an explanation for what variable or variables to join by after you have thought about it. </summary>
+
+
+The `Country`, and `Year` variables are present in all of the datasets with values that overlap. Although `Label` is also present in the datasets, the values do not overlap. We can see that the minimum and maximum year is different for nearly all the datasets.
 
 
 Next, we need to specify what columns/variables we will be joining by using the `by =` argument in the `full_join()` and `left_join()` functions.
@@ -735,8 +817,7 @@ data_wide %>%
 ```
 
 We can also do the same thing using by using the `reduce()` function of the `purrr` package. 
-This is a good option if you have many data sets to combine.
-
+This is a good option if you have many datasets to combine.
 
 ```{r}
 data_wide <- 
@@ -754,7 +835,8 @@ data_wide %>%
 
 Nice, looks good!
 
-We will also make a long version of this data, where we will create an new variable called `Indicator` that will indicate what data set the data came from and we will collapse the values from the columns called ` Emissions` (`CO2 Emissions (Mg)`), `GDP`(`GDP Growth/Capita (%)`), and `Energy`(`Energy Use (kg, oil-eq./capita)`). 
+
+We will also make a long version of this data, where we will create an new variable called `Indicator` that will indicate what dataset the data came from.
 
 ```{r}
 data_long <- data_wide %>%
@@ -768,7 +850,12 @@ data_long %>%
   slice_sample(n = 6)
 ```
 
+</details>
+
+
+
 We will now combine this data with the US data about disasters and temperatures.
+
 
 ```{r}
 us_disaster %>%
@@ -777,7 +864,7 @@ us_temperature %>%
   slice_head(n = 6)
 ```
 
-We will now use the `bind_rows()` function which will just append the `us_temperature` data and the `us_disaster` data after the `data_long` data. 
+We will now use the `bind_rows()` function of the `dplyr` package which will just append the `us_temperature` data and the `us_disaster` data after the `data_long` data. 
 
 ```{r}
 data_long <- 
@@ -786,7 +873,7 @@ data_long <-
   mutate(Country = as.factor(Country))
 ```
 
-We also convert the `Country` column to a factor in the last line of the code chunk. 
+We also converted the `Country` column to a factor in the last line of the code chunk. 
 
 We can check the top and bottom of the new `data_long` tibble to see that our `us_temperature` data is at the bottom. To see the end of our tibble we can use `slice_tail()` function of the `dplyr` package.
 
@@ -806,13 +893,14 @@ data_long %>%
 
 <details> <summary> Click here for details about the difference between `full_join()` and `bind_rows()` </summary>
 
-The difference between this function and the `full_join()` function is that the `bind_rows()` function will essentially just append each data set to each other, whereas the `full_join()` function collapses data that is comparable. 
+The difference between this function and the `full_join()` function is that the `bind_rows()` function will essentially just append each dataset to each other, whereas the `full_join()` function collapses data that is comparable. 
 Here, you will see an example of what the data would have been like for `data_wide` if we had made it using `bind_rows()` and if `full_join()` had been used but was not joined by the `Label` variable.
 Since the `Label` variable has unique values for each type of `Indicator`, this causes the `full_join()` result to be the same as `bind_rows()`. 
 
 Let's consider an example and look at the values for China in the year of 1980.
 
-First we will use the `bind_rows()` function which automatically creates `NA` values for any variable that is missing from a data object that is added by combining the data object with another that contains that missing varaible using this function.
+First we will use the `bind_rows()` function which automatically creates `NA` values for any variable that is missing from a data object that is added by combining the data object with another that contains that missing variable using this function.
+
 ```{r}
 data_wide_br <- 
   list(CO2_emissions, gdp_growth, energy_use) %>% 
@@ -854,19 +942,21 @@ data_wide_fj <-
 data_wide_fj %>%
   filter(Country == "China", Year == "1980")
 ```
+
 Now we see that we have only a single row. The data that corresponds to the same year and country has been collapsed into a single but wider row. 
 
-This is something to keep in mind when you are wranglign your data. The choice of what function to use and how should depend on how you want the data to be after you combine the different sources of data together.
+This is something to keep in mind when you are wrangling your data. The choice of what function to use and how should depend on how you want the data to be after you combine the different sources of data together.
 
-</details>
+</details>  
 
 
-A few more things to do before we leave the data wrangling section. 
+We have a few more things to do before we leave the data wrangling section. 
 
 We will create a new variable called `Region` that will indicate if the data is about the United States or a different country based on the values in the `Country` variable. 
 To do this, we will use the `case_when()` function of the `dplyr` package. 
 
-For example, if the `Country` variable is equal to `"United States"` the value for the new variable will also be `"United States"`, where as if the `Country` variable is not equal to `"United States"` but is some other character string value, such as `"Afghanistan"`, then the value for the new variable will be `"Rest of the World"`.
+For example, if the `Country` variable is equal to `"United States"` the value for the new variable will also be `"United States"`, where as if the `Country` variable is not equal to `"United States"` but is some other character string value, such as `"Afghanistan"`, then the value for the new variable will be `"Rest of the World"`. We can specify that something is not equal by using the `!=` operator.
+
 The new values for the new variable `Region` are indicated after the specific conditional statements by using the `~` symbol. 
 
 
@@ -879,7 +969,8 @@ data_long  %>%
   arrange(Country) %>%
   slice_head(n = 6)
 ```
-We can also remove rows for countries with NA values using the `drop_na()` function of the `tidyr` package to drop all years with missing data.
+
+We can also remove rows for countries with `NA` values using the `drop_na()` function of the `tidyr` package to drop all years with missing data.
 
 ```{r}
 data_long_with_miss <- 
@@ -907,10 +998,15 @@ Using only data from the US, calculate the first and last year that a value was 
 
 ####
 
-
+```{r, echo = FALSE, eval = FALSE}
+save(data_long, file = here::here("data", "wrangled_data.rda"))
+```
 
 # **Data Visualization**
 *** 
+```{r, echo = FALSE}
+load(here::here("data", "wrangled_data.rda"))
+```
 
 Now we will create some simple plots to examine the CO2 emissions over time using the `ggplot2` package.
 
@@ -941,7 +1037,7 @@ As explained by Hadley Wickham:
 
 #### `ggplot2` Terminology 
 
-* **ggplot** - the main function where you specify the data set and variables to plot (this is where we define the `x` and
+* **ggplot** - the main function where you specify the dataset and variables to plot (this is where we define the `x` and
 `y` variable names)
 * **geoms** - geometric objects
     * e.g. `geom_point()`, `geom_bar()`, `geom_line()`, `geom_histogram()`
@@ -960,7 +1056,7 @@ These will define what we are interested in illustrating using the data.
 ## CO2 Emissions
 
 Let's start by plotting the CO2 emissions over time. 
-Because our data set contains other variables, we first need to filter our data to only include the CO2 emissions data by using the `filter()` function of the `dplyr` package. 
+Because our dataset contains other variables, we first need to filter our data to only include the CO2 emissions data by using the `filter()` function of the `dplyr` package. 
 To use this function we need to specify what value (e.g. `Emissions`) we want for a given variable or column (e.g. `Indicator`).  
 
 In this case, we filter to keep all rows where the `Indicator` variable is equal to the word `Emissions`. 
@@ -1020,7 +1116,7 @@ data_long %>%
 ```
 
 Finally, let's make this plot really nice by adding a few final touches. 
-To change title, caption, changing the axis labels, we can use the `labs()` function. 
+To change title, caption, and the axis labels, we can use the `labs()` function. 
 Again, notice that a plus sign is used between each layer that we add to the plot. 
 To make CO2 appear with a subscript we can use `~CO[2]~`.  
 
@@ -1055,10 +1151,10 @@ data_long %>%
   theme_linedraw() +
   theme(axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12),
-        axis.title.x = element_text(size = 12),
-        axis.title.y = element_text(size = 12),
-        plot.caption = element_text(size = 12),
-        plot.title = element_text(size = 16))
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
 ```
 
 We can clearly see that global CO2 emissions have dramatically risen since 1900.
@@ -1080,10 +1176,10 @@ my_theme <-
   theme_linedraw() +
   theme(axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12),
-        axis.title.x = element_text(size = 12),
-        axis.title.y = element_text(size = 12),
-        plot.caption = element_text(size = 12),
-        plot.title = element_text(size = 16))
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
 ```
 
 In this way, we can just add another _layer_ to our plot with the `my_theme` we created with the specifications of the sizes of the title and axis labels. 
@@ -1112,7 +1208,7 @@ CO2_world
 One thing that would be nice to know is which countries are contributing the most or the least to CO2 emissions. 
 Let's continue to explore the data to investigate how CO2 emissions from individual countries have changed over time. 
 
-Next, we go back to using our `data_long` data set. 
+Next, we go back to using our `data_long` dataset. 
 Here, we use the `group` argument in `aes()` which controls whether a line should be drawn 
 
 ```{r}
@@ -1120,7 +1216,8 @@ data_long %>%
   filter(Indicator == "Emissions") %>%
   ggplot(aes(x = Year, y = Value, group = Country)) + 
   geom_line() + 
-  ylab("Emissions")
+  ylab("Emissions") +
+  my_theme
 ```
 
 We can see that many countries show a dramatic increase in emissions over time with a handful of countries with particularly high levels. 
@@ -1134,6 +1231,7 @@ We can see that many countries show a dramatic increase in emissions over time w
 ####
 
 Since we have many overlapping lines, we will make our lines slightly transparent by using the `alpha` argument. 
+
 This takes values from 0 to 1, where 0 is completely transparent and 1 is completely opaque. 
 
 We also add our `my_theme` controlling the size of the title and axis labels. 
@@ -1435,7 +1533,7 @@ The portions of the plot that are white indicate that there is no emission data 
 
 ## More than one variable
 
-Now, we will visualize all the variables in our data set.
+Now, we will visualize all the variables in our dataset.
 
 
 ### Faceted plots
@@ -1477,7 +1575,7 @@ We can also facet by more than one variable (e.g. `Indicator` and `Region` to sh
 In this case we want to use `facet_grid()` instead of `facet_wrap()` so that the same y-axis will be used across the rows.
 The syntax here is to put the name of the two variables on the left or right side of the `~` symbol, which tells you to facet by rows (left) or columns (right).  
 
-First, we will filter out the data about disasters and temperature as this is only for the US, by using the `filter()` function and `!=` which indicates "not equal to".
+First, we will filter out the data about disasters and temperature as this is only for the US, by using the `filter()` function and `!`  indicates that we want only values of the `Indicator` variable not in the list containing `"Disasters"` and `"Temperature"`.
 
 ```{r,fig.width=10, fig.height=10}
 data_long %>%
@@ -1574,7 +1672,7 @@ What trends do you see in GDP and energy use across time?
 Next, let's zoom in on two of the variables: CO2 emissions and temperature. 
 We use years between 1980 and 2014 as we have values for all of those years for these two variables. 
 
-We know that the data sets do not span the same amount of time. 
+We know that the datasets do not span the same amount of time. 
 So let's limit this plot to only the years where the data overlaps for both CO2 emissions and temperature.
 
 We use the `geom_point()` function to create a scatter plot between the `x` and `y` variable defined in `aes()` where `x` is time and `y` is one of the two variables. 
@@ -1660,10 +1758,44 @@ Indeed, it does look like there is a positive, linear trend.
 
 Now that we see that there might be a linear relationship between CO2 emissions and temperature, let's learn about some statistical techniques to measure the strength of that relationship. 
 
+```{r, eval = FALSE, echo = FALSE}
+save(wide_US, file = here::here("data", "wrangled_US_data.rda"))
+```
+
 
 # **Data Analysis**
 ***
  
+```{r, echo = FALSE}
+load(here::here("data", "wranlged_US_data.rda"))
+
+my_theme <- 
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
+
+CO2_temp_US <- 
+  wide_US %>%
+  ggplot(aes(x = Emissions, y = Temperature)) +
+    geom_point() +
+    geom_smooth(method = "lm", se = FALSE) +
+    theme_classic() +
+    theme(axis.text.x = element_text(size = 12, angle = 90),
+          axis.text.y = element_text(size = 12),
+           axis.title = element_text(size = 14),
+           plot.title = element_text(size = 16))+
+    labs(title = "US Emissions and Temperature (1980-2014)", 
+         x = "Emissions (Metric Tonnes)", 
+         y = "Temperature (Fahrenheit)")
+  
+
+```
+
+
 In this section, we are going to introduce some ways to better understand how two variables move together. 
 We will focus on the CO2 emissions and temperature, but you will be encouraged to explore the relationship between CO2 emissions and the other variables. 
 
@@ -1683,7 +1815,7 @@ Next, we are going to learn about the correlation coefficient, which is a summar
 
 ### Correlation coefficient
 
-We can use the [correlation coefficient](https://rafalab.github.io/dsbook/regression.html). 
+We can use the [correlation coefficient](https://rafalab.github.io/dsbook/regression.html#corr-coefl){target="_blank"}. 
 Here, we are using this summary statistic to measure the strength of a _linear_ relationship between two variables. 
 
 If we plot one variable on the x-axis and the other variable on the y-axis, we can see:
@@ -1693,7 +1825,9 @@ If we plot one variable on the x-axis and the other variable on the y-axis, we c
 
 If the variables point upward in a very clear line, then there is a strong positive relationship. 
 If the points do not really form a line, then there is a weak linear relationship or no linear relationship - there may however be a nonlinear relationship if the points create a different but defined shape. 
+
 See [here](https://towardsdatascience.com/estimating-non-linear-correlation-in-r-62c6571cb1db){target="_blank"} for more information.
+
 If the points form a downward sloping line, then there is a negative relationship.
 
 ```{r, echo = FALSE, out.width = "800 px"}
@@ -1827,7 +1961,8 @@ wide_US %>%
   ggplot(aes(x = Emissions, y = Temperature)) + 
     geom_point() + 
     geom_abline(slope = wide_US_summary$slope, 
-                intercept = wide_US_summary$intercept) 
+                intercept = wide_US_summary$intercept) +
+  my_theme
 ```
 
 The regression formula implies that if we first standardize the variables, that is subtract the average and divide by the standard deviation, then the regression line has intercept 0 and slope equal to the correlation $\rho$. You can make same plot, but using standard units like this:
@@ -1836,7 +1971,8 @@ The regression formula implies that if we first standardize the variables, that 
 wide_US %>% 
   ggplot(aes(x = scale(Emissions), y = scale(Temperature))) + 
     geom_point() + 
-    geom_smooth(method = "lm", se = FALSE)
+    geom_smooth(method = "lm", se = FALSE) +
+  my_theme
 ```
 
 Notice that we also use the `geom_smooth(method = "lm")` function which adds a line corresponding to the slope and intercept from the `lm()` function from the `stats` R package. 
@@ -1882,6 +2018,7 @@ We will use the `plot_layout()` function of the `patchwork` R package.
 #plot_grid(CO2_world, Top10t, CO2_temp_US_facet, CO2_temp_US, ncol = 2)
 
 ```
+
 ```{r, units = "in", width = 12, height = 11, res = 300}
 (CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US) +
   plot_layout(widths = c(1,2),
@@ -1898,23 +2035,62 @@ dev.off()
 ```
 
 
-## **Homework**
 
+# **Homework**
 ***
-
-AVOCADO: when I compile the HTML, I see the HW in the data viz section. do you see the same? 
 
 Ask students to create a plot with labels showing the countries with the lowest CO2 emission levels.
 
 Ask students to plot CO2 emissions and other variables (e.g. energy use) on a scatter plot, calculate the Pearson's correlation coefficient, and discuss results. 
 
-## **Summary**
+
+# **Summary**
 ***
 
-Even though  there is quite a bit of scientific evidence to indicate that in fact CO2 emissions trap heat and lead to increased global temperatures, it is important to realize that there are other factors involved in the relationship between US CO2 emissions and US annual average temperatures. However, it is vital that we work around the globe to reduce greenhouse gas emissions to mitigate the increased temperatures that we will experience due to the existing CO2 already in the atmosphere so that the warming temperatures aren't as extreme as they could be. Furthermore, we need to prepare for increased rates of natural disasters and how these may influence people around the world. Evidence suggests that impoverished people are the [most affected by diasters](https://ourworldindata.org/natural-disasters){target="_blank"}. We need to be particularly mindful of this as we prepare.  
+Even though there is quite a bit of scientific evidence to indicate that in fact CO2 emissions trap heat and lead to increased global temperatures, it is important to realize that there are other factors involved in the relationship between US CO2 emissions and US annual average temperatures. However, it is vital that we work around the globe to reduce greenhouse gas emissions to mitigate the increased temperatures that we will experience due to the existing CO2 already in the atmosphere so that the warming temperatures aren't as extreme as they could be. Furthermore, we need to prepare for increased rates of natural disasters and how these may influence people around the world. Evidence suggests that impoverished people are the [most affected by disasters](https://ourworldindata.org/natural-disasters){target="_blank"}. We need to be particularly mindful of this as we prepare for the future.  
 
-## **Helpful Links**
+
+
+# **Helpful Links**
 ***
 
+avocado need to fill out all the helpful links
 - Confidence intervals linear reg.
 https://rstudio-pubs-static.s3.amazonaws.com/195401_20b3272a8bb04615ae7ee4c81d18ffb5.html
+
+[Tidyverse](https://www.tidyverse.org/){target="_blank"}  
+[RStudio cheatsheets](https://rstudio.com/resources/cheatsheets/){target="_blank"}
+[Introduction to correlation](https://www.mathsisfun.com/data/correlation.html){target="_blank"}
+[Correlation coefficient](https://rafalab.github.io/dsbook/regression.html#corr-coefl){target="_blank"}   
+[Correlation does not imply causation](https://dfrieds.com/math/correlation-does-not-imply-causation.html){target="_blank"}  
+[Regression](https://rafalab.github.io/dsbook/regression.html){target="_blank"}  
+[US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}   
+[National Climate Assessment Report](https://data.globalchange.gov/report/nca3-overview){target="_blank"}    
+[Greenhouse gases](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"} 
+[Climat change](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"}
+
+
+<u>Packages used in this case study: </u>
+
+Package   | Use                                                                         
+---------- |-------------
+[here](https://github.com/jennybc/here_here){target="_blank"}       | to easily load and save data
+[readxl](https://readxl.tidyverse.org/){target="_blank"}  | to import the excel file data
+[readr](https://readr.tidyverse.org/){target="_blank"}  | to import the csv file data
+[dplyr](https://dplyr.tidyverse.org/){target="_blank"}  |  to view and wrangle the data
+[magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use and reassign data objects using the `%<>%`pipe operator
+[tidyverse](https://www.tidyverse.org/packages/){target="_blank"}  | to wrangle the data and create ggplot2 plots
+[ggplot2](https://ggplot2.tidyverse.org/){target="_blank"} | to make visualizations
+[directlabels](http://directlabels.r-forge.r-project.org/docs/index.html){target="_blank"} | to add labels to plots easily
+[ggrepel](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"} | to add labels that don't overlap to plots
+[RColorBrewer](https://cran.r-project.org/web/packages/RColorBrewer/index.html){target="_blank"}  | to have greater control over the color in our plots
+[broom](https://www.tidyverse.org/blog/2018/07/broom-0-5-0/) | to make the output form statistical tests easier to work with
+[patchwork](https://github.com/thomasp85/patchwork){target="_blank"}  | to combine plots
+
+
+# **Session Info**
+***
+
+```{r}
+sessionInfo()
+```
