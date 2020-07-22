@@ -113,7 +113,7 @@ Instructors can start at the data visualization section or the data analysis sec
 
 #### Target audience 
 
-This case study is appropriate for those new to R programming and new to statistics. 
+This case study is appropriate for those new to R programming and new to statistics. It is also appropriate for more advanced R users who are new to the Tidyverse.
 
 #### Suggested homework
 

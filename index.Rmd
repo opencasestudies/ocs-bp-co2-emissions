@@ -2054,10 +2054,6 @@ Even though there is quite a bit of scientific evidence to indicate that in fact
 # **Helpful Links**
 ***
 
-avocado need to fill out all the helpful links
-- Confidence intervals linear reg.
-https://rstudio-pubs-static.s3.amazonaws.com/195401_20b3272a8bb04615ae7ee4c81d18ffb5.html
-
 [Tidyverse](https://www.tidyverse.org/){target="_blank"}  
 [RStudio cheatsheets](https://rstudio.com/resources/cheatsheets/){target="_blank"}
 [Introduction to correlation](https://www.mathsisfun.com/data/correlation.html){target="_blank"}
