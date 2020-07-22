@@ -335,7 +335,7 @@ We can also replace all instances of `"-99"` with `NA` using the `na = "-99"` ar
 The "-99" needs to be in quotation marks because this argument expects characters.
 
 ```{r}
-us_temperature <- readr::read_csv(here("data/temperature.csv"), skip = 4, na ="-99")
+us_temperature <- readr::read_csv(here("data/temperature.csv"), skip = 4, na = "-99")
 ```
 
 Great! now we have imported all of the data that we will need.
@@ -408,7 +408,7 @@ Tibbles also give us information about the class of each variable.
 
 For example the `country` variable is made up of character (abbreviated as `chr`) values.
 ```{r}
-CO2_emissions %>% 
+CO2_emissions %>%
   select(country)
 ```
 
@@ -437,8 +437,8 @@ We want to collapse all of the values for the emission data across the different
 ```{r}
 
 CO2_emissions  %<>%
-  pivot_longer(cols = -country, 
-               names_to = "Year", 
+  pivot_longer(cols = -country,
+               names_to = "Year",
                values_to = "Emissions")
 
 set.seed(123)
@@ -466,9 +466,9 @@ You may also note that the `Year` variable is currently of class type character.
 
 
 ```{r}
-CO2_emissions  %<>% 
-   dplyr::rename(Country=country) %>%
-   dplyr::mutate(Year = as.numeric(Year), 
+CO2_emissions  %<>%
+   dplyr::rename(Country = country) %>%
+   dplyr::mutate(Year = as.numeric(Year),
                  Label = "CO2 Emissions (Metric Tons)")
 ```
 
@@ -488,9 +488,9 @@ Finally, we use the `pull()` function of the `dplyr` package to extract the valu
 
 #### {.scrollable }
 ```{r}
-#Scroll through the output!
-CO2_emissions %>% 
-  distinct(Country) %>% 
+# Scroll through the output!
+CO2_emissions %>%
+  distinct(Country) %>%
   pull()
 ```
 ####
@@ -538,10 +538,10 @@ Using what you just learned about `pivot_longer()`, `rename()`, and `mutate()` a
 
 ```{r, eval = FALSE}
 gdp_growth %<>%
-  pivot_longer(cols = -country, 
-               names_to = "Year", 
+  pivot_longer(cols = -country,
+               names_to = "Year",
                values_to = "gdp_growth") %>%
-  rename(Country=country) %>%
+  rename(Country = country) %>%
   mutate(Year = as.numeric(Year),
          Label = "GDP Growth/Capita (%)") %>%
   rename(GDP = gdp_growth)
@@ -551,10 +551,10 @@ gdp_growth %<>%
 
 ```{r, echo = FALSE}
 gdp_growth %<>%
-  pivot_longer(cols = -country, 
-           names_to = "Year", 
+  pivot_longer(cols = -country,
+           names_to = "Year",
           values_to = "gdp_growth") %>%
-  rename(Country=country) %>%
+  rename(Country = country) %>%
   mutate(Year = as.numeric(Year),
         Label = "GDP Growth/Capita (%)") %>%
   rename(GDP = gdp_growth)
@@ -574,9 +574,9 @@ Again let's check that the `Country` variable only contains values we would expe
 
 #### {.scrollable }
 ```{r}
-#Scroll through the output!
-gdp_growth %>% 
-  distinct(Country) %>% 
+# Scroll through the output!
+gdp_growth %>%
+  distinct(Country) %>%
   pull()
 ```
 ####
@@ -613,8 +613,8 @@ Again try to come up with the code on your own to wrangle the data.
 
 ```{r, eval = FALSE}
 energy_use %<>%
-  pivot_longer(cols = -country, 
-               names_to = "Year", 
+  pivot_longer(cols = -country,
+               names_to = "Year",
                values_to = "energy_use") %>%
   rename(Country = country) %>%
   mutate(Year = as.numeric(Year),
@@ -626,8 +626,8 @@ energy_use %<>%
 
 ```{r, echo = FALSE}
 energy_use %<>%
-  pivot_longer(cols = -country, 
-               names_to = "Year", 
+  pivot_longer(cols = -country,
+               names_to = "Year",
                values_to = "energy_use") %>%
   rename(Country = country) %>%
   mutate(Year = as.numeric(Year),
@@ -647,9 +647,9 @@ Now we will check the `Country` variable:
 
 #### {.scrollable }
 ```{r}
-#Scroll through the output!
-energy_use %>% 
-  distinct(Country) %>% 
+# Scroll through the output!
+energy_use %>%
+  distinct(Country) %>%
   pull()
 ```
 ####
@@ -664,7 +664,7 @@ Now we will take a look at the US data about disasters and temperature.
 
 First, we consider the disasters that have occurred in the US. 
 ```{r}
-us_disaster 
+us_disaster
 ```
 
 We are specifically interested in the `Year` and the variables that contain the word `"Count"`. 
@@ -691,7 +691,7 @@ We don't want to include the `Year` variable in our sum, so we can exclude it us
 
 ```{r}
 us_disaster %<>%
-  mutate(`Disasters` = rowSums(select(., -Year))) 
+  mutate(`Disasters` = rowSums(select(., -Year)))
 
 us_disaster %>%
   glimpse()
@@ -753,7 +753,7 @@ us_temperature %<>%
   dplyr::select(-Anomaly) %>%
   mutate(Date = str_sub(Date, start = 1, end = 4)) %>%
   mutate(Country = "United States",
-         Year = as.numeric(Date), 
+         Year = as.numeric(Date),
          Indicator = "Temperature",
          Label = "Temperature (Fahrenheit)") %>%
   select(Year, Country, Indicator, Value, Label)
@@ -820,8 +820,8 @@ We can also do the same thing using by using the `reduce()` function of the `pur
 This is a good option if you have many datasets to combine.
 
 ```{r}
-data_wide <- 
-  list(CO2_emissions, gdp_growth, energy_use) %>% 
+data_wide <-
+  list(CO2_emissions, gdp_growth, energy_use) %>%
   reduce(full_join, by = c("Country", "Year", "Label"))
 
 data_wide %>%
@@ -840,8 +840,8 @@ We will also make a long version of this data, where we will create an new varia
 
 ```{r}
 data_long <- data_wide %>%
-  pivot_longer(cols = c(-Country, -Year, -Label), 
-               names_to = "Indicator", 
+  pivot_longer(cols = c(-Country, -Year, -Label),
+               names_to = "Indicator",
                values_to = "Value")
 
 set.seed(123)
@@ -859,7 +859,7 @@ We will now combine this data with the US data about disasters and temperatures.
 
 ```{r}
 us_disaster %>%
-  slice_head(n = 6)     
+  slice_head(n = 6)
 us_temperature %>%
   slice_head(n = 6)
 ```
@@ -867,9 +867,9 @@ us_temperature %>%
 We will now use the `bind_rows()` function of the `dplyr` package which will just append the `us_temperature` data and the `us_disaster` data after the `data_long` data. 
 
 ```{r}
-data_long <- 
+data_long <-
   list(data_long, us_disaster, us_temperature) %>%
-  bind_rows() %>% 
+  bind_rows() %>%
   mutate(Country = as.factor(Country))
 ```
 
@@ -902,12 +902,12 @@ Let's consider an example and look at the values for China in the year of 1980.
 First we will use the `bind_rows()` function which automatically creates `NA` values for any variable that is missing from a data object that is added by combining the data object with another that contains that missing variable using this function.
 
 ```{r}
-data_wide_br <- 
-  list(CO2_emissions, gdp_growth, energy_use) %>% 
+data_wide_br <-
+  list(CO2_emissions, gdp_growth, energy_use) %>%
   bind_rows()
 
 data_wide_br %>%
- filter(Country == "China", 
+ filter(Country == "China",
            Year == 1980)
 ```
 
@@ -916,8 +916,8 @@ We see that we have three rows of data.
 Now we will use the `full_join()` function two ways. First we will combine by `Country` and `Year` and `Label`. 
 
 ```{r}
-data_wide_fj_label <- 
-  list(CO2_emissions, gdp_growth, energy_use) %>% 
+data_wide_fj_label <-
+  list(CO2_emissions, gdp_growth, energy_use) %>%
   reduce(full_join, by = c("Country", "Year", "Label"))
 
 data_wide_fj_label %>%
@@ -935,8 +935,8 @@ setequal(data_wide_fj_label, data_wide_br)
 However, now we will join by only `Country` and `Year`:
 
 ```{r}
-data_wide_fj <- 
-  list(CO2_emissions, gdp_growth, energy_use) %>% 
+data_wide_fj <-
+  list(CO2_emissions, gdp_growth, energy_use) %>%
   reduce(full_join, by = c("Country", "Year"))
 
 data_wide_fj %>%
@@ -961,11 +961,11 @@ The new values for the new variable `Region` are indicated after the specific co
 
 
 ```{r}
- data_long %<>%
+data_long %<>%
   mutate(Region = case_when(Country == "United States" ~ "United States",
                             Country != "United States" ~ "Rest of the World"))
 
-data_long  %>% 
+data_long  %>%
   arrange(Country) %>%
   slice_head(n = 6)
 ```
@@ -973,8 +973,8 @@ data_long  %>%
 We can also remove rows for countries with `NA` values using the `drop_na()` function of the `tidyr` package to drop all years with missing data.
 
 ```{r}
-data_long_with_miss <- 
-  data_long %>% 
+data_long_with_miss <-
+  data_long %>%
   arrange(Country)
 
 data_long %<>%
@@ -1074,7 +1074,7 @@ Here, we use the `group_by()` and `summarize()` function that we previously lear
 data_long %>%
   filter(Indicator == "Emissions") %>%
   group_by(Year) %>%
-  summarize(Emissions = sum(Value)) 
+  summarize(Emissions = sum(Value))
 ```
 
 Then, we use the `aes()` argument of the `ggplot()` function to define that our x-axis will be the `Year` variable, the y-axis will be the emission `Value` variable, and that our data should be grouped or separated by the `Country` variable. 
@@ -1084,7 +1084,7 @@ data_long %>%
   filter(Indicator == "Emissions") %>%
   group_by(Year) %>%
   summarize(Emissions = sum(Value)) %>%
-  ggplot(aes(x = Year, y = Emissions)) 
+  ggplot(aes(x = Year, y = Emissions))
 ```
 
 Looks like we got a blank plot. 
@@ -1126,9 +1126,9 @@ data_long %>%
   group_by(Year) %>%
   summarize(Emissions = sum(Value)) %>%
   ggplot(aes(x = Year, y = Emissions)) +
-    geom_line(size = 1.5) + 
-    labs(title = "World "~CO[2]~" Emissions per Year (1751-2014)",
-         caption = "Limited to reporting countries", 
+    geom_line(size = 1.5) +
+    labs(title = "World " ~ CO[2] ~ " Emissions per Year (1751-2014)",
+         caption = "Limited to reporting countries",
          y = "Emissions (Metric Tonnes)")
 ```
 
@@ -1144,9 +1144,9 @@ data_long %>%
   group_by(Year) %>%
   summarize(Emissions = sum(Value)) %>%
   ggplot(aes(x = Year, y = Emissions)) +
-    geom_line(size = 1.5) + 
-    labs(title = "World "~CO[2]~" Emissions per Year (1751-2014)",
-         caption = "Limited to reporting countries", 
+    geom_line(size = 1.5) +
+    labs(title = "World " ~ CO[2] ~ " Emissions per Year (1751-2014)",
+         caption = "Limited to reporting countries",
          y = "Emissions (Metric Tonnes)") +
   theme_linedraw() +
   theme(axis.text.x = element_text(size = 12),
@@ -1172,7 +1172,7 @@ Great! We've created our first plot.
 Before we leave this section, let's save this theme so we do not have to keep typing the same code in future plots. 
 
 ```{r}
-my_theme <- 
+my_theme <-
   theme_linedraw() +
   theme(axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12),
@@ -1185,15 +1185,15 @@ my_theme <-
 In this way, we can just add another _layer_ to our plot with the `my_theme` we created with the specifications of the sizes of the title and axis labels. 
 
 ```{r}
-CO2_world <- 
+CO2_world <-
   data_long %>%
   filter(Indicator == "Emissions") %>%
   group_by(Year) %>%
   summarize(Emissions = sum(Value)) %>%
   ggplot(aes(x = Year, y = Emissions)) +
-    geom_line(size = 1.5) + 
-    labs(title = "World "~CO[2]~" Emissions per Year (1751-2014)",
-         caption = "Limited to reporting countries", 
+    geom_line(size = 1.5) +
+    labs(title = "World " ~ CO[2] ~ " Emissions per Year (1751-2014)",
+         caption = "Limited to reporting countries",
          y = "Emissions (Metric Tonnes)") +
   my_theme
 ```
@@ -1214,8 +1214,8 @@ Here, we use the `group` argument in `aes()` which controls whether a line shoul
 ```{r}
 data_long %>%
   filter(Indicator == "Emissions") %>%
-  ggplot(aes(x = Year, y = Value, group = Country)) + 
-  geom_line() + 
+  ggplot(aes(x = Year, y = Value, group = Country)) +
+  geom_line() +
   ylab("Emissions") +
   my_theme
 ```
@@ -1237,12 +1237,12 @@ This takes values from 0 to 1, where 0 is completely transparent and 1 is comple
 We also add our `my_theme` controlling the size of the title and axis labels. 
 
 ```{r}
-CO2_countries <- 
+CO2_countries <-
   data_long %>%
   filter(Indicator == "Emissions") %>%
-  ggplot(aes(x = Year, y = Value, group = Country))+
-  geom_line(alpha = 0.4) + 
-  labs(title = "Country" ~CO[2]~ "Emissions per Year (1751-2014)",
+  ggplot(aes(x = Year, y = Value, group = Country)) +
+  geom_line(alpha = 0.4) +
+  labs(title = "Country" ~ CO[2] ~ "Emissions per Year (1751-2014)",
      caption = "Limited to reporting countries",
            y = "Emissions (Metric Tonnes)") +
   my_theme
@@ -1268,10 +1268,10 @@ We can add this line to the plot in two ways.
 **Useful tip**: Instead of retyping the original code to create the `CO2_countries` plot, we can just use the `+` operator: 
 
 ```{r}
-CO2_countries + 
+CO2_countries +
   geom_line(data = data_long %>%
               filter(Indicator == "Emissions",
-                     Country == "United States"), 
+                     Country == "United States"),
               aes(x = Year, y = Value, color = Country)) +
   scale_colour_manual(values = c("red"))
 ```
@@ -1297,9 +1297,9 @@ Then, we will arrange the output by rank using the `arrange()` function of the `
 ```{r}
 top_10_count <-
   data_long %>%
-  filter(Indicator=="Emissions", Year==2014) %>%
-  mutate(rank=dense_rank(desc(Value))) %>%
-  filter(rank<=10) %>%
+  filter(Indicator == "Emissions", Year == 2014) %>%
+  mutate(rank = dense_rank(desc(Value))) %>%
+  filter(rank <= 10) %>%
   arrange(rank)
 
 top_10_count
@@ -1362,7 +1362,7 @@ Top10b +
   geom_text(data = data_long %>%
               filter(Country %in% pull(top_10_count, Country)) %>%
               filter(Indicator == "Emissions") %>%
-              filter(Year == last(Year)), 
+              filter(Year == last(Year)),
             aes(label = Country)) +
   theme(legend.position = "none")
 ```
@@ -1377,10 +1377,10 @@ Top10b +
   geom_text(data = data_long %>%
               filter(Country %in% pull(top_10_count, Country)) %>%
               filter(Indicator == "Emissions") %>%
-              filter(Year == last(Year)), 
-            aes(label = Country), 
-            check_overlap = TRUE) + 
-  scale_x_continuous(expand = c(0.2,0)) +
+              filter(Year == last(Year)),
+            aes(label = Country),
+            check_overlap = TRUE) +
+  scale_x_continuous(expand = c(0.2, 0)) +
   theme(legend.position = "none")
 ```
 
@@ -1391,15 +1391,15 @@ The most simple option is to use the `direct.label()` function, which will autom
 However, it is a bit difficult to see some of our labels as they get automatically sized to fit the plot.
 
 ```{r}
-direct.label(Top10b) + 
-  scale_x_continuous(expand = c(0.3,0))
+direct.label(Top10b) +
+  scale_x_continuous(expand = c(0.3, 0))
 ```
 
 Alternatively this can be done within the `ggplot2` framework by layering using the `geom_dl()` function.
 
 ```{r}
-Top10b + 
-  scale_x_continuous(expand = c(0.3,0)) +
+Top10b +
+  scale_x_continuous(expand = c(0.3, 0)) +
   geom_dl(aes(label = Country), method = list("last.bumpup")) +
   theme(legend.position = "none")
 ```
@@ -1413,15 +1413,15 @@ Another option is to use a different method in the `directlables` package.
 For example, the `"angled.boxes"` method looks nice for some plots but does not work very well for our plot:
 
 ```{r}
-direct.label(Top10b, method = list("angled.boxes")) + 
-  scale_x_continuous(expand = c(0.3,0)) 
+direct.label(Top10b, method = list("angled.boxes")) +
+  scale_x_continuous(expand = c(0.3, 0))
 ```
 
 However the `"last.polygons"` method works quite well:
 
 ```{r}
-direct.label(Top10b,method = list("last.polygons")) + 
-  scale_x_continuous(expand = c(0.3,0))
+direct.label(Top10b, method = list("last.polygons")) +
+  scale_x_continuous(expand = c(0.3, 0))
 ```
 
 The second package is the `ggrepel` package, which is especially good for crowded labels that might overlap one another. 
@@ -1432,14 +1432,14 @@ Just like with `geom_text()`, first we need to specify what data we want to incl
 Then, we specify with the `aes()` argument that our label will be based on the `Country` variable and we again specify what variable to use for our x axis and y axis, so that we indicate where the labels should be plotted. 
 
 ```{r}
-Top10b + 
+Top10b +
   geom_text_repel(data = data_long %>%
                     filter(Country %in% pull(top_10_count, Country)) %>%
-                    filter(Indicator=="Emissions") %>%
+                    filter(Indicator == "Emissions") %>%
                     filter(Year == last(Year)),
                   aes(label = Country, x = Year, y = Value)) +
-  theme(legend.position = "none") + 
-  scale_x_continuous(expand = c(0.3,0))
+  theme(legend.position = "none") +
+  scale_x_continuous(expand = c(0.3, 0))
 ```
 You can see that this package creates segments that connect the label to the line.
 
@@ -1455,21 +1455,20 @@ See [the ggrepel vignette](https://cran.r-project.org/web/packages/ggrepel/vigne
 
 Let's play around with some of these options in the table above. 
 ```{r}
-Top10b + 
+Top10b +
   geom_text_repel(data = data_long %>%
                     filter(Country %in% pull(top_10_count, Country)) %>%
-                    filter(Indicator=="Emissions") %>%
+                    filter(Indicator == "Emissions") %>%
                     filter(Year == last(Year)),
                   aes(label = Country, x = Year, y = Value),
                   nudge_x = 10,
                   hjust = 1,
                   vjust = 1,
                   segment.size = 0.25,
-                  force = 1)+
+                  force = 1) +
   theme(legend.position = "none") +
-  scale_x_continuous(expand = c(0.3,0)) +
-  scale_y_continuous(expand = c(0.3,0))
-
+  scale_x_continuous(expand = c(0.3, 0)) +
+  scale_y_continuous(expand = c(0.3, 0))
 ```
 
 Nice, that looks pretty good.
@@ -1496,24 +1495,24 @@ See [the scale_viridis reference](https://ggplot2.tidyverse.org/reference/scale_
 
 
 ```{r}
-Top10t <- 
+Top10t <-
   data_long %>%
   filter(Country %in% pull(top_10_count, Country)) %>%
-  filter(Indicator=="Emissions") %>%
+  filter(Indicator == "Emissions") %>%
   filter(Year >= 1900) %>%
-  ggplot(aes(x=Year, y=fct_reorder(Country, Value, last))) +
-    geom_tile(aes(fill=log(Value))) +
-    scale_fill_viridis_c() 
+  ggplot(aes(x = Year, y = fct_reorder(Country, Value, last))) +
+    geom_tile(aes(fill = log(Value))) +
+    scale_fill_viridis_c()
 ```
 
 
 Finally, let's clean up the axes and the axes labels: 
 
 ```{r}
-Top10t <- Top10t + 
-  scale_x_continuous(breaks = seq(1900,2014,by=5),
-                     labels = seq(1900,2014,by=5)) + 
-  labs(title = "Top 10 "~CO[2]~"Emission-producing Countries",
+Top10t <- Top10t +
+  scale_x_continuous(breaks = seq(1900, 2014, by = 5),
+                     labels = seq(1900, 2014, by = 5)) +
+  labs(title = "Top 10 " ~ CO[2] ~ "Emission-producing Countries",
        subtitle = "Ordered by Emissions Produced in 2014",
        fill = "Ln(CO2 Emissions (Metric Tonnes))") +
   theme_classic() +
@@ -1545,15 +1544,15 @@ We can also indicate where we would like the label for the subplots to be locate
 
 ```{r,fig.width=10, fig.height=10}
 ggplot(data_long, aes(x = Year, y = Value, group = Country)) +
-  geom_line(alpha = 0.2) + 
+  geom_line(alpha = 0.2) +
   geom_line(data = data_long %>%
-              filter(Country == "United States"), 
+              filter(Country == "United States"),
               aes(x = Year, y = Value, color = Country)) +
   scale_colour_manual(values = c("red")) +
-  labs(title = "Distribution of Indicators by Year and Value", 
+  labs(title = "Distribution of Indicators by Year and Value",
        y = "Indicator Value") +
   my_theme +
-  theme(strip.text = element_text(size = 16, face = "bold")) + 
+  theme(strip.text = element_text(size = 16, face = "bold")) +
   facet_wrap(Indicator ~ .,
              scales = "free_y",
              strip.position = "right",
@@ -1580,12 +1579,12 @@ First, we will filter out the data about disasters and temperature as this is on
 ```{r,fig.width=10, fig.height=10}
 data_long %>%
   filter(!(Indicator %in% c("Disasters", "Temperature"))) %>%
-  ggplot(aes(x = Year, y = Value, group = Country)) + 
-    geom_line() + 
+  ggplot(aes(x = Year, y = Value, group = Country)) +
+    geom_line() +
     facet_grid(Indicator ~ Region, scales = "free_y") +
-    labs(title = "Distribution of Indicators by Year and Value", 
+    labs(title = "Distribution of Indicators by Year and Value",
          y = "Indicator Value") +
-    my_theme + 
+    my_theme +
     theme(strip.text = element_text(size = 16, face = "bold"))
 ```
 
@@ -1623,7 +1622,7 @@ Finally, we will also create a factor variable about the sign of the `Diff_from_
 We will use this to color our plots.
 
 ```{r}
-data_long_us <- 
+data_long_us <-
   data_long %>%
   filter(Country == "United States", Year >= 1980, Year <= 2010) %>%
   group_by(Indicator) %>%
@@ -1644,12 +1643,12 @@ In our case, this creates a plot that shows a bar for the difference between the
 data_long_us %>%
   filter(Indicator %in% c("Emissions", "Temperature", "Disasters")) %>%
   ggplot(aes(x = Year, y = Value)) +
-    geom_segment(aes(x = Year, y = Value, xend = Year, 
-                     yend = Mean, color = Diff_color), 
-                 size=3.25) +
-  scale_color_manual(values = c("blue","red")) + 
+    geom_segment(aes(x = Year, y = Value, xend = Year,
+                     yend = Mean, color = Diff_color),
+                 size = 3.25) +
+  scale_color_manual(values = c("blue", "red")) +
   geom_hline(aes(yintercept = Mean), linetype = 1, color = "black") +
-  facet_wrap(Indicator ~ ., scales = "free_y", ncol = 1) + 
+  facet_wrap(Indicator ~ ., scales = "free_y", ncol = 1) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90),
          axis.title = element_blank(),
@@ -1679,7 +1678,7 @@ We use the `geom_point()` function to create a scatter plot between the `x` and 
 We also add a line on top of the scatter plot that smooths the trend from the points. The smoother we used here is `loess` or local polynomial regression fitting. 
 
 ```{r}
-CO2_temp_US_facet <- 
+CO2_temp_US_facet <-
   data_long %>%
   filter(Country == "United States", Year >= 1980, Year <= 2014,
          Indicator %in% c("Emissions", "Temperature")) %>%
@@ -1687,7 +1686,7 @@ CO2_temp_US_facet <-
   geom_point() +
   geom_smooth(method = "loess", se = FALSE) +
   scale_x_continuous(breaks = seq(1980, 2014, by = 5),
-                     labels = seq(1980, 2014, by = 5)) + 
+                     labels = seq(1980, 2014, by = 5)) +
   facet_wrap(Label ~ ., scales = "free_y", ncol = 1) +
   theme_classic() +
   theme(axis.text.x = element_text(size = 12, angle = 90),
@@ -1716,7 +1715,7 @@ Next, instead of looking at the variables separately in faceted plots, let's loo
 We begin by using `pivot_wider()` to transform our long data table into a wide format. 
 
 ```{r}
-wide_US <- 
+wide_US <-
   data_long %>%
   filter(Country == "United States", Year >= 1980, Year <= 2014) %>%
   select(-Label) %>%
@@ -1725,7 +1724,7 @@ wide_US <-
 
 ```{r}
 
-CO2_temp_US <- 
+CO2_temp_US <-
   wide_US %>%
   ggplot(aes(x = Emissions, y = Temperature)) +
     geom_point() +
@@ -1734,11 +1733,11 @@ CO2_temp_US <-
     theme(axis.text.x = element_text(size = 12, angle = 90),
           axis.text.y = element_text(size = 12),
            axis.title = element_text(size = 14),
-           plot.title = element_text(size = 16))+
-    labs(title = "US Emissions and Temperature (1980-2014)", 
-         x = "Emissions (Metric Tonnes)", 
+           plot.title = element_text(size = 16)) +
+    labs(title = "US Emissions and Temperature (1980-2014)",
+         x = "Emissions (Metric Tonnes)",
          y = "Temperature (Fahrenheit)")
-  
+
 
 CO2_temp_US
 ```
@@ -1767,9 +1766,9 @@ save(wide_US, file = here::here("data", "wrangled_US_data.rda"))
 ***
  
 ```{r, echo = FALSE}
-load(here::here("data", "wranlged_US_data.rda"))
+load(here::here("data", "wrangled_US_data.rda"))
 
-my_theme <- 
+my_theme <-
   theme_linedraw() +
   theme(axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12),
@@ -1778,7 +1777,7 @@ my_theme <-
        plot.caption = element_text(size = 12),
          plot.title = element_text(size = 16))
 
-CO2_temp_US <- 
+CO2_temp_US <-
   wide_US %>%
   ggplot(aes(x = Emissions, y = Temperature)) +
     geom_point() +
@@ -1787,12 +1786,10 @@ CO2_temp_US <-
     theme(axis.text.x = element_text(size = 12, angle = 90),
           axis.text.y = element_text(size = 12),
            axis.title = element_text(size = 14),
-           plot.title = element_text(size = 16))+
-    labs(title = "US Emissions and Temperature (1980-2014)", 
-         x = "Emissions (Metric Tonnes)", 
+           plot.title = element_text(size = 16)) +
+    labs(title = "US Emissions and Temperature (1980-2014)",
+         x = "Emissions (Metric Tonnes)",
          y = "Temperature (Fahrenheit)")
-  
-
 ```
 
 
@@ -1804,7 +1801,7 @@ We will focus on the CO2 emissions and temperature, but you will be encouraged t
 We can always calculate the sample mean and variance for two variables. 
 
 ```{r}
-wide_US %>% 
+wide_US %>%
   summarize(mean(Emissions), mean(Temperature), sd(Emissions), sd(Temperature))
 ```
 
@@ -1862,16 +1859,16 @@ where $\mu_x, \mu_y$ are the means of $x_1,\dots, x_n$ and $y_1, \dots, y_n$, re
 Therefore, we can standardize the two variables and average the standardize values to calculate the correlation coefficient `rho`: 
 
 ```{r}
-wide_US %>% 
-  summarize(rho = mean(scale(Emissions) * scale(Temperature))) %>% 
+wide_US %>%
+  summarize(rho = mean(scale(Emissions) * scale(Temperature))) %>%
   pull(rho)
 ```
 
 Alternatively, you can use the `cor()` function in base R
 
 ```{r}
-wide_US %>% 
-  summarize(r = cor(Emissions, Temperature)) %>% 
+wide_US %>%
+  summarize(r = cor(Emissions, Temperature)) %>%
   pull(r)
 ```
 
@@ -1908,10 +1905,10 @@ We can use the `tidy()` function of the `broom` package to make the output more 
 
 ```{r}
 
-cor.test(pull(wide_US, Emissions), 
+cor.test(pull(wide_US, Emissions),
          pull(wide_US, Temperature))
 
-broom::tidy(cor.test(pull(wide_US, Emissions), 
+broom::tidy(cor.test(pull(wide_US, Emissions),
          pull(wide_US, Temperature)))
 ```
 
@@ -1949,18 +1946,18 @@ $$
 Here, we add the regression line to the original data:
 
 ```{r}
-wide_US_summary <- 
-  wide_US %>% 
-  summarize(mu_x = mean(Emissions), sd_x = sd(Emissions), 
-            mu_y = mean(Temperature), sd_y = sd(Temperature), 
-            rho = cor(Emissions, Temperature), 
-            slope = rho * sd_y/sd_x, 
-            intercept = mu_y - rho * sd_y/sd_x * mu_x)
+wide_US_summary <-
+  wide_US %>%
+  summarize(mu_x = mean(Emissions), sd_x = sd(Emissions),
+            mu_y = mean(Temperature), sd_y = sd(Temperature),
+            rho = cor(Emissions, Temperature),
+            slope = rho * sd_y / sd_x,
+            intercept = mu_y - rho * sd_y / sd_x * mu_x)
 
-wide_US %>% 
-  ggplot(aes(x = Emissions, y = Temperature)) + 
-    geom_point() + 
-    geom_abline(slope = wide_US_summary$slope, 
+wide_US %>%
+  ggplot(aes(x = Emissions, y = Temperature)) +
+    geom_point() +
+    geom_abline(slope = wide_US_summary$slope,
                 intercept = wide_US_summary$intercept) +
   my_theme
 ```
@@ -1968,9 +1965,9 @@ wide_US %>%
 The regression formula implies that if we first standardize the variables, that is subtract the average and divide by the standard deviation, then the regression line has intercept 0 and slope equal to the correlation $\rho$. You can make same plot, but using standard units like this:
 
 ```{r} 
-wide_US %>% 
-  ggplot(aes(x = scale(Emissions), y = scale(Temperature))) + 
-    geom_point() + 
+wide_US %>%
+  ggplot(aes(x = scale(Emissions), y = scale(Temperature))) +
+    geom_point() +
     geom_smooth(method = "lm", se = FALSE) +
   my_theme
 ```
@@ -2008,20 +2005,19 @@ The last thing we will do here is to create a plot that summarizes our major fin
 We will use the `plot_layout()` function of the `patchwork` R package.
 
 ```{r, out.width = "500px" , out.height = "400px"}
-(CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US)+
-  plot_layout( widths = c(4, 6), heights = c(6, 6))
+(CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US) +
+  plot_layout(widths = c(4, 6), heights = c(6, 6))
   # plot_layout(widths = c(2,4),
   #             heights = unit(c(4 , 4), c('cm', 'cm')))
 
 
-#plot
-#plot_grid(CO2_world, Top10t, CO2_temp_US_facet, CO2_temp_US, ncol = 2)
-
+# plot
+# plot_grid(CO2_world, Top10t, CO2_temp_US_facet, CO2_temp_US, ncol = 2)
 ```
 
 ```{r, units = "in", width = 12, height = 11, res = 300}
 (CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US) +
-  plot_layout(widths = c(1,2),
+  plot_layout(widths = c(1, 2),
               heights = unit(c(4, 10), c('cm', 'cm')))
 ```
 
@@ -2029,7 +2025,7 @@ We will use the `plot_layout()` function of the `patchwork` R package.
 ```{r, echo = FALSE}
 png(here::here("img", "mainplot.png"), units = "in", width = 12, height = 11, res = 300)
 (CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US) +
-  plot_layout(widths = c(1,2),
+  plot_layout(widths = c(1, 2),
               heights = unit(c(4, 10), c('cm', 'cm')))
 dev.off()
 ```
