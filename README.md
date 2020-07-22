@@ -2,7 +2,8 @@
 OpenCaseStudies
 ===============
 
-\*\* need to add travis badge\*\*
+[![Build
+Status](https://travis-ci.org/opencasestudies/ocs-bp-co2-emissions.svg?branch=master)](https://travis-ci.org/opencasestudies/ocs-bp-co2-emissions)
 
 ### Disclaimer
 
