@@ -97,8 +97,8 @@ avocado: perhaps we can trade this out for learning objectives with a statistica
 ### Other notes and resources
 
 [Tidyverse](https://www.tidyverse.org/){target="_blank"}  
-[RStudio cheatsheets](https://rstudio.com/resources/cheatsheets/){target="_blank"}
-[Introduction to correlation](https://www.mathsisfun.com/data/correlation.html){target="_blank"}
+[RStudio cheatsheets](https://rstudio.com/resources/cheatsheets/){target="_blank"}   
+[Introduction to correlation](https://www.mathsisfun.com/data/correlation.html){target="_blank"}   
 [Correlation coefficient](https://rafalab.github.io/dsbook/regression.html#corr-coefl){target="_blank"}   
 [Correlation does not imply causation](https://dfrieds.com/math/correlation-does-not-imply-causation.html){target="_blank"}  
 [Regression](https://rafalab.github.io/dsbook/regression.html){target="_blank"}  

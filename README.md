@@ -129,8 +129,8 @@ analysis to below data exploration
 ### Other notes and resources
 
 <a href="https://www.tidyverse.org/" target="_blank">Tidyverse</a>  
-<a href="https://rstudio.com/resources/cheatsheets/" target="_blank">RStudio cheatsheets</a>
-<a href="https://www.mathsisfun.com/data/correlation.html" target="_blank">Introduction to correlation</a>
+<a href="https://rstudio.com/resources/cheatsheets/" target="_blank">RStudio cheatsheets</a>  
+<a href="https://www.mathsisfun.com/data/correlation.html" target="_blank">Introduction to correlation</a>  
 <a href="https://rafalab.github.io/dsbook/regression.html#corr-coefl" target="_blank">Correlation coefficient</a>  
 <a href="https://dfrieds.com/math/correlation-does-not-imply-causation.html" target="_blank">Correlation does not imply causation</a>  
 <a href="https://rafalab.github.io/dsbook/regression.html" target="_blank">Regression</a>
