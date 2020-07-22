@@ -166,11 +166,13 @@ library(readxl)
 library(readr)
 library(dplyr)
 library(magrittr)
-library(tidyverse)
+library(stringr)
+library(purrr)
+library(tidyr)
+library(forcats)
 library(ggplot2)
 library(directlabels)
 library(ggrepel)
-library(RColorBrewer)
 library(broom)
 library(patchwork)
 ```
@@ -181,13 +183,15 @@ library(patchwork)
 [here](https://github.com/jennybc/here_here){target="_blank"}       | to easily load and save data
 [readxl](https://readxl.tidyverse.org/){target="_blank"}  | to import the excel file data
 [readr](https://readr.tidyverse.org/){target="_blank"}  | to import the csv file data
-[dplyr](https://dplyr.tidyverse.org/){target="_blank"}  |  to view and wrangle the data
+[dplyr](https://dplyr.tidyverse.org/){target="_blank"}  |  o view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a varaible   
 [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use and reassign data objects using the `%<>%`pipe operator
-[tidyverse](https://www.tidyverse.org/packages/){target="_blank"}  | to wrangle the data and create ggplot2 plots
+[stringr](https://stringr.tidyverse.org/){target="_blank"}  | to select only the first 4 characters of date data
+[purrr](https://purrr.tidyverse.org/){target="_blank"}  | to apply a function on a list of tibbles
+[tidyr](https://tidyr.tidyverse.org/){target="_blank"}  | to drop rows with `NA` values from a tibble
+[forcats](https://forcats.tidyverse.org/){target="_blank"}  | to reorder the levels of a factor
 [ggplot2](https://ggplot2.tidyverse.org/){target="_blank"} | to make visualizations
 [directlabels](http://directlabels.r-forge.r-project.org/docs/index.html){target="_blank"} | to add labels to plots easily
 [ggrepel](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"} | to add labels that don't overlap to plots
-[RColorBrewer](https://cran.r-project.org/web/packages/RColorBrewer/index.html){target="_blank"}  | to have greater control over the color in our plots
 [broom](https://www.tidyverse.org/blog/2018/07/broom-0-5-0/) | to make the output form statistical tests easier to work with
 [patchwork](https://github.com/thomasp85/patchwork){target="_blank"}  | to combine plots
 The first time we use a function, we will use the `::` to indicate which package we are using. Unless we have overlapping function names, this is not necessary, but we will include it here to be informative about where the functions we will use come from.
@@ -1118,7 +1122,7 @@ data_long %>%
 Finally, let's make this plot really nice by adding a few final touches. 
 To change title, caption, and the axis labels, we can use the `labs()` function. 
 Again, notice that a plus sign is used between each layer that we add to the plot. 
-To make CO2 appear with a subscript we can use `~CO[2]~`.  
+To make CO2 appear with a subscript we can use `~ CO[2] ~`.  
 
 ```{r}
 data_long %>%
@@ -2064,20 +2068,23 @@ Even though there is quite a bit of scientific evidence to indicate that in fact
 
 <u>Packages used in this case study: </u>
 
-Package   | Use                                                                         
+ Package   | Use                                                                         
 ---------- |-------------
 [here](https://github.com/jennybc/here_here){target="_blank"}       | to easily load and save data
 [readxl](https://readxl.tidyverse.org/){target="_blank"}  | to import the excel file data
 [readr](https://readr.tidyverse.org/){target="_blank"}  | to import the csv file data
-[dplyr](https://dplyr.tidyverse.org/){target="_blank"}  |  to view and wrangle the data
+[dplyr](https://dplyr.tidyverse.org/){target="_blank"}  |  o view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a varaible   
 [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use and reassign data objects using the `%<>%`pipe operator
-[tidyverse](https://www.tidyverse.org/packages/){target="_blank"}  | to wrangle the data and create ggplot2 plots
+[stringr](https://stringr.tidyverse.org/){target="_blank"}  | to select only the first 4 characters of date data
+[purrr](https://purrr.tidyverse.org/){target="_blank"}  | to apply a function on a list of tibbles
+[tidyr](https://tidyr.tidyverse.org/){target="_blank"}  | to drop rows with `NA` values from a tibble
+[forcats](https://forcats.tidyverse.org/){target="_blank"}  | to reorder the levels of a factor
 [ggplot2](https://ggplot2.tidyverse.org/){target="_blank"} | to make visualizations
 [directlabels](http://directlabels.r-forge.r-project.org/docs/index.html){target="_blank"} | to add labels to plots easily
 [ggrepel](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"} | to add labels that don't overlap to plots
-[RColorBrewer](https://cran.r-project.org/web/packages/RColorBrewer/index.html){target="_blank"}  | to have greater control over the color in our plots
 [broom](https://www.tidyverse.org/blog/2018/07/broom-0-5-0/) | to make the output form statistical tests easier to work with
 [patchwork](https://github.com/thomasp85/patchwork){target="_blank"}  | to combine plots
+The first time we use a function, we will use the `::` to indicate which package we are using. Unless we have overlapping function names, this is not necessary, but we will include it here to be informative about where the functions we will use come from.
 
 
 # **Session Info**
