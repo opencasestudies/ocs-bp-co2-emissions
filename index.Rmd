@@ -1520,8 +1520,8 @@ Top10t <- Top10t +
        subtitle = "Ordered by Emissions Produced in 2014",
        fill = "Ln(CO2 Emissions (Metric Tonnes))") +
   theme_classic() +
-  theme(axis.text.x = element_text(size = 12, angle = 90),
-        axis.text.y = element_text(size = 12),
+  theme(axis.text.x = element_text(size = 12, angle = 90, color = "black"),
+        axis.text.y = element_text(size = 12, color = "black"),
         axis.title = element_blank(),
         plot.caption = element_text(size = 12),
         plot.title = element_text(size = 16),
@@ -1693,8 +1693,8 @@ CO2_temp_US_facet <-
                      labels = seq(1980, 2014, by = 5)) +
   facet_wrap(Label ~ ., scales = "free_y", ncol = 1) +
   theme_classic() +
-  theme(axis.text.x = element_text(size = 12, angle = 90),
-        axis.text.y = element_text(size = 12),
+  theme(axis.text.x = element_text(size = 12, angle = 90, color = "black"),
+        axis.text.y = element_text(size = 12, color = "black"),
         strip.text.x = element_text(size = 14),
          axis.title = element_blank(),
          plot.title = element_text(size = 16))
@@ -1734,8 +1734,8 @@ CO2_temp_US <-
     geom_point() +
     geom_smooth(method = "lm", se = FALSE) +
     theme_classic() +
-    theme(axis.text.x = element_text(size = 12, angle = 90),
-          axis.text.y = element_text(size = 12),
+    theme(axis.text.x = element_text(size = 12, angle = 90, color = "black"),
+          axis.text.y = element_text(size = 12, color = "black"),
            axis.title = element_text(size = 14),
            plot.title = element_text(size = 16)) +
     labs(title = "US Emissions and Temperature (1980-2014)",
@@ -2002,39 +2002,26 @@ knitr::include_graphics(here::here("img", "causation.png"))
 
 ##### [[source]](http://tylervigen.com/spurious-correlations){target="_blank"}
 
-
-
+# **Summary Plot**
+***
 
 The last thing we will do here is to create a plot that summarizes our major findings. 
-We will use the `plot_layout()` function of the `patchwork` R package.
+We will use the `plot_layout()` function of the `patchwork` R package. The `patchwork` allows you to create a plot layout based on mathematical-like formulas. As you can see in this example we want the `CO2_world` and `Top10t` plot on top and we want another row with the `CO2_temp_US_facet` and  the `CO2_temp_US` plot on the bottom. The plot_layout() function of the `patchwork` package then allows us to specify heights and widths for the plots.
 
-```{r, out.width = "500px" , out.height = "400px"}
-(CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US) +
-  plot_layout(widths = c(4, 6), heights = c(6, 6))
-  # plot_layout(widths = c(2,4),
-  #             heights = unit(c(4 , 4), c('cm', 'cm')))
+We will also save the figure using the `grDevices` `png()` function. We can specify the name of our plot file and where we want it to be saved using the `here()` function of the `here` package. In this case in the `img` subdirectory of the directory containing our .Rproj file. We can also specify the size of the plot and the resolution using the `res` argument.  The `grDevices` `dev.off()` function is necessary to close the graphics device.
 
 
-# plot
-# plot_grid(CO2_world, Top10t, CO2_temp_US_facet, CO2_temp_US, ncol = 2)
-```
-
-```{r, units = "in", width = 12, height = 11, res = 300}
-(CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US) +
-  plot_layout(widths = c(1, 2),
-              heights = unit(c(4, 10), c('cm', 'cm')))
-```
-
-
-```{r, echo = FALSE}
-png(here::here("img", "mainplot.png"), units = "in", width = 12, height = 11, res = 300)
+```{r}
+png(here::here("img", "mainplot.png"), units = "in", width = 12, height = 10, res = 300)
 (CO2_world | Top10t) / (CO2_temp_US_facet | CO2_temp_US) +
   plot_layout(widths = c(1, 2),
               heights = unit(c(4, 10), c('cm', 'cm')))
 dev.off()
 ```
 
-
+```{r, echo = FALSE, out.width = "800 px", dpi=300}
+knitr::include_graphics(here::here("img", "mainplot.png"))
+```
 
 # **Homework**
 ***
@@ -2084,7 +2071,7 @@ Even though there is quite a bit of scientific evidence to indicate that in fact
 [ggrepel](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"} | to add labels that don't overlap to plots
 [broom](https://www.tidyverse.org/blog/2018/07/broom-0-5-0/) | to make the output form statistical tests easier to work with
 [patchwork](https://github.com/thomasp85/patchwork){target="_blank"}  | to combine plots
-The first time we use a function, we will use the `::` to indicate which package we are using. Unless we have overlapping function names, this is not necessary, but we will include it here to be informative about where the functions we will use come from.
+
 
 
 # **Session Info**
