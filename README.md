@@ -28,6 +28,11 @@ United States License.
 
 To cite this case study:
 
+Wright, Carrie, and Ontiveros, Michael and Jager, Leah and Taub,
+Margaret and Hicks, Stephanie. (2020).
+<a href="https://github.com/opencasestudies/ocs-bp-co2-emissions" class="uri">https://github.com/opencasestudies/ocs-bp-co2-emissions</a>.
+Exploring CO2 emissions across time (Version v1.0.0).
+
 ### Title
 
 Exploring CO2 emissions across time
