@@ -1027,9 +1027,9 @@ The idea is that you can construct many sentences by learning just a few nouns, 
 There are specific "words" that we will need to learn and once we do, you will be able to create (or "write") hundreds of different plots. 
 
 The critical part to making graphics using `ggplot2` is the data needs to be in a _tidy_ format. 
-Given that we have just spend the last two lectures learning about how to work with _tidy_ data, we are primed to take advantage of all that `ggplot2` has to offer! 
+Given that we have just spent time putting our data in _tidy_ format, we are primed to take advantage of all that `ggplot2` has to offer! 
 
-We will show how it is easy to pipe _tidy_ data (output) as input to other functions that creates plots. 
+We will show how it is easy to pipe _tidy_ data (output) as input to other functions that create plots. 
 This all works because we are working 
 within the _tidyverse_. 
 
@@ -1122,7 +1122,7 @@ data_long %>%
 Finally, let's make this plot really nice by adding a few final touches. 
 To change title, caption, and the axis labels, we can use the `labs()` function. 
 Again, notice that a plus sign is used between each layer that we add to the plot. 
-To make CO2 appear with a subscript we can use `~ CO[2] ~`.  
+To make CO2 appear with a subscript we can use `~CO[2]~`.  
 
 ```{r}
 data_long %>%
@@ -1131,7 +1131,7 @@ data_long %>%
   summarize(Emissions = sum(Value)) %>%
   ggplot(aes(x = Year, y = Emissions)) +
     geom_line(size = 1.5) +
-    labs(title = "World " ~ CO[2] ~ " Emissions per Year (1751-2014)",
+    labs(title = "World " ~CO[2]~ " Emissions per Year (1751-2014)",
          caption = "Limited to reporting countries",
          y = "Emissions (Metric Tonnes)")
 ```
@@ -1149,7 +1149,7 @@ data_long %>%
   summarize(Emissions = sum(Value)) %>%
   ggplot(aes(x = Year, y = Emissions)) +
     geom_line(size = 1.5) +
-    labs(title = "World " ~ CO[2] ~ " Emissions per Year (1751-2014)",
+    labs(title = "World " ~CO[2]~ " Emissions per Year (1751-2014)",
          caption = "Limited to reporting countries",
          y = "Emissions (Metric Tonnes)") +
   theme_linedraw() +
@@ -1196,7 +1196,7 @@ CO2_world <-
   summarize(Emissions = sum(Value)) %>%
   ggplot(aes(x = Year, y = Emissions)) +
     geom_line(size = 1.5) +
-    labs(title = "World " ~ CO[2] ~ " Emissions per Year (1751-2014)",
+    labs(title = "World " ~CO[2]~ " Emissions per Year (1751-2014)",
          caption = "Limited to reporting countries",
          y = "Emissions (Metric Tonnes)") +
   my_theme
@@ -1246,7 +1246,7 @@ CO2_countries <-
   filter(Indicator == "Emissions") %>%
   ggplot(aes(x = Year, y = Value, group = Country)) +
   geom_line(alpha = 0.4) +
-  labs(title = "Country" ~ CO[2] ~ "Emissions per Year (1751-2014)",
+  labs(title = "Country" ~CO[2]~ "Emissions per Year (1751-2014)",
      caption = "Limited to reporting countries",
            y = "Emissions (Metric Tonnes)") +
   my_theme
@@ -1516,7 +1516,7 @@ Finally, let's clean up the axes and the axes labels:
 Top10t <- Top10t +
   scale_x_continuous(breaks = seq(1900, 2014, by = 5),
                      labels = seq(1900, 2014, by = 5)) +
-  labs(title = "Top 10 " ~ CO[2] ~ "Emission-producing Countries",
+  labs(title = "Top 10 " ~CO[2]~ "Emission-producing Countries",
        subtitle = "Ordered by Emissions Produced in 2014",
        fill = "Ln(CO2 Emissions (Metric Tonnes))") +
   theme_classic() +
@@ -1962,11 +1962,17 @@ wide_US %>%
 **Note**: In the plot above, we use the scale of the original variables (CO2 emission and temperature), but the formula above implies that standardization of the variables (i.e. subtracting the mean and dividing by the standard deviation) allows the regression line to have an intercept of 0 and slope equal to $\rho$. A similar plot in standardized units is given below.  
 
 ```{r} 
-wide_US %>%
+CO2_temp_US<-wide_US %>%
   ggplot(aes(x = scale(Emissions), y = scale(Temperature))) +
     geom_point() +
     geom_smooth(method = "lm", se = FALSE) +
-  my_theme
+  my_theme +
+  labs(title = "US" ~ CO[2]~ "Emissions and Temperature (1980-2014)",
+         y = "Scaled Temperature (Fahrenheit)",
+         x = "Scaled Emissions (Metric Tonnes)") +
+  theme(axis.title.x = element_text(size =14),
+        axis.title.y = element_text(size =14))
+CO2_temp_US
 ```
 
 Notice that we also use the `geom_smooth(method = "lm")` function which adds a line corresponding to the slope and intercept from the `lm()` function from the `stats` R package. 
@@ -1995,7 +2001,7 @@ knitr::include_graphics(here::here("img", "causation.png"))
 
 ##### [[source]](http://tylervigen.com/spurious-correlations){target="_blank"}
 
-# **Back Matter**
+# **Summary**
 *** 
 
 ## Summary Plot
@@ -2019,14 +2025,9 @@ dev.off()
 knitr::include_graphics(here::here("img", "mainplot.png"))
 ```
 
-## Homework
-
-Ask students to create a plot with labels showing the countries with the lowest CO2 emission levels.
-
-Ask students to plot CO2 emissions and other variables (e.g. energy use) on a scatter plot, calculate the Pearson's correlation coefficient, and discuss results. 
 
 
-## Summary
+## Synopsis
 
 In this case study we evaluated CO2 emissions from as far back as 1751 for some countries to 2014. We discovered that global levels of CO2 emissions have dramatically increased over time. We also learned that some countries have been responsible for particularly high levels. 
 
@@ -2035,6 +2036,16 @@ We also took a look at how CO2 emissions might relate to other factors, such as 
 However, there is quite a bit of scientific evidence to indicate that in fact CO2 emissions trap heat and lead to increased global temperatures. Yet, it is important to realize that there are other factors involved in the relationship between US CO2 emissions and US annual average temperatures. For example there are CO2 emissions from other countries in the atmosphere, there are other greenhouse gases, and there is already existing CO2 in the atmosphere that will continue to trap heat for many years. However, it is vital that we work around the globe to reduce future greenhouse gas emissions to mitigate the increased temperatures that we will experience due to the existing CO2 already in the atmosphere so that the warming temperatures aren't as extreme as they could be. Furthermore, we need to prepare for increased rates of natural disasters and how these may influence people around the world. Evidence suggests that impoverished people are the [most affected by disasters](https://ourworldindata.org/natural-disasters){target="_blank"}. We need to be particularly mindful of this as we prepare for the future.  
 
 
+
+# **Homework**
+***
+
+Ask students to create a plot with labels showing the countries with the lowest CO2 emission levels.
+
+Ask students to plot CO2 emissions and other variables (e.g. energy use) on a scatter plot, calculate the Pearson's correlation coefficient, and discuss results. 
+
+# **Additional information**
+***
 
 ## Helpful Links
 
