@@ -1727,12 +1727,10 @@ wide_US <-
 ```
 
 ```{r}
-
 CO2_temp_US <-
   wide_US %>%
   ggplot(aes(x = Emissions, y = Temperature)) +
     geom_point() +
-    geom_smooth(method = "lm", se = FALSE) +
     theme_classic() +
     theme(axis.text.x = element_text(size = 12, angle = 90, color = "black"),
           axis.text.y = element_text(size = 12, color = "black"),
@@ -1785,7 +1783,6 @@ CO2_temp_US <-
   wide_US %>%
   ggplot(aes(x = Emissions, y = Temperature)) +
     geom_point() +
-    geom_smooth(method = "lm", se = FALSE) +
     theme_classic() +
     theme(axis.text.x = element_text(size = 12, angle = 90),
           axis.text.y = element_text(size = 12),
@@ -1920,35 +1917,31 @@ We see that the correlation coefficient quantifying the strength of the linear r
 
 ### Relationship between correlation and linear regression
 
-Let's briefly discuss the relationship between correlation and linear regression.
-This section is taken from Rafael Irizarry's [Introduction to Data Science book](https://rafalab.github.io/dsbook/regression.html). 
+Let's briefly discuss the relationship between correlation and linear regression, which is further described in [Introduction to Data Science book](https://rafalab.github.io/dsbook/regression.html). 
 
-If we are predicting a random variable $Y$ knowing the value of another $X=x$ using a regression line, then we predict that for every standard deviation, $\sigma_X$, that $x$ increases above the average $\mu_X$, $Y$ increase $\rho$ standard deviations $\sigma_Y$ above the average $\mu_Y$ with $\rho$ the correlation between $X$ and $Y$. The formula for the regression is therefore:
+We can use a regression line to predict a random variable $Y$ given that we have gathered or observed some data about another variable $X=x$. 
+The regression line formally is defined as:
 
-$$ 
-\left( \frac{Y-\mu_Y}{\sigma_Y} \right) = \rho \left( \frac{x-\mu_X}{\sigma_X} \right)
-$$
+$$ \left( \frac{Y-\mu_Y}{\sigma_Y} \right) = \rho \left( \frac{x-\mu_X}{\sigma_X} \right) $$
+where $\mu_X$ and $\sigma_X$ ($\mu_Y$ and $\sigma_Y$) are the mean and standard deviation of $X$ ($Y$), and $\rho$ is correlation between $X$ and $Y$. 
+If $x$ is larger than $\mu_X$, then for every $\sigma_X$, then $Y$ will also increase $\rho$ standard deviations above $\mu_Y$. 
 
-We can rewrite it like this:
+Re-organizing the terms so that $Y$ is on the left side and everything else is on the right side:
 
-$$ 
-Y = \mu_Y + \rho \left( \frac{x-\mu_X}{\sigma_X} \right) \sigma_Y
-$$
+$$ Y = \mu_Y + \rho \left( \frac{x-\mu_X}{\sigma_X} \right) \sigma_Y $$
+Thinking about some extreme examples: 
 
-If there is perfect correlation, the regression line predicts an increase that is the same number of SDs. 
-If there is 0 correlation, then we don't use $x$ at all for the prediction and simply predict the average $\mu_Y$.
-For values between 0 and 1, the prediction is somewhere in between. If the correlation is negative, we predict a reduction instead of an increase. 
+- If $\rho$ = 0 (i.e. no correlation), we ignore the $x$ term entirely and only predict $Y$ using the mean $\mu_Y$. 
+- If $\rho$ = 1 (or -1) (i.e. perfect correlation), the regression line predicts an increase (or decrease) that is the same number of SDs. 
+- If $\rho$ is between -1 and 1, then we predict using both terms on the right hand side. 
 
-Thinking about CO2 emissions ($X$) and temperature ($Y$) -- note that if the correlation is positive and lower than 1, our prediction is closer, in standard units, to the average temperature ($\mu_Y$) than the value used to predict, $x$, is to the average of the $x$s. 
-This is why we call it _regression_: observed temperatures regresses to the average temperature.
 To add regression lines to plots, we will need the above formula in the form: 
 
 $$
 y= b + mx \mbox{ with slope } m = \rho \frac{\sigma_y}{\sigma_x} \mbox{ and intercept } b=\mu_y - m \mu_x
 $$
 
-Here, we add the regression line to the original data:
-
+In our example, we can calculate the slope and intercept using the formula above. 
 ```{r}
 wide_US_summary <-
   wide_US %>%
@@ -1966,7 +1959,7 @@ wide_US %>%
   my_theme
 ```
 
-The regression formula implies that if we first standardize the variables, that is subtract the average and divide by the standard deviation, then the regression line has intercept 0 and slope equal to the correlation $\rho$. You can make same plot, but using standard units like this:
+**Note**: In the plot above, we use the scale of the original variables (CO2 emission and temperature), but the formula above implies that standardization of the variables (i.e. subtracting the mean and dividing by the standard deviation) allows the regression line to have an intercept of 0 and slope equal to $\rho$. A similar plot in standardized units is given below.  
 
 ```{r} 
 wide_US %>%
@@ -2002,8 +1995,11 @@ knitr::include_graphics(here::here("img", "causation.png"))
 
 ##### [[source]](http://tylervigen.com/spurious-correlations){target="_blank"}
 
-# **Summary Plot**
-***
+# **Back Matter**
+*** 
+
+## Summary Plot
+
 
 The last thing we will do here is to create a plot that summarizes our major findings. 
 We will use the `plot_layout()` function of the `patchwork` R package. The `patchwork` allows you to create a plot layout based on mathematical-like formulas. As you can see in this example we want the `CO2_world` and `Top10t` plot on top and we want another row with the `CO2_temp_US_facet` and  the `CO2_temp_US` plot on the bottom. The plot_layout() function of the `patchwork` package then allows us to specify heights and widths for the plots.
@@ -2023,23 +2019,20 @@ dev.off()
 knitr::include_graphics(here::here("img", "mainplot.png"))
 ```
 
-# **Homework**
-***
+## Homework
 
 Ask students to create a plot with labels showing the countries with the lowest CO2 emission levels.
 
 Ask students to plot CO2 emissions and other variables (e.g. energy use) on a scatter plot, calculate the Pearson's correlation coefficient, and discuss results. 
 
 
-# **Summary**
-***
+## Summary
 
 Even though there is quite a bit of scientific evidence to indicate that in fact CO2 emissions trap heat and lead to increased global temperatures, it is important to realize that there are other factors involved in the relationship between US CO2 emissions and US annual average temperatures. However, it is vital that we work around the globe to reduce greenhouse gas emissions to mitigate the increased temperatures that we will experience due to the existing CO2 already in the atmosphere so that the warming temperatures aren't as extreme as they could be. Furthermore, we need to prepare for increased rates of natural disasters and how these may influence people around the world. Evidence suggests that impoverished people are the [most affected by disasters](https://ourworldindata.org/natural-disasters){target="_blank"}. We need to be particularly mindful of this as we prepare for the future.  
 
 
 
-# **Helpful Links**
-***
+## Helpful Links
 
 [Tidyverse](https://www.tidyverse.org/){target="_blank"}  
 [RStudio cheatsheets](https://rstudio.com/resources/cheatsheets/){target="_blank"}
@@ -2074,8 +2067,7 @@ Even though there is quite a bit of scientific evidence to indicate that in fact
 
 
 
-# **Session Info**
-***
+## Session Info
 
 ```{r}
 sessionInfo()
