@@ -125,12 +125,6 @@ between the two using a linear regression. We discuss the relationship
 between correlation and linear regression and how we interpret the
 findings.
 
-#### Statistical concepts
-
-avocado: perhaps we can trade this out for learning objectives with a
-statistical section - which I have included above? I also moved the
-analysis to below data exploration
-
 ### Other notes and resources
 
 <a href="https://www.tidyverse.org/" target="_blank">Tidyverse</a>  
