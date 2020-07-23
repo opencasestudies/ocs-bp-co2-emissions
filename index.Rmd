@@ -183,7 +183,7 @@ library(patchwork)
 [here](https://github.com/jennybc/here_here){target="_blank"}       | to easily load and save data
 [readxl](https://readxl.tidyverse.org/){target="_blank"}  | to import the excel file data
 [readr](https://readr.tidyverse.org/){target="_blank"}  | to import the csv file data
-[dplyr](https://dplyr.tidyverse.org/){target="_blank"}  |  o view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a varaible   
+[dplyr](https://dplyr.tidyverse.org/){target="_blank"}  |  o view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a variable   
 [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use and reassign data objects using the `%<>%`pipe operator
 [stringr](https://stringr.tidyverse.org/){target="_blank"}  | to select only the first 4 characters of date data
 [purrr](https://purrr.tidyverse.org/){target="_blank"}  | to apply a function on a list of tibbles
@@ -1732,7 +1732,7 @@ CO2_temp_US <-
   ggplot(aes(x = Emissions, y = Temperature)) +
     geom_point() +
     theme_classic() +
-    theme(axis.text.x = element_text(size = 12, angle = 90, color = "black"),
+    theme(axis.text.x = element_text(size = 12, color = "black"),
           axis.text.y = element_text(size = 12, color = "black"),
            axis.title = element_text(size = 14),
            plot.title = element_text(size = 16)) +
@@ -1806,7 +1806,7 @@ wide_US %>%
   summarize(mean(Emissions), mean(Temperature), sd(Emissions), sd(Temperature))
 ```
 
-These are useful, but on their own they do not summarize whether or not there is a relationship between `Emissions` and `Temperature` (also these are on different scales entirely. 
+These are useful, but on their own they do not summarize whether or not there is a relationship between `Emissions` and `Temperature` (also these are on different scales entirely). 
 
 What else could we use? 
 Next, we are going to learn about the correlation coefficient, which is a summary statistic that describes how two variables are related or move together. 
@@ -1822,9 +1822,9 @@ If we plot one variable on the x-axis and the other variable on the y-axis, we c
 2. The direction of the relationship - based on if the points progress upward or downward 
 
 If the variables point upward in a very clear line, then there is a strong positive relationship. 
-If the points do not really form a line, then there is a weak linear relationship or no linear relationship - there may however be a nonlinear relationship if the points create a different but defined shape. 
+If the points do not really form a line, then there is a weak linear relationship or no linear relationship. There may however be a nonlinear relationship if the points create a different but defined shape. 
 
-See [here](https://towardsdatascience.com/estimating-non-linear-correlation-in-r-62c6571cb1db){target="_blank"} for more information.
+See [here](https://towardsdatascience.com/estimating-non-linear-correlation-in-r-62c6571cb1db){target="_blank"} for more information on nonlinear relationships.
 
 If the points form a downward sloping line, then there is a negative relationship.
 
@@ -1855,9 +1855,9 @@ Formally, if we have a pair of observations $(x_1, y_1), \dots, (x_n,y_n)$, the 
 $$
 \rho = \frac{1}{n} \sum_{i=1}^n \left( \frac{x_i-\mu_x}{\sigma_x} \right)\left( \frac{y_i-\mu_y}{\sigma_y} \right)
 $$
-where $\mu_x, \mu_y$ are the means of $x_1,\dots, x_n$ and $y_1, \dots, y_n$, respectively, and $\sigma_x, \sigma_y$ the standard deviations. 
+where $\mu_x, \mu_y$ are the means of $x_1,\dots, x_n$ and $y_1, \dots, y_n$, respectively, and $\sigma_x, \sigma_y$ are the standard deviations. 
 
-Therefore, we can standardize the two variables and average the standardize values to calculate the correlation coefficient `rho`: 
+Therefore, we can standardize the two variables and average the standardized values to calculate the correlation coefficient `rho`: 
 
 ```{r}
 wide_US %>%
@@ -1865,7 +1865,7 @@ wide_US %>%
   pull(rho)
 ```
 
-Alternatively, you can use the `cor()` function in base R
+Alternatively, you can use the `cor()` function in base R.
 
 ```{r}
 wide_US %>%
@@ -1917,7 +1917,7 @@ We see that the correlation coefficient quantifying the strength of the linear r
 
 ### Relationship between correlation and linear regression
 
-Let's briefly discuss the relationship between correlation and linear regression, which is further described in [Introduction to Data Science book](https://rafalab.github.io/dsbook/regression.html). 
+Let's briefly discuss the relationship between correlation and linear regression, which is further described in the [Introduction to Data Science book](https://rafalab.github.io/dsbook/regression.html). 
 
 We can use a regression line to predict a random variable $Y$ given that we have gathered or observed some data about another variable $X=x$. 
 The regression line formally is defined as:
@@ -1926,7 +1926,7 @@ $$ \left( \frac{Y-\mu_Y}{\sigma_Y} \right) = \rho \left( \frac{x-\mu_X}{\sigma_X
 where $\mu_X$ and $\sigma_X$ ($\mu_Y$ and $\sigma_Y$) are the mean and standard deviation of $X$ ($Y$), and $\rho$ is correlation between $X$ and $Y$. 
 If $x$ is larger than $\mu_X$, then for every $\sigma_X$, then $Y$ will also increase $\rho$ standard deviations above $\mu_Y$. 
 
-Re-organizing the terms so that $Y$ is on the left side and everything else is on the right side:
+Re-organizing the terms so that $Y$ is on the left side and everything else is on the right side, we get:
 
 $$ Y = \mu_Y + \rho \left( \frac{x-\mu_X}{\sigma_X} \right) \sigma_Y $$
 Thinking about some extreme examples: 
@@ -1941,7 +1941,7 @@ $$
 y= b + mx \mbox{ with slope } m = \rho \frac{\sigma_y}{\sigma_x} \mbox{ and intercept } b=\mu_y - m \mu_x
 $$
 
-In our example, we can calculate the slope and intercept using the formula above. 
+In our example, we can calculate the slope and intercept using the formula above and plot the line. 
 ```{r}
 wide_US_summary <-
   wide_US %>%
@@ -1983,8 +1983,8 @@ What does `se = FALSE` mean? Try turning it to TRUE. What happens?
 While correlation is useful in many settings to understand how two variables move together, correlation is not always a useful summary. 
 For example, here are ways it might not be useful: 
 
-- A linear relationship might not be the best way to capture the relationship
-- If an individual were interested in understanding a _causal_ relationship between two variables, [correlation does not imply causation](https://dfrieds.com/math/correlation-does-not-imply-causation.html){target="_blank"}. Another way of stating this is that simply showing there is a linear trend over time does not imply there is a causal relationship between these two variables.  
+- A linear relationship might not be the best way to capture the relationship.
+- If an individual were interested in understanding a _causal_ relationship between two variables, as [correlation does not imply causation](https://dfrieds.com/math/correlation-does-not-imply-causation.html){target="_blank"}. Another way of stating this is that simply showing there is a linear trend over time does not imply there is a causal relationship between these two variables.  
 
 As you can see from this plot, often data may show a similar pattern over time by random chance. 
 See this [website](https://www.tylervigen.com/spurious-correlations){target="_blank"} for more examples.
@@ -2028,7 +2028,11 @@ Ask students to plot CO2 emissions and other variables (e.g. energy use) on a sc
 
 ## Summary
 
-Even though there is quite a bit of scientific evidence to indicate that in fact CO2 emissions trap heat and lead to increased global temperatures, it is important to realize that there are other factors involved in the relationship between US CO2 emissions and US annual average temperatures. However, it is vital that we work around the globe to reduce greenhouse gas emissions to mitigate the increased temperatures that we will experience due to the existing CO2 already in the atmosphere so that the warming temperatures aren't as extreme as they could be. Furthermore, we need to prepare for increased rates of natural disasters and how these may influence people around the world. Evidence suggests that impoverished people are the [most affected by disasters](https://ourworldindata.org/natural-disasters){target="_blank"}. We need to be particularly mindful of this as we prepare for the future.  
+In this case study we evaluated CO2 emissions from as far back as 1751 for some countries to 2014. We discovered that global levels of CO2 emissions have dramatically increased over time. We also learned that some countries have been responsible for particularly high levels. 
+
+We also took a look at how CO2 emissions might relate to other factors, such as temperature, energy use, and natural disasters. We learned that we can summarize the relationship between two sets of data using **correlation coefficients**. We also learned that we can use **regression** to predict or describe how changes in one variable may influence changes in another variable. Importantly, we also learned that just because two variables show strong correlation or show an association, it does not necessarily indicate that they are causally related. 
+
+However, there is quite a bit of scientific evidence to indicate that in fact CO2 emissions trap heat and lead to increased global temperatures. Yet, it is important to realize that there are other factors involved in the relationship between US CO2 emissions and US annual average temperatures. For example there are CO2 emissions from other countries in the atmosphere, there are other greenhouse gases, and there is already existing CO2 in the atmosphere that will continue to trap heat for many years. However, it is vital that we work around the globe to reduce future greenhouse gas emissions to mitigate the increased temperatures that we will experience due to the existing CO2 already in the atmosphere so that the warming temperatures aren't as extreme as they could be. Furthermore, we need to prepare for increased rates of natural disasters and how these may influence people around the world. Evidence suggests that impoverished people are the [most affected by disasters](https://ourworldindata.org/natural-disasters){target="_blank"}. We need to be particularly mindful of this as we prepare for the future.  
 
 
 
@@ -2053,7 +2057,7 @@ Even though there is quite a bit of scientific evidence to indicate that in fact
 [here](https://github.com/jennybc/here_here){target="_blank"}       | to easily load and save data
 [readxl](https://readxl.tidyverse.org/){target="_blank"}  | to import the excel file data
 [readr](https://readr.tidyverse.org/){target="_blank"}  | to import the csv file data
-[dplyr](https://dplyr.tidyverse.org/){target="_blank"}  |  o view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a varaible   
+[dplyr](https://dplyr.tidyverse.org/){target="_blank"}  |  o view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a variable   
 [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use and reassign data objects using the `%<>%`pipe operator
 [stringr](https://stringr.tidyverse.org/){target="_blank"}  | to select only the first 4 characters of date data
 [purrr](https://purrr.tidyverse.org/){target="_blank"}  | to apply a function on a list of tibbles
