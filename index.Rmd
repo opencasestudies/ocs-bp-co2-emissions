@@ -48,6 +48,13 @@ knitr::include_graphics(here::here("img", "mainplot.png"))
 
 This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 [(CC BY-NC 3.0)](https://creativecommons.org/licenses/by-nc/3.0/us/){target="_blank"}  United States License.
 
+
+## {.reference_block}
+
+To cite this case study please use:
+
+Wright, Carrie, and Ontiveros, Michael and Jager, Leah and Taub, Margaret and Hicks, Stephanie. (2020). https://github.com/opencasestudies/ocs-bp-co2-emissions. Exploring CO2 emissions across time (Version v1.0.0).
+
 # **Motivation**
 *** 
 
