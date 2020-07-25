@@ -33,6 +33,15 @@ Margaret and Hicks, Stephanie. (2020).
 <a href="https://github.com/opencasestudies/ocs-bp-co2-emissions" class="uri">https://github.com/opencasestudies/ocs-bp-co2-emissions</a>.
 Exploring CO2 emissions across time (Version v1.0.0).
 
+### Acknowledgements
+
+We would like to acknowledge [Megan
+Latshaw](https://www.jhsph.edu/faculty/directory/profile/1708/megan-weil-latshaw)
+for assisting in framing the major direction of the case study.
+
+We would also like to acknowledge the [Bloomberg American Health
+Initiative](https://americanhealth.jhu.edu/) for funding this work.
+
 ### Title
 
 Exploring CO2 emissions across time

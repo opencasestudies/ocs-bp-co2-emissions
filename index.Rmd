@@ -2088,9 +2088,14 @@ Ask students to plot CO2 emissions and other variables (e.g. energy use) on a sc
 [patchwork](https://github.com/thomasp85/patchwork){target="_blank"}  | to combine plots
 
 
-
 ## Session Info
 
 ```{r}
 sessionInfo()
 ```
+
+## Acknowledgements
+
+We would like to acknowledge [Megan Latshaw](https://www.jhsph.edu/faculty/directory/profile/1708/megan-weil-latshaw) for assisting in framing the major direction of the case study.
+
+We would also like to acknowledge the [Bloomberg American Health Initiative](https://americanhealth.jhu.edu/) for funding this work. 
