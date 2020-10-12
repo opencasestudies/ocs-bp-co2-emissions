@@ -188,9 +188,9 @@ library(patchwork)
  Package   | Use                                                                         
 ---------- |-------------
 [here](https://github.com/jennybc/here_here){target="_blank"}       | to easily load and save data
-[readxl](https://readxl.tidyverse.org/){target="_blank"}  | to import the excel file data
+[readxl](https://readxl.tidyverse.org/){target="_blank"}  | to import the Excel file data
 [readr](https://readr.tidyverse.org/){target="_blank"}  | to import the csv file data
-[dplyr](https://dplyr.tidyverse.org/){target="_blank"}  |  o view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a variable   
+[dplyr](https://dplyr.tidyverse.org/){target="_blank"}  |  to view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a variable   
 [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use and reassign data objects using the `%<>%`pipe operator
 [stringr](https://stringr.tidyverse.org/){target="_blank"}  | to select only the first 4 characters of date data
 [purrr](https://purrr.tidyverse.org/){target="_blank"}  | to apply a function on a list of tibbles
@@ -356,7 +356,7 @@ Great! now we have imported all of the data that we will need.
 *** 
 
 Next, we take a look at our data that we just imported. 
-We will need to do some data wrangling to use to allow us to evaluate how CO2 emissions have changed over time and how emissions may relate to energy use, GDP etc.
+We will need to do some data wrangling to allow us to evaluate how CO2 emissions have changed over time and how emissions may relate to energy use, GDP, etc.
 Let's explore how to do that with useful functions and packages from the `tidyverse`. 
 
 ## Yearly CO~2~ Emissions
@@ -373,7 +373,7 @@ CO2_emissions %>%
   slice_head(n = 3)
 ```
 
-Another useful function is `slice_sample()` to look at a **selection of random rows**. To continue to get the same random values or for others to get the same values we need to set a seed first. We can do this with the `set.seed()` base function. We just specify a number with this function and that will allow us to get the same subset of values from the `slice_sample()` function.
+Another useful function is `slice_sample()` to look at a **selection of random rows**. To continue to get the same random values or for others to get the same values, we need to set a seed first. We can do this with the `set.seed()` base function. We just specify a number with this function and that will allow us to get the same subset of values from the `slice_sample()` function.
 
 ```{r}
 set.seed(123)
@@ -443,7 +443,7 @@ In wide format, each variable is listed as its own column.
 In contrast, in long format, variables maybe collapsed into a column that identifies the variables and a column of values. 
 See [here](https://en.wikipedia.org/wiki/Wide_and_narrow_data){target="_blank"} for more information about the difference between the two formats.
 
-We want to collapse all of the values for the emission data across the different individual year variables into one new `Emissions` variable and we will identify what year they are from creating a new `Year` variable. The `cols =` argument allows us to specify which columns we want to use or not use to pull from to create these new columns. We want to keep our `country` data so we will exclude it using the `-` sign, by default all other columns will be used.
+We want to collapse all of the values for the emission data across the different individual year variables into one new `Emissions` variable. We will identify what year they are from by creating a new `Year` variable. The `cols =` argument allows us to specify which columns we want to use or not use to pull from to create these new columns. We want to keep our `country` data so we will exclude it using the `-` sign, by default all other columns will be used.
 
 ```{r}
 
@@ -682,7 +682,7 @@ We are specifically interested in the `Year` and the variables that contain the 
 We will select them using the `select()` and `contains()` functions in the `dplyr` package. 
 Since we are selecting for variables with the word `"Count"` we need to use quotation marks around it. 
 
-Selecting for the variable `Year` does not require this as that is actually the name of one of the existing variables.
+Selecting for the variable `Year` does not require quotes because it is the full name of one of the existing variables.
 
 
 ```{r}
@@ -708,7 +708,7 @@ us_disaster %>%
   glimpse()
 ```
 
-Great, now we are going to remove some of these variables and just keep or select using the `select()` function the variables we are interested in. 
+Great, now we are going to remove some of these variables and just keep the variables of interest using `select()`.
 
 We are also going to add a new variable called `Country` to indicate that this data is from the United States. Again this will create a new variable where every value is `United States`.
 
@@ -744,9 +744,9 @@ us_temperature %>%
 ```
 So a few things need to be fixed here. 
 
-First, there is a `Date` column, which it looks like it is currently listed as the year followed by the number 12. 
+First, the `Date` column looks a bit strange. The format of the numbers look like the year followed by the number 12.
 
-We want change this to only keep the first 4 characters in the `Date` variable string values. 
+We want to change this to only keep the first 4 characters in the `Date` variable string values. 
 We can use the `str_sub()` function of the `stringr` package to do this. 
 We just need to indicate the start and stop characters. 
 In this case the start would be 1 and the 4th character would be where we want to stop, so we would use `start = 1, stop = 4`. 
@@ -776,10 +776,10 @@ us_temperature %>%
 
 ## Joining data
 
-Now that we have wrangled the individual datasets, we are ready to put everything together now. 
+Now that we have wrangled the individual datasets, we are ready to put everything together. 
 Specifically, we will _join_ the individual datasets into one tibble using `*_join()` functions available in the `dplyr` package. 
 
-Before we begin though, we will need to have at least one column or variable with the same name to be used as a key for putting your data together. 
+Before we begin though, we will need to make sure that there is at least one variable/column that has the same name across all datasets to be joined. Such variables with common names are called **keys** for joining your data.
 
 These are the `by="x1"` arguments below where `x1` is the name of the column in both the `a` and `b` datasets that we will join together. 
 
@@ -827,7 +827,7 @@ data_wide %>%
   slice_sample(n = 6)
 ```
 
-We can also do the same thing using by using the `reduce()` function of the `purrr` package. 
+We can also do the same thing by using the `reduce()` function of the `purrr` package. 
 This is a good option if you have many datasets to combine.
 
 ```{r}
@@ -1031,7 +1031,7 @@ We are choosing to introduce `ggplot2` because, in our opinion, it is one of the
 
 The reasons [`ggplot2`](http://ggplot2.tidyverse.org) is generally intuitive for beginners is the use of [grammar of graphics](http://vita.had.co.nz/papers/layered-grammar.html) or the `gg` in `ggplot2`. 
 The idea is that you can construct many sentences by learning just a few nouns, adjectives, and verbs. 
-There are specific "words" that we will need to learn and once we do, you will be able to create (or "write") hundreds of different plots. 
+There are specific "words" that we will introduce, and once you are comfortable with them, you will be able to create (or "write") hundreds of different plots. 
 
 The critical part to making graphics using `ggplot2` is the data needs to be in a _tidy_ format. 
 Given that we have just spent time putting our data in _tidy_ format, we are primed to take advantage of all that `ggplot2` has to offer! 
@@ -1460,7 +1460,7 @@ There are many arguments to use to style your labels just the way that you want:
 knitr::include_graphics(here::here("img", "ggrepel.png"))
 ```
 
-##### [[source]](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html)target="_blank"
+##### [[source]](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"}
 
 See [the ggrepel vignette](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"} for more details.
 
