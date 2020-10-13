@@ -356,6 +356,16 @@ We will skip importing all 4 lines by using `skip = 4`.
 We can also replace all instances of `"-99"` with `NA` using the `na = "-99"` argument of the `read_csv()` function.
 The "-99" needs to be in quotation marks because this argument expects characters.
 
+***
+<details> <summary> Click here for an explanation about data types in R and about character strings.</summary>
+
+There are several classes of data in R programming. Character is one of these classes. A character string is an individual data value made up of characters. This can be a paragraph, like the legend for the table, or it can be a single letter or number like the letter "a" or the number "3". If data are of class character, than the numeric values will not be processed like a numeric value in a mathematical sense. If you want your numeric values to be interpreted that way, they need to be converted to a numeric class. The options typically used are integer (which has no decimal place) and double precision (which has a decimal place).
+
+A variable that is a factor has a set of particular values called levels (this can be numbers or characters). Even if these are numeric, they will be interpreted as levels (i.e., as if they were characters) not as mathematical numbers. The values of a factor are assumed to have a particular ordering; by default the order is alphabetical, but this is not always the correct/intuitive ordering. You can modify the order of these levels with the `forcats` package.
+
+</details> 
+***
+
 ```{r}
 us_temperature <- readr::read_csv(here("data", "temperature.csv"), skip = 4, na = "-99")
 ```
@@ -384,7 +394,7 @@ CO2_emissions %>%
   slice_head(n = 3)
 ```
 
-Another useful function is `slice_sample()` to look at a **selection of random rows** using a [pseudorandom](https://en.wikipedia.org/wiki/Pseudorandomness) number for the index of rows to show. To continue to get the same random values or for others to get the same values, we need to set a seed first. We can do this with the `set.seed()` base function. We just specify a number with this function and that will allow us to get the same subset of values from the `slice_sample()` function. If two different people ran this code (without set.seed()), they would each see a different subset of rows. For data exploration, this isn't a huge deal, but if we'd like separate analysts running the same code to see the same output, we will use set.seed(). If we changed set.seed(123) to set.seed(333), we would obtain a different random sample of rows. 
+Another useful function is `slice_sample()` to look at a **selection of random rows** using [pseudorandom](https://en.wikipedia.org/wiki/Pseudorandomness){target="_blank"} numbers for the index of rows to show. To continue to get the same random values or for others to get the same values, we need to set a seed first. We can do this with the `set.seed()` base function. We just specify a number with this function and that will allow us to get the same subset of values from the `slice_sample()` function. If two different people ran this code (without set.seed()), they would each see a different subset of rows. For data exploration, this isn't a huge deal, but if we'd like separate analysts running the same code to see the same output, we will use set.seed(). If we changed set.seed(123) to set.seed(333), we would obtain a different random sample of rows. 
 
 ```{r}
 set.seed(123)
@@ -454,7 +464,7 @@ In wide format, each variable is listed as its own column.
 In contrast, in long format, variables maybe collapsed into a column that identifies the variables and a column of values. 
 See [here](https://en.wikipedia.org/wiki/Wide_and_narrow_data){target="_blank"} for more information about the difference between the two formats.
 
-We want to collapse all of the values for the emission data across the different individual year variables into one new `Emissions` variable. We will identify what year they are from by creating a new `Year` variable. The `cols =` argument allows us to specify which columns we want to use or not use to pull from to create these new columns. We want to keep our `country` data so we will exclude it using the `-` sign, by default all other columns will be used.
+We want to collapse all of the values for the emission data across the different individual year variables into one new `Emissions` variable. We will identify what year they are from by creating a new `Year` variable. The `cols =` argument allows us to specify which columns we want to pivot (or not pivot) to create these new columns. We want to keep our `country` data as an ID variable so we will exclude it using the `-` sign, by default all other columns will be used.
 
 ```{r}
 
@@ -692,8 +702,9 @@ First, we consider the disasters that have occurred in the US.
 us_disaster
 ```
 
-We are specifically interested in the `Year` and the variables that contain the word `"Count"`. 
-We will select them using the `select()` and `contains()` functions in the `dplyr` package. 
+We are specifically interested in the `Year` and the variables that contain the word `"Count"`. The other variables represent an estimate of the economic cost in billions of dollars, as well as the upper and lower bounds for simulations used to estimate the economic cost, which show the level of uncertainity in these estimates (at three different levels of confidence) as the true cost is unknown. See [here](https://www.ncdc.noaa.gov/billions/time-series) for more information about the data. For this analysis, we will focus just on the number of disasters that occured each year. 
+
+We will select our variables of interest using the `select()` and `contains()` functions in the `dplyr` package. 
 Since we are selecting for variables with the word `"Count"` we need to use quotation marks around it. 
 
 Selecting for the variable `Year` does not require quotes because it is the full name of one of the existing variables.
@@ -709,14 +720,29 @@ us_disaster %>%
 
 Now we want to create a new variable that will be the sum of all the different types of disasters for each year. 
 
-We can create this new variable using the `mutate()` function of `dplyr` and we will use the base `rowSums()` function to perform the calculation. 
+We don't want to include the `Year` variable in our sum, so we can exclude it using the `select` function. To perform the sum for each year, we can use the base `rowSums()` function. 
 
-We don't want to include the `Year` variable in our sum, so we can exclude it using the `select`function within the `rowSums()` function. However, to do so we need to indicate that we are using the data that we already used as input to our `mutate()` and `rowSums()` functions. We can do so by using a `.`. 
+```{r}
+yearly_disasters <- us_disaster %>% 
+                      select(-Year) %>%
+                      rowSums()
 
+yearly_disasters
+```
+
+We could then add this to our `us_diaster` tibble like so using the `bind_cols` function of the `dplyr` package:
+
+```{r}
+us_disaster %>% bind_cols(Disaters = yearly_disasters)
+```
+
+However, we can actually create and add this new variable directly to the `us_disaster` tibble by using the `mutate()` function of `dplyr` and using the `.` notation.
+
+We need to use the `.` notation to indicate that we are using the data that we already used as input to our `mutate()` function, which in this case is the entire `us_disaster` tibble for our `select()` function. The the output from the `select()` function will be used for the `rowSums()` function. 
 
 ```{r}
 us_disaster %<>%
-  mutate(`Disasters` = rowSums(select(., -Year)))
+  mutate(Disasters = rowSums(select(., -Year)))
 
 us_disaster %>%
   glimpse()
@@ -758,25 +784,60 @@ us_temperature %>%
 ```
 So a few things need to be fixed here. 
 
-First, the `Date` column looks a bit strange. The format of the numbers look like the year followed by the number 12.
+First, the `Date` column looks a bit strange. The format of the numbers look like the year followed by the number 12 (representing 12 months).
 
 We want to change this to only keep the first 4 characters in the `Date` variable string values. 
-We can use the `str_sub()` function of the `stringr` package to do this. 
-We just need to indicate the start and stop characters. 
-In this case the start would be 1 and the 4th character would be where we want to stop, so we would use `start = 1, stop = 4`. 
 
-Next, we want to remove the `Anomaly` variable, which is an indicator of how different the national average temperature for that year was from the average temperature from 1901-2000 which was 52.02&deg;F. 
+However, first let's make sure that indeed all of the `Date` variables are 6 characters long and that they all end with the number 12.
+
+We can use a couple of functions in the `stringr` package to do this. This package is used for working with character strings.  The `str_length()` function can be used to check the length of each value, while the `str_ends()` function can be used to check that all the values end with `"12"`.
+
+Let's start with the `str_length()` function. These functions in the `stringr` package require a character vector. Thus we need to pull the values for the `Date` variable first using the `pull()` function of the `dplyr` package. 
+
+```{r}
+us_temperature %>%
+  pull(Date) %>%
+  str_length()
+```
+Great! It looks like all of the values are 6 characters long.
+
+Now let's check that they all end with `"12"`. We just need to specify what pattern to look for. 
+
+```{r}
+us_temperature %>%
+  pull(Date) %>%
+  str_ends(pattern = "12")
+
+```
+Great! Since all of the values are `TRUE` we know that all of the values in the `Date` variable end with `"12"`.
+
+It's a good idea to always check that your data is as you expect. 
+
+Now we can use the `str_sub()` function of the `stringr` package to remove the `"12"` from each `Date` value.
+
+We just need to indicate the start and stop characters. 
+
+In this case the start would be 1 and the 4th character would be where we want to stop, so we would use `start = 1, stop = 4`. We can do this inside of the `mutate()` function to modify the `Date` variable. In doing so, we will not need to use `pull()` to pull the values for the `Date` variable.
+
+```{r}
+us_temperature %<>%
+  mutate(Date = str_sub(Date, start = 1, end = 4))
+
+us_temperature
+```
+We also want to remove the `Anomaly` variable, which is an indicator of how different the national average temperature for that year was from the average temperature from 1901-2000 which was 52.02&deg;F. 
 
 Then, we also want to create a `Country` variable. 
 We will also change the name of the `Date` variable to `Year` so that it will be consistent with our other datasets. We also also want the `Year` to be numeric. 
 We can accomplish both renaming and changing to numeric by using the `mutate()` function.
+
+We also want to create an `Indicator` varaible so that we can later tell what data the values in this tibble represent if we combine it with other tibbles and a `Label` variable, so that we will have informative labels if we make a plot with this data later. 
 
 Finally, we remove the `Date` variable and also order the columns just like the other us data using the `select()` function.
 
 ```{r}
 us_temperature %<>%
   dplyr::select(-Anomaly) %>%
-  mutate(Date = str_sub(Date, start = 1, end = 4)) %>%
   mutate(Country = "United States",
          Year = as.numeric(Date),
          Indicator = "Temperature",
@@ -803,8 +864,10 @@ knitr::include_graphics(here::here("img", "join.png"))
 
 ##### [[source]](https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf){target="_blank"}
 
-There are several types of `*_join()` functions to consider. 
+There are several types of `*_join()` functions to consider. The `full_join()` function keeps all rows from both tibbles that are being joined and adds `NA` values as necessary if there are values within the key for either of the tibbles that is is not in the key of the other tibble. 
+
 We use the `full_join()` function as we have different time spans for each dataset and we would like to retain as much data as possible. 
+
 The `full_join()` function will simply create `NA` values for any of the years that are not in one of the datasets. 
 
 First, we check using the base `summary()` function that there are column names that are consistent in each dataset that we wish to combine.
@@ -829,7 +892,7 @@ What variable or variables might we want to use to join our data by?
 The `Country`, and `Year` variables are present in all of the datasets with values that overlap. Although `Label` is also present in the datasets, the values do not overlap. We can see that the minimum and maximum year is different for nearly all the datasets.
 
 
-Next, we need to specify what columns/variables we will be joining by using the `by =` argument in the `full_join()` and `left_join()` functions.
+Next, we need to specify what columns/variables we will be joining by using the `by =` argument in the `full_join()` function, (recall that this variable is called the "key")
 
 ```{r}
 data_wide <- CO2_emissions %>%
@@ -842,19 +905,28 @@ data_wide %>%
   slice_sample(n = 6)
 ```
 
-We can also do the same thing by using the `reduce()` function of the `purrr` package. 
-This is a good option if you have many datasets to combine.
+***
+<details> <summary> Click here to see an explanation for another option that works well for large numbers of tibbles </summary>
+
+We can also do the same thing by using the `reduce()` function of the `purrr` package.  This takes a list of elements (which can be tibbles) and then applies a function that requires two inputs iteratively using the first pair of elements and creating a single element and then applying the function again to the output element and the next listed element and so on and so forth.
+
+For example we will use a list of tibbles and the `full_join()` function which requires two tibbles to combine. This will first combine `CO2_emissions` and  `gdp_growth` and then take the resulting joined tibble and combine this with the `energy_use` tibble. 
+
+
+You can see that this is a great option if you have many datasets to combine!
 
 ```{r}
 data_wide <-
   list(CO2_emissions, gdp_growth, energy_use) %>%
   reduce(full_join, by = c("Country", "Year", "Label"))
 
+set.seed(123)
+
 data_wide %>%
-  slice_head(n = 6)
+  slice_sample(n = 6)
 ```
 
-
+</details> 
 </details>
 ***
 
@@ -1413,7 +1485,7 @@ Top10b +
 
 Not bad, but some of the labels are overlapping and difficult to read.
 We can use the `check_overlap = TRUE` argument within the `geom_text()` function to remove overlapping variables. 
-Also, we can expand the plot area horizontally so that the names are not cutoff by using `scale_x_continuous(expand = c(0.2,0))`.
+Also, we can expand the plot area horizontally so that the names are not cutoff by using `scale_x_continuous(expand = c(0.2,0))`. This takes a vector with two values. The first value indicates what percentage to expand the x axis in both directions. In our case we will expand by 15 percent. The second value indicates what absolute value to expand the limit of the x axis. In our case `c(0.15,0)` will achieve a similar result as `c(0, 17)`, as the range of values from 1990 to 2014 is 114 years and 15% of this is 17. 
 
 ```{r}
 
@@ -1424,7 +1496,7 @@ Top10b +
               filter(Year == last(Year)),
             aes(label = Country),
             check_overlap = TRUE) +
-  scale_x_continuous(expand = c(0.2, 0)) +
+  scale_x_continuous(expand = c(0.15, 0)) +
   theme(legend.position = "none")
 ```
 
@@ -1758,9 +1830,9 @@ We can see that there are similar patterns of CO2 emission levels an average ann
 
 ####
 
-Next, instead of looking at the variables separately in faceted plots, let's look at the relationship between CO2 emissions and other variables directly. 
+Next, instead of looking at the variables separately in faceted plots, let's look at the relationship between CO2 emissions and other variables directly. Thus, it is useful to have each of these indicators as their own variable.
 
-We begin by using `pivot_wider()` to transform our long data table into a wide format. 
+We can do this by using `pivot_wider()` to transform our long data table into a wide format. 
 
 ```{r}
 wide_US <-
@@ -1769,6 +1841,8 @@ wide_US <-
   select(-Label) %>%
   pivot_wider(names_from = Indicator, values_from = Value)
 ```
+
+Now we can specify which indicators we want to look at, so now we can specifically look at emissions and temperature.
 
 ```{r}
 CO2_temp_US <-
@@ -1786,6 +1860,16 @@ CO2_temp_US <-
 
 
 CO2_temp_US
+```
+
+It might be helpful to add a trend line to this. We can do so by using the `geom_smooth()` function of the `ggplot2` package.
+
+If we want to look at a linear trend we need to specify the method using the `method = lm` argument. This adds a line to the data based on a linear model of the data using the `lm` function of the `stats` package. We will discuss the se = FALSE argument later. 
+
+We can just add this to the plot object that we just created to create a plot with this trend line.
+
+```{r}
+CO2_temp_US + geom_smooth(method = "lm", se = FALSE)
 ```
 
 Indeed, it does look like there is a positive, linear trend. 
@@ -2020,7 +2104,7 @@ CO2_temp_US<-wide_US %>%
 CO2_temp_US
 ```
 
-Notice that we also use the `geom_smooth(method = "lm")` function which adds a line corresponding to the slope and intercept from the `lm()` function from the `stats` R package. 
+Notice that we also use the `geom_smooth(method = "lm")` function that we previously used. Again, this adds a line corresponding to the slope and intercept from the `lm()` function from the `stats` R package. 
 
 #### {.think_question_block}
 <b><u> Question Opportunity </u></b>
@@ -2028,7 +2112,11 @@ Notice that we also use the `geom_smooth(method = "lm")` function which adds a l
 What does `se = FALSE` mean? Try turning it to TRUE. What happens? 
 
 ####
-
+***
+<details> <summary> Click here for the answer.</summary>
+`se` stands for standard error. The gray shading shows the [confidence interval](https://stattrek.com/regression/slope-confidence-interval.aspx){target="_blank"} of the smooth line.
+</details>
+***
 ### Limitations of Correlation 
 
 While correlation is useful in many settings to understand how two variables move together, correlation is not always a useful summary. 
