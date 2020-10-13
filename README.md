@@ -143,6 +143,79 @@ findings.
 <a href="https://dfrieds.com/math/correlation-does-not-imply-causation.html" target="_blank">Correlation does not imply causation</a>  
 <a href="https://rafalab.github.io/dsbook/regression.html" target="_blank">Regression</a>
 
+<u>**Packages used in this case study:** </u>
+
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Package</th>
+<th>Use in this case study</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://github.com/jennybc/here_here" target="_blank">here</a></td>
+<td>to easily load and save data</td>
+</tr>
+<tr class="even">
+<td><a href="https://readxl.tidyverse.org/" target="_blank">readxl</a></td>
+<td>to import the excel file data</td>
+</tr>
+<tr class="odd">
+<td><a href="https://readr.tidyverse.org/" target="_blank">readr</a></td>
+<td>to import the csv file data</td>
+</tr>
+<tr class="even">
+<td><a href="https://dplyr.tidyverse.org/" target="_blank">dplyr</a></td>
+<td>o view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a variable</td>
+</tr>
+<tr class="odd">
+<td><a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html" target="_blank">magrittr</a></td>
+<td>to use and reassign data objects using the <code>%&lt;&gt;%</code>pipe operator</td>
+</tr>
+<tr class="even">
+<td><a href="https://stringr.tidyverse.org/" target="_blank">stringr</a></td>
+<td>to select only the first 4 characters of date data</td>
+</tr>
+<tr class="odd">
+<td><a href="https://purrr.tidyverse.org/" target="_blank">purrr</a></td>
+<td>to apply a function on a list of tibbles (tibbles are the tidyverse version of a data frame)</td>
+</tr>
+<tr class="even">
+<td><a href="https://tidyr.tidyverse.org/" target="_blank">tidyr</a></td>
+<td>to drop rows with <code>NA</code> values from a tibble</td>
+</tr>
+<tr class="odd">
+<td><a href="https://forcats.tidyverse.org/" target="_blank">forcats</a></td>
+<td>to reorder the levels of a factor</td>
+</tr>
+<tr class="even">
+<td><a href="https://ggplot2.tidyverse.org/" target="_blank">ggplot2</a></td>
+<td>to make visualizations</td>
+</tr>
+<tr class="odd">
+<td><a href="http://directlabels.r-forge.r-project.org/docs/index.html" target="_blank">directlabels</a></td>
+<td>to add labels to plots easily</td>
+</tr>
+<tr class="even">
+<td><a href="https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html" target="_blank">ggrepel</a></td>
+<td>to add labels that don’t overlap to plots</td>
+</tr>
+<tr class="odd">
+<td><a href="https://www.tidyverse.org/blog/2018/07/broom-0-5-0/">broom</a></td>
+<td>to make the output form statistical tests easier to work with</td>
+</tr>
+<tr class="even">
+<td><a href="https://github.com/thomasp85/patchwork" target="_blank">patchwork</a></td>
+<td>to combine plots</td>
+</tr>
+</tbody>
+</table>
+
 #### For users
 
 There is a [`Makefile`](Makefile) in this folder that allows you to type

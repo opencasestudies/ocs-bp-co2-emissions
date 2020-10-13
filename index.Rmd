@@ -117,8 +117,10 @@ The [National Climate Assessment Report](https://data.globalchange.gov/report/nc
 
 > Heat-trapping gases already in the atmosphere have committed us to a hotter future with more climate-related impacts over the next few decades. The magnitude of climate change beyond the next few decades depends primarily on the amount of heat-trapping gases that human activities emit globally, now and in the future.
 
-See [here](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"},  [here](https://nca2014.globalchange.gov/){target="_blank"}, and [here](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"}  for more information about how greenhouse gases have influenced global temperatures.
-
+See the following links for more information about how greenhouse gases have influenced global temperatures:
+1) The EPA [report](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"} on green house gases  
+2) The National Climate Assessment (NCA) [summary from 2014](https://nca2014.globalchange.gov/){target="_blank"}) 
+3) The [World101 website](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"} about how countries are adapting to climate change
 
 # **Main Questions**
 *** 
@@ -184,8 +186,10 @@ library(broom)
 library(patchwork)
 ```
 
+<u>**Packages used in this case study:** </u>
 
- Package   | Use                                                                         
+
+ Package   | Use in this case study                                                                         
 ---------- |-------------
 [here](https://github.com/jennybc/here_here){target="_blank"}       | to easily load and save data
 [readxl](https://readxl.tidyverse.org/){target="_blank"}  | to import the Excel file data
@@ -193,7 +197,7 @@ library(patchwork)
 [dplyr](https://dplyr.tidyverse.org/){target="_blank"}  |  to view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a variable   
 [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use and reassign data objects using the `%<>%`pipe operator
 [stringr](https://stringr.tidyverse.org/){target="_blank"}  | to select only the first 4 characters of date data
-[purrr](https://purrr.tidyverse.org/){target="_blank"}  | to apply a function on a list of tibbles
+[purrr](https://purrr.tidyverse.org/){target="_blank"}  | to apply a function on a list of tibbles (tibbles are the tidyverse version of a data frame)  
 [tidyr](https://tidyr.tidyverse.org/){target="_blank"}  | to drop rows with `NA` values from a tibble
 [forcats](https://forcats.tidyverse.org/){target="_blank"}  | to reorder the levels of a factor
 [ggplot2](https://ggplot2.tidyverse.org/){target="_blank"} | to make visualizations
@@ -308,15 +312,22 @@ Data   | Time span
 
 We will explore more about this a bit later. 
 
+#### {.think_question_block}
+<b><u> Question Opportunity </u></b>
+
+What concerns might arise about reliability and variation of measurement practices over time?
+
+####
+
 # **Data Import**
 *** 
 
-To read in the files that were downloaded from the various sources as indicated in the table above, we will use the `read_xlsx()` and `read_xls()` functions of the `readxl` package to import the data from the `.xlsx` and `.xls` files, respectively. 
+To read in the files that were downloaded from the various sources as indicated in the table above, we will use the `read_xlsx()` and `read_xls()` functions of the `readxl` package to import the data from the `.xlsx` and `.xls` files, respectively. We will also use the `here()` function of the `here` package to more easily specify the path to our files relative to the directory where the .Rproj file is located. 
 
 ```{r}
-CO2_emissions <- readxl::read_xlsx(here("data/yearly_co2_emissions_1000_tonnes.xlsx"))
-gdp_growth    <- readxl::read_xlsx(here("data/gdp_per_capita_yearly_growth.xlsx"))
-energy_use    <- readxl::read_xlsx(here("data/energy_use_per_person.xlsx"))
+CO2_emissions <- readxl::read_xlsx(here("data", "yearly_co2_emissions_1000_tonnes.xlsx"))
+gdp_growth    <- readxl::read_xlsx(here("data", "gdp_per_capita_yearly_growth.xlsx"))
+energy_use    <- readxl::read_xlsx(here("data", "energy_use_per_person.xlsx"))
 ```
 
 We will use the `read_csv()` function of the `readr` package to import the data from the `.csv` files.
@@ -332,7 +343,7 @@ knitr::include_graphics(here::here("img", "Disasters.png"))
 To do this, we can skip rows using the `skip = 2` argument of the `read_csv()` function. 
 
 ```{r}
-us_disaster <- readr::read_csv(here("data/disasters.csv"), skip = 2)
+us_disaster <- readr::read_csv(here("data","disasters.csv"), skip = 2)
 ```
 
 Now looking at the `data/temperature.csv` file, we see that the first four lines do not have the same number of columns as the subsequent lines. 
@@ -346,7 +357,7 @@ We can also replace all instances of `"-99"` with `NA` using the `na = "-99"` ar
 The "-99" needs to be in quotation marks because this argument expects characters.
 
 ```{r}
-us_temperature <- readr::read_csv(here("data/temperature.csv"), skip = 4, na = "-99")
+us_temperature <- readr::read_csv(here("data", "temperature.csv"), skip = 4, na = "-99")
 ```
 
 Great! now we have imported all of the data that we will need.
@@ -373,7 +384,7 @@ CO2_emissions %>%
   slice_head(n = 3)
 ```
 
-Another useful function is `slice_sample()` to look at a **selection of random rows**. To continue to get the same random values or for others to get the same values, we need to set a seed first. We can do this with the `set.seed()` base function. We just specify a number with this function and that will allow us to get the same subset of values from the `slice_sample()` function.
+Another useful function is `slice_sample()` to look at a **selection of random rows** using a [pseudorandom](https://en.wikipedia.org/wiki/Pseudorandomness) number for the index of rows to show. To continue to get the same random values or for others to get the same values, we need to set a seed first. We can do this with the `set.seed()` base function. We just specify a number with this function and that will allow us to get the same subset of values from the `slice_sample()` function. If two different people ran this code (without set.seed()), they would each see a different subset of rows. For data exploration, this isn't a huge deal, but if we'd like separate analysts running the same code to see the same output, we will use set.seed(). If we changed set.seed(123) to set.seed(333), we would obtain a different random sample of rows. 
 
 ```{r}
 set.seed(123)
@@ -382,10 +393,10 @@ CO2_emissions %>%
   slice_sample(n = 3)
 ```
 
-#### {.question_block}
+#### {.think_question_block}
 <b><u> Question Opportunity </u></b>
 
-What happens if you set a different seed? 
+Try setting a different seed to see the difference in the output.
 
 ####
 
@@ -459,7 +470,7 @@ CO2_emissions %>%
 ```
 
 
-#### {.question_block}
+#### {.recall_code_question_block}
 <b><u> Question Opportunity </u></b>
 
 Think a moment about what the dimensions of the  `CO2_emissions` tibble are now and why? How would you check this?
@@ -538,13 +549,14 @@ Next, we will use the `pivot_longer()` to transform the data to long format, sim
 
 We will also again change the `country` variable to be `Country` by using the `rename()` function, and we will make the `Year` variable numeric using the `mutate()` function. 
 
-#### {.question_block}
+#### {.recall_code_question_block}
 <b><u> Question Opportunity </u></b>
 
 Using what you just learned about `pivot_longer()`, `rename()`, and `mutate()` and without scrolling up, try to come up with the code to do the wrangling for this data.
 
 ####
 
+***
 <details> <summary> Click here to reveal the code. </summary>
 
 ```{r, eval = FALSE}
@@ -559,6 +571,7 @@ gdp_growth %<>%
 ```  
 
 </details>
+***
 
 ```{r, echo = FALSE}
 gdp_growth %<>%
@@ -613,13 +626,14 @@ energy_use %>%
 Looks like we have `r nrow(energy_use)` rows and `r ncol(energy_use)` columns where we have a `country` column and again a set of years. 
 To wrangle the `energy_use` data, we will again convert the data to long format, rename some variables, and mutate the `Year` data to be numeric.
 
-#### {.question_block}
+#### {.recall_code_question_block}
 <b><u> Question Opportunity </u></b>
 
 Again try to come up with the code on your own to wrangle the data.
 
 ####
 
+***
 <details> <summary> Click here to reveal the code. </summary>
 
 ```{r, eval = FALSE}
@@ -633,7 +647,7 @@ energy_use %<>%
   rename(Energy = energy_use)
 ```
 </details>
-
+***
 
 ```{r, echo = FALSE}
 energy_use %<>%
@@ -726,7 +740,7 @@ us_disaster %>%
 ```
 Great, this looks good now. 
 
-#### {.question_block}
+#### {.think_question_block}
 <b><u> Question Opportunity </u></b>
 
 This dataset was slightly different from the other datasets and therefore required slightly different wrangling.
@@ -801,13 +815,14 @@ summary(gdp_growth)
 summary(energy_use)
 ```
 
-#### {.question_block}
+#### {.think_question_block}
 <b><u> Question Opportunity </u></b>
 
 What variable or variables might we want to use to join our data by?
 
 ####
 
+***
 <details> <summary> Click here to see an explanation for what variable or variables to join by after you have thought about it. </summary>
 
 
@@ -839,6 +854,10 @@ data_wide %>%
   slice_head(n = 6)
 ```
 
+
+</details>
+***
+
 ```{r}
 data_wide %>%
   glimpse()
@@ -849,20 +868,33 @@ Nice, looks good!
 
 We will also make a long version of this data, where we will create an new variable called `Indicator` that will indicate what dataset the data came from.
 
+#### {.recall_code_question_block}
+<b><u> Question Opportunity </u></b>
+
+Try to come up with the code to do this.
+
+####
+
+***
+<details> <summary> Click here to reveal the code. </summary>
+
+
 ```{r}
 data_long <- data_wide %>%
   pivot_longer(cols = c(-Country, -Year, -Label),
                names_to = "Indicator",
                values_to = "Value")
+```
 
+</details> 
+***
+
+```{r}
 set.seed(123)
 
 data_long %>%
   slice_sample(n = 6)
 ```
-
-</details>
-
 
 
 We will now combine this data with the US data about disasters and temperatures.
@@ -901,7 +933,7 @@ data_long %>%
   slice_sample(n = 10)
 ```
 
-
+***
 <details> <summary> Click here for details about the difference between `full_join()` and `bind_rows()` </summary>
 
 The difference between this function and the `full_join()` function is that the `bind_rows()` function will essentially just append each dataset to each other, whereas the `full_join()` function collapses data that is comparable. 
@@ -959,7 +991,7 @@ Now we see that we have only a single row. The data that corresponds to the same
 This is something to keep in mind when you are wrangling your data. The choice of what function to use and how should depend on how you want the data to be after you combine the different sources of data together.
 
 </details>  
-
+***
 
 We have a few more things to do before we leave the data wrangling section. 
 
@@ -1000,7 +1032,7 @@ data_long %>%
   slice_head(n = 6)
 ```
 
-#### {.question_block}
+#### {.recall_code_question_block}
 <b><u> Question Opportunity </u></b>
 
 Using only data from the US, calculate the first and last year that a value was reported for each variable (e.g. CO2 emissions, energy use, etc). 
@@ -1011,6 +1043,7 @@ Using only data from the US, calculate the first and last year that a value was 
 
 ```{r, echo = FALSE, eval = FALSE}
 save(data_long, file = here::here("data", "wrangled_data.rda"))
+readr::write_csv(data_long, path = here::here("data", "wrangled_data.csv"))
 ```
 
 # **Data Visualization**
@@ -1233,7 +1266,7 @@ data_long %>%
 
 We can see that many countries show a dramatic increase in emissions over time with a handful of countries with particularly high levels. 
 
-#### {.question_block}
+#### {.recall_code_question_block}
 <b><u> Question Opportunity </u></b>
 
 - What happens when you do not use the `group = Country` argument? 
@@ -1318,7 +1351,7 @@ top_10_count
 
 We can see that China is now the top emission producing country.
 
-#### {.question_block}
+#### {.think_question_block}
 <b><u> Question Opportunity </u></b>
 
 What are the bottom 10 emission producing countries in 2014?
@@ -1541,6 +1574,13 @@ We see that Germany had very low emission rates at the end of World War II.
 We also see that the US has consistently had high emission rates since 1900, but the emission rates in China recently surpassed that of the US. 
 The portions of the plot that are white indicate that there is no emission data for that country.
 
+#### {.think_question_block}
+<b><u> Question Opportunity </u></b>
+
+Think about what the pros and cons are of tile and line plots. In what situations would a tile plot be a better choince for effective scientific communication? In what situations would a line plot be a better choice?
+
+####
+
 ## More than one variable
 
 Now, we will visualize all the variables in our dataset.
@@ -1573,16 +1613,10 @@ ggplot(data_long, aes(x = Year, y = Value, group = Country)) +
 Notice that we can change the size or style of the font for these labels using the `strip.text =` argument of the `theme()` function. 
 We can also specify how many rows or columns we would like the subplots to be shown. 
 
-#### {.question_block}
-<b><u> Question Opportunity </u></b>
-
-- What happens when you use the `facet_grid()` function instead `facet_wrap()`?
-- Why is this less ideal in this plot? 
-
-####
-
 We can also facet by more than one variable (e.g. `Indicator` and `Region` to show the data from the US compared to other countries).
-In this case we want to use `facet_grid()` instead of `facet_wrap()` so that the same y-axis will be used across the rows.
+
+In this case we want the same y-axis to be used across the rows. We will use the `facet_grid()` function this time instead of `facet_wrap()` because of the way that the two facet variables are displayed. The `facet_grid()` function will as you might expect, create an output of plots that are displayed in a grid. 
+
 The syntax here is to put the name of the two variables on the left or right side of the `~` symbol, which tells you to facet by rows (left) or columns (right).  
 
 First, we will filter out the data about disasters and temperature as this is only for the US, by using the `filter()` function and `!`  indicates that we want only values of the `Indicator` variable not in the list containing `"Disasters"` and `"Temperature"`.
@@ -1599,17 +1633,20 @@ data_long %>%
     theme(strip.text = element_text(size = 16, face = "bold"))
 ```
 
+
+
 From these plots we can see that each type of data spans a different time span.
 
 
-#### {.question_block}
+#### {.think_question_block}
 <b><u> Question Opportunity </u></b>
 
-What happens when you use the `scales = "free"` with `facet_wrap()`?
+What happens when you create the same plot with `facet_wrap()`? 
+Why might this be preferrable in certain cases?
 
 ####
 
-#### {.question_block}
+#### {.recall_code_question_block}
 <b><u> Question Opportunity </u></b>
 
 Calculate the total number of countries per year reporting C02 emissions, energy use and GDP. 
@@ -1669,7 +1706,7 @@ data_long_us %>%
 ```
 We can see from this plot that overall there has been an increase in disasters, emissions and temperature in the most recent years. 
 
-#### {.question_block}
+#### {.think_question_block}
 <b><u> Question Opportunity </u></b>
 
 What trends do you see in GDP and energy use across time? 
@@ -1713,7 +1750,7 @@ CO2_temp_US_facet
 Note, we are showing a different `theme` here, namely the `theme_classic()` theme. 
 We can see that there are similar patterns of CO2 emission levels an average annual temperatures.
 
-#### {.question_block}
+#### {.recall_code_question_block}
 <b><u> Question Opportunity </u></b>
 
 - Try show a similar plot without filtering by years and faceting by the other three variables: energy use, GDP and disasters. Are there other variables that look like they might have a similar pattern to CO2 emissions? 
@@ -1754,7 +1791,7 @@ CO2_temp_US
 Indeed, it does look like there is a positive, linear trend. 
 
 
-#### {.question_block}
+#### {.recall_code_question_block}
 <b><u> Question Opportunity </u></b>
 
 - Make similar plots for between CO2 emissions and other variables. 
@@ -1768,6 +1805,7 @@ Now that we see that there might be a linear relationship between CO2 emissions 
 
 ```{r, eval = FALSE, echo = FALSE}
 save(wide_US, file = here::here("data", "wrangled_US_data.rda"))
+readr::write_csv(wide_US, path = here::here("data", "wrangled_US_data.csv"))
 ```
 
 
@@ -1881,7 +1919,7 @@ wide_US %>%
 ```
 
 
-#### {.question_block}
+#### {.think_question_block}
 <b><u> Question Opportunity </u></b>
 
 Why do these two numbers not match?
@@ -1889,7 +1927,7 @@ Why do these two numbers not match?
 ####
 
 
-#### {.question_block}
+#### {.recall_code_question_block}
 <b><u> Question Opportunity </u></b>
 
 There are different types of correlation coefficients. Look at the help file for the `cor()` function and try a different `method`. 
@@ -1899,7 +1937,7 @@ What are the differences?
 ####
 
 
-#### {.question_block}
+#### {.think_question_block}
 <b><u> Question Opportunity </u></b>
 
 - Try calculating the correlation coefficient between CO2 emissions and the other variables. 
@@ -1984,14 +2022,14 @@ CO2_temp_US
 
 Notice that we also use the `geom_smooth(method = "lm")` function which adds a line corresponding to the slope and intercept from the `lm()` function from the `stats` R package. 
 
-#### {.question_block}
+#### {.think_question_block}
 <b><u> Question Opportunity </u></b>
 
 What does `se = FALSE` mean? Try turning it to TRUE. What happens? 
 
 ####
 
-### Correlation does not imply causation 
+### Limitations of Correlation 
 
 While correlation is useful in many settings to understand how two variables move together, correlation is not always a useful summary. 
 For example, here are ways it might not be useful: 
@@ -2068,9 +2106,9 @@ Ask students to plot CO2 emissions and other variables (e.g. energy use) on a sc
 [Climat change](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"}
 
 
-<u>Packages used in this case study: </u>
+<u>**Packages used in this case study:** </u>
 
- Package   | Use                                                                         
+ Package   | Use in this case study                                                                        
 ---------- |-------------
 [here](https://github.com/jennybc/here_here){target="_blank"}       | to easily load and save data
 [readxl](https://readxl.tidyverse.org/){target="_blank"}  | to import the excel file data
@@ -2078,7 +2116,7 @@ Ask students to plot CO2 emissions and other variables (e.g. energy use) on a sc
 [dplyr](https://dplyr.tidyverse.org/){target="_blank"}  |  o view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a variable   
 [magrittr](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use and reassign data objects using the `%<>%`pipe operator
 [stringr](https://stringr.tidyverse.org/){target="_blank"}  | to select only the first 4 characters of date data
-[purrr](https://purrr.tidyverse.org/){target="_blank"}  | to apply a function on a list of tibbles
+[purrr](https://purrr.tidyverse.org/){target="_blank"}  | to apply a function on a list of tibbles (tibbles are the tidyverse version of a data frame)  
 [tidyr](https://tidyr.tidyverse.org/){target="_blank"}  | to drop rows with `NA` values from a tibble
 [forcats](https://forcats.tidyverse.org/){target="_blank"}  | to reorder the levels of a factor
 [ggplot2](https://ggplot2.tidyverse.org/){target="_blank"} | to make visualizations
