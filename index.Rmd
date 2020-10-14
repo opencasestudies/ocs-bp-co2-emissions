@@ -143,7 +143,7 @@ This case study will particularly focus on how to use different datasets that sp
 We will especially focus on using packages and functions from the [`tidyverse`](https://www.tidyverse.org/){target="_blank"}, such as `dplyr`, `tidyr`, and `ggplot2`. 
 
 The tidyverse is a library of packages created by RStudio. 
-While some students may be familiar with previous R programming packages, these packages make data science in R especially efficient.
+While some students may be familiar with previous R programming packages, these packages make data science in R especially legible and intuitive.
 
 The skills, methods, and concepts that students will be familiar with by the end of this case study are:
 
@@ -1230,6 +1230,7 @@ data_long %>%
   ggplot(aes(x = Year, y = Emissions)) +
     geom_line(size = 1.5)
 ```
+Wow, the CO2 is really rising sharply!
 
 Finally, let's make this plot really nice by adding a few final touches. 
 To change title, caption, and the axis labels, we can use the `labs()` function. 
