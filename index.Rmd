@@ -1977,44 +1977,54 @@ Recall the plot we made above:
 CO2_temp_US
 ```
 
-Let's calculate the correlation coefficient between CO2 emissions and temperature in the US. 
+Let's calculate the Pearson's correlation coefficient called "Rho" $\rho$ between CO2 emissions and temperature in the US. There are a few ways to calculate a correlatation coefficient and this is one of the most common.
 
-Formally, if we have a pair of observations $(x_1, y_1), \dots, (x_n,y_n)$, the correlation coefficient between $x$ and $y$ is defined as 
+Formally, if we have a pair of observations $(x_1, y_1), \dots, (x_n,y_n)$, the correlation coefficient $\rho$ between $x$ and $y$ is defined as 
 
 $$
-\rho = \frac{1}{n} \sum_{i=1}^n \left( \frac{x_i-\mu_x}{\sigma_x} \right)\left( \frac{y_i-\mu_y}{\sigma_y} \right)
+\rho = \frac{1}{n-1} \sum_{i=1}^n \left( \frac{x_i-\mu_x}{\sigma_x} \right)\left( \frac{y_i-\mu_y}{\sigma_y} \right)
 $$
 where $\mu_x, \mu_y$ are the means of $x_1,\dots, x_n$ and $y_1, \dots, y_n$, respectively, and $\sigma_x, \sigma_y$ are the standard deviations. 
 
-Therefore, we can standardize the two variables and average the standardized values to calculate the correlation coefficient `rho`: 
+Therefore, we can standardize the two variables and essentially average (the denominator is n-1) the standardized values to calculate the correlation coefficient `rho`. 
+
+Here we will manually perform the calculation. We will use the `tally()` function of the `dplyr` package to get the number of samples $n$. In this case this is equivalent the the number of rows in the `wide_US` tibble. We need to then use the `pull()` function to specifically grab the value out of the tibble that is created from using this function. As you can see from using the base `class()` function that this is a `tbl_df` which is short for tibble data frame (the tidyverse version of a data frame) rather than just a number. 
 
 ```{r}
+tally(wide_US)
+class(tally(wide_US))
+```
+
+When we check the class after using the `pull()` function we see that it is an integer.
+
+```{r}
+pull(tally(wide_US), n)
+class(pull(tally(wide_US), n))
+```
+
+We will also use the base `scale()` function to standardize the `Emissions` and `Temperature` values.
+```{r}
 wide_US %>%
-  summarize(rho = mean(scale(Emissions) * scale(Temperature))) %>%
+  summarize(rho = (1/(pull(tally(wide_US), n) -1)) *(sum(scale(Emissions) * scale(Temperature)))) %>%
   pull(rho)
 ```
 
-Alternatively, you can use the `cor()` function in base R.
+Alternatively, you can use the `cor()` function in base R like so:
 
 ```{r}
 wide_US %>%
-  summarize(r = cor(Emissions, Temperature)) %>%
+  summarize(r = cor(x = Emissions,
+                    y = Temperature, 
+               method = "pearson")) %>%
   pull(r)
 ```
 
-
-#### {.think_question_block}
-<b><u> Question Opportunity </u></b>
-
-Why do these two numbers not match?
-
-####
-
+If you want to learn more about why this is the calculation to determine the strength of the relationship between two variables, see this [link](https://bcheggeseth.github.io/Stat155Notes/two-quantitative-variables.html). 
 
 #### {.recall_code_question_block}
 <b><u> Question Opportunity </u></b>
 
-There are different types of correlation coefficients. Look at the help file for the `cor()` function and try a different `method`. 
+There are different types of correlation coefficients. Look at the help file for the `cor()` function by typing `?cor()` into the RStudio Console to learn more and then try a different `method`. 
 
 What are the differences? 
 
@@ -2025,13 +2035,13 @@ What are the differences?
 <b><u> Question Opportunity </u></b>
 
 - Try calculating the correlation coefficient between CO2 emissions and the other variables. 
-- Do you think calculating a correlation coefficient between CO2 emissions and the other variables is a meaningful thing to do -- why or why not? 
+- What do you expect? 
 
 ####
 
 To test if the association between a pair of variables is statistically significant, you can use the `cor.test()` of the `stats` package to calculate the correlation coefficient, as well as confidence intervals for correlation coefficients.
 
-We can use the `tidy()` function of the `broom` package to make the output more usable for working with in R.
+We can use the `tidy()` function of the `broom` package to make the output more usable for working with in R. The role of this function is to pull numeric values from outputs and create a data frame of the values.
 
 ```{r}
 
