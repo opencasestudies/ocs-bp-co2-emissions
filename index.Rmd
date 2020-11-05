@@ -750,7 +750,7 @@ us_disaster %>% bind_cols(Disaters = yearly_disasters)
 
 However, we can actually create and add this new variable directly to the `us_disaster` tibble by using the `mutate()` function of `dplyr` and using the `.` notation.
 
-We need to use the `.` notation to indicate that we are using the data that we already used as input (on the right side of the pipe) to our `mutate()` function (on the left side of our pipe), which in this case is the entire `us_disaster` tibble for our `select()` function. The the output from the `select()` function will be used for the `rowSums()` function. 
+We need to use the `.` notation to indicate that we are using the data that we already used as input (on the left side of the pipe) to our `mutate()` function (on the right side of our pipe), which in this case is the entire `us_disaster` tibble for our `select()` function. The the output from the `select()` function will be used for the `rowSums()` function. 
 
 ```{r}
 us_disaster %<>%
@@ -2161,7 +2161,7 @@ knitr::include_graphics(here::here("img", "causation.png"))
 
 ##### [[source]](http://tylervigen.com/spurious-correlations){target="_blank"}
 
-In this example and in our case study data, datasets about something over time, like the number of people killed by venomous spiders will have what is called [autocorrleation](https://en.wikipedia.org/wiki/Autocorrelation){target="_blank"} or serial correlation. This means that data points from one year to the next are similar to one another or have some sort of internal structure related to time (such as seasonality). Let's think about our CO2 emission and temperature data. You may be able to see how one year of CO2 emissions might be fairly similar to next year, because the number of sources (such as industrial factories and cars) in the US will change slightly from year to year, but they will be related to that of the previous years. Anytime we look at correlation between two variables that each have autocorrelation, this can result in a higher likelihood of correlation between these variables. 
+In this example and in our case study, data was collected over time. This type of data will often have what is called [autocorrleation](https://en.wikipedia.org/wiki/Autocorrelation){target="_blank"} or serial correlation. This means that data points from one year to the next may be similar to one another or have some sort of internal structure related to time (such as seasonality). Let's think about our CO2 emission and temperature data. You may be able to see how one year of CO2 emissions might be fairly similar to next year, because the number of sources (such as industrial factories and cars) in the US will change slightly from year to year, but they will be related to that of the previous years. Anytime we look at correlation between two variables that each have autocorrelation, this can result in a higher likelihood of correlation between these variables. 
 
 Indeed if we look at correlation between two random variables with autocorrelation we can see an inflation in the correlation rho values between the two variables, as compared to that of variables that do not have autocorrelation.
 
