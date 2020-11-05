@@ -85,6 +85,8 @@ Transportation and Electricity contribute the most metric tons of CO2:
 knitr::include_graphics(here::here("img", "sources_pie.jpg"))
 ```
 
+##### [[source]](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"}
+
 
 So why should we pay attention to greenhouse gases?
 
@@ -92,7 +94,7 @@ According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Gre
 
 > Greenhouse gases absorb infrared radiation, thereby trapping heat in the atmosphere and making the planet warmer. The most important greenhouse gases directly emitted by humans include carbon dioxide (CO2), methane (CH4), nitrous oxide (N2O), and several fluorine-containing halogenated substances. Although CO2, CH4, and N2O occur naturally in the atmosphere, human activities have changed their atmospheric concentrations. From the pre- industrial era (i.e., ending about 1750) to 2018, concentrations of these greenhouse gases have increased globally by 46, 165, and 23 percent, respectively (IPCC 2013; NOAA/ESRL 2019a, 2019b, 2019c). 
 
-* IPCC stands for the Intergovernmental Panel on Climate Change
+\* IPCC stands for the Intergovernmental Panel on Climate Change
 
 In fact, there are many signs that our planet is experiencing warmer temperatures:
 
@@ -218,19 +220,21 @@ Greenhouse gas emissions are due to both natural processes and anthropogenic (hu
 These emissions are one of the contributing factors to rising global temperatures, which can have a great influence on [public health](https://www.epa.gov/climate-indicators/understanding-connections-between-climate-change-and-human-health){target="_blank"}  as illustrated in the following image:
 
 ```{r, echo = FALSE, out.width="800px"}
-knitr::include_graphics(here::here("img", "health.png"))
+knitr::include_graphics(here::here("img", "climate_change_health_impacts.jpg"))
 ```
 
-##### [[source]](https://www.epa.gov/climate-indicators/understanding-connections-between-climate-change-and-human-health){target="_blank"}
+##### [[source]](https://www.cdc.gov/climateandhealth/effects/default.htm){target="_blank"}
 
 
-According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}
+According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}:
 
-> Gases in the atmosphere can contribute to climate change both directly and indirectly. Direct effects occur when the gas itself absorbs radiation. Indirect radiative forcing occurs when chemical transformations of the substance produce other greenhouse gases, when a gas influences the atmospheric lifetimes of other gases, and/or when a gas affects atmospheric processes that alter the radiative balance of the earth (e.g., affect cloud formation or albedo). 
+> Gases in the atmosphere can contribute to climate change both directly and indirectly. Direct effects occur when the gas itself absorbs radiation. Indirect radiative forcing occurs when chemical transformations of the substance produce other greenhouse gases, when a gas influences the atmospheric lifetimes of other gases, and/or when a gas affects atmospheric processes that alter the radiative balance of the earth (e.g., affect cloud formation or [albedo](https://en.wikipedia.org/wiki/Albedo){target="_blank"}). 
 
 The **Global Warming Potential (GWP)** compares the **ability of a greenhouse gas to trap heat in the atmosphere relative to another gas**.
 
 >The GWP of a greenhouse gas is defined as the ratio of the accumulated radiative forcing within a specific time horizon caused by emitting 1 kilogram of the gas, relative to that of the reference gas CO2 (IPCC 2013). Therefore GWP-weighted emissions are provided in million metric tons of CO2 equivalent (MMT CO2 Eq.)
+
+##### [[source]](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}
 
 CO2 is actually the least heat-trapping gas of the greenhouse gases:
 
@@ -243,7 +247,13 @@ knitr::include_graphics(here::here("img", "GWP.png"))
 However, because CO2 is so much more abundant and stays in the atmosphere so much longer than other greenhouse gases, it has been the largest contributor to global warming.
 See [here](https://www.ucsusa.org/resources/why-does-co2-get-more-attention-other-gases#:~:text=CO2%20sticks%20around,oxide%20(N2O)){target="_blank"} for more details.
 
-Furthermore, rising CO2 levels also influence ocean acidity:
+It is also important to keep in mind that there is a [lag](https://earthobservatory.nasa.gov/blogs/climateqa/would-gw-stop-with-greenhouse-gases/) between greenhouse gas emissions and temperature changes that we experience because much of Earth's thermal energy (and CO2) gets stored in the ocean. 
+
+Due to a process called [thermal inertia](https://en.wikipedia.org/wiki/Volumetric_heat_capacity#Thermal_inertia), the heat stored in the ocean will eventually be transfered to the surface of the Earth long after the gases were emitted that resulted in the increased ocean temperature.
+
+See [here](https://earthobservatory.nasa.gov/blogs/climateqa/would-gw-stop-with-greenhouse-gases/) for more explanation.
+
+Furthermore, rising CO2 levels in the ocean also influence ocean acidity:
 
 
 ```{r, echo = FALSE, out.width="500px"}
@@ -298,6 +308,8 @@ To obtain the temperature data, the annual average temperatures were selected as
 ```{r, echo = FALSE, out.width = "800 px"}
 knitr::include_graphics(here::here("img", "temp.png"))
 ```
+
+##### [[source]](https://www.ncdc.noaa.gov/cag/national/time-series){target="_blank"}
 
 
 Importantly, notice that the data we would like to use span different time periods:
@@ -359,7 +371,7 @@ The "-99" needs to be in quotation marks because this argument expects character
 ***
 <details> <summary> Click here for an explanation about data types in R and about character strings.</summary>
 
-There are several classes of data in R programming. Character is one of these classes. A character string is an individual data value made up of characters. This can be a paragraph, like the legend for the table, or it can be a single letter or number like the letter "a" or the number "3". If data are of class character, than the numeric values will not be processed like a numeric value in a mathematical sense. If you want your numeric values to be interpreted that way, they need to be converted to a numeric class. The options typically used are integer (which has no decimal place) and double precision (which has a decimal place).
+There are several [classes of data in R programming](https://en.wikipedia.org/wiki/R_(programming_language), meaning that certain objects will be treated or interpreted differently. Character is one of these classes. A character string is an individual data value made up of characters. This can be a paragraph, like the legend for the table, or it can be a single letter or number like the letter "a" or the number "3". If data are of class character, than the numeric values will not be processed like a numeric value in a mathematical sense. If you want your numeric values to be interpreted that way, they need to be converted to a numeric class. The options typically used are integer (which has no decimal place) and double precision (which has a decimal place).
 
 A variable that is a factor has a set of particular values called levels (this can be numbers or characters). Even if these are numeric, they will be interpreted as levels (i.e., as if they were characters) not as mathematical numbers. The values of a factor are assumed to have a particular ordering; by default the order is alphabetical, but this is not always the correct/intuitive ordering. You can modify the order of these levels with the `forcats` package.
 
@@ -386,7 +398,7 @@ First, let's take a look at the CO2 data (`CO2_emissions`).
 We can use the `slice_head()` function of the `dplyr` package to see just the first rows of our data. 
 We can specify how many rows we would like to see by using the `n =` argument. 
 
-We will use the `%>%` pipe from the `magrittr` package (although it is also imported by other Tidyverse packages, like `dplyr`), which can be used to define the input for later sequential steps. 
+We will use the `%>%` pipe from the `magrittr` package (although it is also imported by other `tidyverse` packages, like `dplyr`), which can be used to define the input for later sequential steps. 
 This will make more sense when we have multiple sequential steps using the same data object. 
 
 ```{r}
@@ -702,7 +714,7 @@ First, we consider the disasters that have occurred in the US.
 us_disaster
 ```
 
-We are specifically interested in the `Year` and the variables that contain the word `"Count"`. The other variables represent an estimate of the economic cost in billions of dollars, as well as the upper and lower bounds for simulations used to estimate the economic cost, which show the level of uncertainity in these estimates (at three different levels of confidence) as the true cost is unknown. See [here](https://www.ncdc.noaa.gov/billions/time-series) for more information about the data. For this analysis, we will focus just on the number of disasters that occured each year. 
+We are specifically interested in the `Year` and the variables that contain the word `"Count"`. The other variables represent an estimate of the economic cost in billions of dollars, as well as the upper and lower bounds for simulations used to estimate the economic cost, which show the level of uncertainty in these estimates (at three different levels of confidence) as the true cost is unknown. See [here](https://www.ncdc.noaa.gov/billions/time-series) for more information about the data. For this analysis, we will focus just on the number of disasters that occurred each year. 
 
 We will select our variables of interest using the `select()` and `contains()` functions in the `dplyr` package. 
 Since we are selecting for variables with the word `"Count"` we need to use quotation marks around it. 
@@ -738,7 +750,7 @@ us_disaster %>% bind_cols(Disaters = yearly_disasters)
 
 However, we can actually create and add this new variable directly to the `us_disaster` tibble by using the `mutate()` function of `dplyr` and using the `.` notation.
 
-We need to use the `.` notation to indicate that we are using the data that we already used as input to our `mutate()` function, which in this case is the entire `us_disaster` tibble for our `select()` function. The the output from the `select()` function will be used for the `rowSums()` function. 
+We need to use the `.` notation to indicate that we are using the data that we already used as input (on the right side of the pipe) to our `mutate()` function (on the left side of our pipe), which in this case is the entire `us_disaster` tibble for our `select()` function. The the output from the `select()` function will be used for the `rowSums()` function. 
 
 ```{r}
 us_disaster %<>%
@@ -831,7 +843,7 @@ Then, we also want to create a `Country` variable.
 We will also change the name of the `Date` variable to `Year` so that it will be consistent with our other datasets. We also also want the `Year` to be numeric. 
 We can accomplish both renaming and changing to numeric by using the `mutate()` function.
 
-We also want to create an `Indicator` varaible so that we can later tell what data the values in this tibble represent if we combine it with other tibbles and a `Label` variable, so that we will have informative labels if we make a plot with this data later. 
+We also want to create an `Indicator` variable so that we can later tell what data the values in this tibble represent if we combine it with other tibbles and a `Label` variable, so that we will have informative labels if we make a plot with this data later. 
 
 Finally, we remove the `Date` variable and also order the columns just like the other us data using the `select()` function.
 
@@ -1374,10 +1386,11 @@ Which line indicates the emissions in the US?
 
 ### Adding color 
 
-We can add another "layer" on top of our first plot to add a red line just for the US data. 
+We can add another "layer" on top of our first plot to add a blue line just for the US data. 
 To do this we need to indicate what data we would like to plot, so we need to filter for just the US data and then we need to indicate that it will be colored by Country, even though in this case we only have one line to color. 
-The default color would be a salmon pink color, but we would like red. 
-So we will use the `scale_color_manual()` function to manually choose the color that we want by using `scale_colour_manual(values = c("red"))`. 
+The default color would be a salmon pink color, but we would like blue. 
+So we will use the `scale_color_manual()` function to manually choose the color that we want by using `scale_colour_manual(values = c("blue"))`. Often you might use red to highlight a subset of the data, however, this can be difficult for viewers with certain types of colorblindness. 
+
 Notice how the color name needs to be in quotes and that the argument `values =` is used to specify what color values to use.
 
 We can add this line to the plot in two ways. 
@@ -1390,7 +1403,7 @@ CO2_countries +
               filter(Indicator == "Emissions",
                      Country == "United States"),
               aes(x = Year, y = Value, color = Country)) +
-  scale_colour_manual(values = c("red"))
+  scale_colour_manual(values = c("blue"))
 ```
 
 It looks like the US has long been the largest CO2 emission producing country until recently, when the US was surpassed by another country. 
@@ -1650,7 +1663,7 @@ The portions of the plot that are white indicate that there is no emission data 
 #### {.think_question_block}
 <b><u> Question Opportunity </u></b>
 
-Think about what the pros and cons are of tile and line plots. In what situations would a tile plot be a better choince for effective scientific communication? In what situations would a line plot be a better choice?
+Think about what the pros and cons are of tile and line plots. In what situations would a tile plot be a better choice for effective scientific communication? In what situations would a line plot be a better choice?
 
 ####
 
@@ -1672,7 +1685,7 @@ ggplot(data_long, aes(x = Year, y = Value, group = Country)) +
   geom_line(data = data_long %>%
               filter(Country == "United States"),
               aes(x = Year, y = Value, color = Country)) +
-  scale_colour_manual(values = c("red")) +
+  scale_colour_manual(values = c("blue")) +
   labs(title = "Distribution of Indicators by Year and Value",
        y = "Indicator Value") +
   my_theme +
@@ -1715,7 +1728,7 @@ From these plots we can see that each type of data spans a different time span.
 <b><u> Question Opportunity </u></b>
 
 What happens when you create the same plot with `facet_wrap()`? 
-Why might this be preferrable in certain cases?
+Why might this be preferable in certain cases?
 
 ####
 
@@ -1734,11 +1747,14 @@ What do you see?
 
 There are also some other common visualization techniques that are good for showing the difference between a set of observations and a mean value across time. 
 
-One of those is a line segment plot. 
-Let's calculate the mean across all years for the CO2 emission and temperature from 1980 to 2010. 
+One of those is a line segment plot.
 For simplicity, let's focus only on the data from the US. 
-We call this new variable `Mean`. 
-Then, we calculate the difference between each observation and the mean and create a new variable for these values called `Diff_from_mean`. 
+Let's calculate the mean across all years for the CO2 emission and temperature from 1980 to 2010.
+Recall that our `Indicator` variable describes what kind of data we have (Emissions, Temperature, GDP, Energy, Disasters).
+We will calculate the mean for each `Indicator` set of data by first grouping by this variable and then calculating the mean of the values of the `Value` variable for each set of data. 
+We will call this new variable `Mean`. 
+Then, we calculate the difference between each observation and the mean and create a new variable for these values called `Diff_from_mean`.  Again, all of this is performed for each group of data separately.
+Once we have created the new variables, we want to use the `ungroup()` function so that we no longer perform functions on subsets of the data based on the `Indicator` variable.
 Finally, we will also create a factor variable about the sign of the `Diff_from_mean` value to distinguish positive or negative changes. 
 We will use this to color our plots.
 
@@ -1796,7 +1812,7 @@ We know that the datasets do not span the same amount of time.
 So let's limit this plot to only the years where the data overlaps for both CO2 emissions and temperature.
 
 We use the `geom_point()` function to create a scatter plot between the `x` and `y` variable defined in `aes()` where `x` is time and `y` is one of the two variables. 
-We also add a line on top of the scatter plot that smooths the trend from the points. The smoother we used here is `loess` or local polynomial regression fitting. 
+We also add a line on top of the scatter plot that smooths the trend from the points. The smoother we used here is `loess` [locally estimated scatterplot smoothing](https://en.wikipedia.org/wiki/Local_regression){target="_blank"}, a type of [local polynomial regression](https://en.wikipedia.org/wiki/Local_regression){target="_blank"} fitting. This is a nonparametric regression that is also called a "moving regression" where subsets of points that are close to one another (hence the term local) are used in a least squares  linear or nonlinear fit. Thus this results in a fit that may curve with the data.
 
 ```{r}
 CO2_temp_US_facet <-
@@ -1978,7 +1994,7 @@ Recall the plot we made above:
 CO2_temp_US
 ```
 
-Let's calculate the Pearson's correlation coefficient called "Rho" $\rho$ between CO2 emissions and temperature in the US. There are a few ways to calculate a correlatation coefficient and this is one of the most common.
+Let's calculate the Pearson's correlation coefficient called "Rho" $\rho$ between CO2 emissions and temperature in the US. There are a few ways to calculate a correlation coefficient and this is one of the most common.
 
 Formally, if we have a pair of observations $(x_1, y_1), \dots, (x_n,y_n)$, the correlation coefficient $\rho$ between $x$ and $y$ is defined as 
 
@@ -2040,7 +2056,7 @@ What are the differences?
 
 ####
 
-To test if the association between a pair of variables is statistically significant, you can use the `cor.test()` of the `stats` package to calculate the correlation coefficient, as well as confidence intervals for correlation coefficients.
+To test if the association between a pair of variables is [statistically significant](https://en.wikipedia.org/wiki/Statistical_significance), you can use the `cor.test()` of the `stats` package to calculate the correlation coefficient, as well as confidence intervals for correlation coefficients.
 
 We can use the `tidy()` function of the `broom` package to make the output more usable for working with in R. The role of this function is to pull numeric values from outputs and create a data frame of the values.
 
@@ -2145,6 +2161,17 @@ knitr::include_graphics(here::here("img", "causation.png"))
 
 ##### [[source]](http://tylervigen.com/spurious-correlations){target="_blank"}
 
+In this example and in our case study data, datasets about something over time, like the number of people killed by venomous spiders will have what is called [autocorrleation](https://en.wikipedia.org/wiki/Autocorrelation){target="_blank"} or serial correlation. This means that data points from one year to the next are similar to one another or have some sort of internal structure related to time (such as seasonality). Let's think about our CO2 emission and temperature data. You may be able to see how one year of CO2 emissions might be fairly similar to next year, because the number of sources (such as industrial factories and cars) in the US will change slightly from year to year, but they will be related to that of the previous years. Anytime we look at correlation between two variables that each have autocorrelation, this can result in a higher likelihood of correlation between these variables. 
+
+Indeed if we look at correlation between two random variables with autocorrelation we can see an inflation in the correlation rho values between the two variables, as compared to that of variables that do not have autocorrelation.
+
+```{r, echo = FALSE}
+hist(replicate(5000, { cor(diffinv(rnorm(99)),diffinv(rnorm(99))) }), breaks=100, main="Correlation between autocorrelated variables", xlab="rho")
+hist(replicate(5000, { cor(rnorm(100),rnorm(100)) }), breaks=100, main="Correlation between variables with no autocorrelation", xlab="rho")
+```
+
+This is something to keep in mind when you evaluate how two things are related to one another over time. There are [methods](https://online.stat.psu.edu/stat462/node/188/) that have been developed to account for this in [time series](https://en.wikipedia.org/wiki/Time_series) analysis (analyzing data over time). This does not mean that two variables (such as CO2 and temperature) may not be in fact correlated, it just means that we need to account for the autocorrelation within each variable, however this is beyond the scope of this case study.
+
 # **Summary**
 *** 
 
@@ -2177,7 +2204,7 @@ In this case study we evaluated CO2 emissions from as far back as 1751 for some 
 
 We also took a look at how CO2 emissions might relate to other factors, such as temperature, energy use, and natural disasters. We learned that we can summarize the relationship between two sets of data using **correlation coefficients**. We also learned that we can use **regression** to predict or describe how changes in one variable may influence changes in another variable. Importantly, we also learned that just because two variables show strong correlation or show an association, it does not necessarily indicate that they are causally related. 
 
-However, there is quite a bit of scientific evidence to indicate that in fact CO2 emissions trap heat and lead to increased global temperatures. Yet, it is important to realize that there are other factors involved in the relationship between US CO2 emissions and US annual average temperatures. For example there are CO2 emissions from other countries in the atmosphere, there are other greenhouse gases, and there is already existing CO2 in the atmosphere that will continue to trap heat for many years. However, it is vital that we work around the globe to reduce future greenhouse gas emissions to mitigate the increased temperatures that we will experience due to the existing CO2 already in the atmosphere so that the warming temperatures aren't as extreme as they could be. Furthermore, we need to prepare for increased rates of natural disasters and how these may influence people around the world. Evidence suggests that impoverished people are the [most affected by disasters](https://ourworldindata.org/natural-disasters){target="_blank"}. We need to be particularly mindful of this as we prepare for the future.  
+However, there is quite a bit of scientific evidence to indicate that in fact CO2 emissions trap heat and lead to increased global temperatures. Yet, it is important to realize that there are other factors involved in the relationship between US CO2 emissions and US annual average temperatures. For example there are CO2 emissions from other countries in the atmosphere, there are other greenhouse gases, there is already existing CO2 in the atmosphere that will continue to trap heat for many years, and finally there is heat trapped in the ocean due to previous emissions that will cause delayed changes in surface temperatures. However, it is vital that we work around the globe to reduce future greenhouse gas emissions to mitigate the increased temperatures that we will experience due to previous and existing CO2 emissions, so that the warming temperatures aren't as extreme as they could be. Furthermore, we need to prepare for increased rates of natural disasters and how these may influence people around the world. Evidence suggests that impoverished people are the [most affected by disasters](https://ourworldindata.org/natural-disasters){target="_blank"}. We need to be particularly mindful of this as we prepare for the future.  
 
 
 
@@ -2199,10 +2226,15 @@ Ask students to plot CO2 emissions and other variables (e.g. energy use) on a sc
 [Correlation coefficient](https://rafalab.github.io/dsbook/regression.html#corr-coefl){target="_blank"}   
 [Correlation does not imply causation](https://dfrieds.com/math/correlation-does-not-imply-causation.html){target="_blank"}  
 [Regression](https://rafalab.github.io/dsbook/regression.html){target="_blank"}  
+[Locally estimated scatterplot smoothing](https://en.wikipedia.org/wiki/Local_regression){target="_blank"}  
+[Local polynomial regression](https://en.wikipedia.org/wiki/Local_regression){target="_blank"}  
+[Autocorrleation](https://en.wikipedia.org/wiki/Autocorrelation){target="_blank"}  
+[Time series](https://en.wikipedia.org/wiki/Time_series){target="_blank"}   
+[Methods to account for autocorrelation](https://online.stat.psu.edu/stat462/node/188/){target="_blank"}  
 [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}   
 [National Climate Assessment Report](https://data.globalchange.gov/report/nca3-overview){target="_blank"}    
 [Greenhouse gases](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"} 
-[Climat change](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"}
+[Climate change](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"}
 
 
 <u>**Packages used in this case study:** </u>

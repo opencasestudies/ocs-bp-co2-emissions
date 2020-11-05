@@ -137,11 +137,20 @@ findings.
 ### Other notes and resources
 
 <a href="https://www.tidyverse.org/" target="_blank">Tidyverse</a>  
-<a href="https://rstudio.com/resources/cheatsheets/" target="_blank">RStudio cheatsheets</a>  
-<a href="https://www.mathsisfun.com/data/correlation.html" target="_blank">Introduction to correlation</a>  
+<a href="https://rstudio.com/resources/cheatsheets/" target="_blank">RStudio cheatsheets</a>
+<a href="https://www.mathsisfun.com/data/correlation.html" target="_blank">Introduction to correlation</a>
 <a href="https://rafalab.github.io/dsbook/regression.html#corr-coefl" target="_blank">Correlation coefficient</a>  
 <a href="https://dfrieds.com/math/correlation-does-not-imply-causation.html" target="_blank">Correlation does not imply causation</a>  
-<a href="https://rafalab.github.io/dsbook/regression.html" target="_blank">Regression</a>
+<a href="https://rafalab.github.io/dsbook/regression.html" target="_blank">Regression</a>  
+<a href="https://en.wikipedia.org/wiki/Local_regression" target="_blank">Locally estimated scatterplot smoothing</a>  
+<a href="https://en.wikipedia.org/wiki/Local_regression" target="_blank">Local polynomial regression</a>  
+<a href="https://en.wikipedia.org/wiki/Autocorrelation" target="_blank">Autocorrleation</a>  
+<a href="https://en.wikipedia.org/wiki/Time_series" target="_blank">Time series</a>  
+<a href="https://online.stat.psu.edu/stat462/node/188/" target="_blank">Methods to account for autocorrelation</a>  
+<a href="https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf" target="_blank">US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report</a>  
+<a href="https://data.globalchange.gov/report/nca3-overview" target="_blank">National Climate Assessment Report</a>  
+<a href="https://www.epa.gov/report-environment/greenhouse-gases" target="_blank">Greenhouse gases</a>
+<a href="https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations" target="_blank">Climate change</a>
 
 <u>**Packages used in this case study:** </u>
 
