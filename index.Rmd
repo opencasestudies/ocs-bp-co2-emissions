@@ -750,7 +750,7 @@ us_disaster %>% bind_cols(Disaters = yearly_disasters)
 
 However, we can actually create and add this new variable directly to the `us_disaster` tibble by using the `mutate()` function of `dplyr` and using the `.` notation.
 
-We need to use the `.` notation to indicate that we are using the data that we already used as input (on the left side of the pipe) to our `mutate()` function (on the right side of our pipe), which in this case is the entire `us_disaster` tibble for our `select()` function. The the output from the `select()` function will be used for the `rowSums()` function. 
+We need to use the `.` notation to indicate that we are using the data that we already used as input (on the left side of the pipe) to our `mutate()` function (on the right side of our pipe), which in this case is the entire `us_disaster` tibble for our `select()` function. The output from the `select()` function will be used for the `rowSums()` function. 
 
 ```{r}
 us_disaster %<>%
@@ -1614,7 +1614,7 @@ To create this plot we will filter our data to include only the Countries includ
 Then, we will use the `fct_reorder()` function of the `forcats` package to order our countries based on the last emission value in 2014.
 
 To use this function, the variable that is to be reordered is listed first. 
-The variable that is that is being used to determine the order is listed second. 
+The variable that is being used to determine the order is listed second. 
 Finally, a function to apply to the variable listed second is listed third.
 This function is used to determine the order. 
 In this case, we want to determine the last value of the `Value` variable using the `last()` function (recall that this is also a function of the `dplyr` package). 
@@ -1837,7 +1837,7 @@ CO2_temp_US_facet
 ```
 
 Note, we are showing a different `theme` here, namely the `theme_classic()` theme. 
-We can see that there are similar patterns of CO2 emission levels an average annual temperatures.
+We can see that there are similar patterns of CO2 emission levels and average annual temperatures.
 
 #### {.recall_code_question_block}
 <b><u> Question Opportunity </u></b>
@@ -2005,7 +2005,7 @@ where $\mu_x, \mu_y$ are the means of $x_1,\dots, x_n$ and $y_1, \dots, y_n$, re
 
 Therefore, we can standardize the two variables and essentially average (the denominator is n-1) the standardized values to calculate the correlation coefficient `rho`. 
 
-Here we will manually perform the calculation. We will use the `tally()` function of the `dplyr` package to get the number of samples $n$. In this case this is equivalent the the number of rows in the `wide_US` tibble. We need to then use the `pull()` function to specifically grab the value out of the tibble that is created from using this function. As you can see from using the base `class()` function that this is a `tbl_df` which is short for tibble data frame (the tidyverse version of a data frame) rather than just a number. 
+Here we will manually perform the calculation. We will use the `tally()` function of the `dplyr` package to get the number of samples $n$. In this case this is equivalent to the number of rows in the `wide_US` tibble. We need to then use the `pull()` function to specifically grab the value out of the tibble that is created from using this function. As you can see from using the base `class()` function that this is a `tbl_df` which is short for tibble data frame (the tidyverse version of a data frame) rather than just a number. 
 
 ```{r}
 tally(wide_US)
