@@ -8,6 +8,12 @@ output: md_document
 
 [![Build Status](https://travis-ci.org/opencasestudies/ocs-bp-co2-emissions.svg?branch=master)](https://travis-ci.org/opencasestudies/ocs-bp-co2-emissions)
 
+### Important links 
+
+- HTML: https://www.opencasestudies.org/ocs-bp-co2-emissions
+- GitHub: https://github.com//opencasestudies/ocs-bp-co2-emissions
+- Bloomberg American Health Initiative: https://americanhealth.jhu.edu/open-case-studies
+
 ### Disclaimer 
 
 The purpose of the [Open Case
@@ -30,7 +36,7 @@ To cite this case study:
 
 Wright, Carrie and Ontiveros, Michael and Jager, Leah and Taub, Margaret and Hicks, Stephanie. (2020). https://github.com/opencasestudies/ocs-bp-co2-emissions. Exploring CO2 emissions across time (Version v1.0.0).
 
-### Acknowledgements
+### Acknowledgments
 
 We would like to acknowledge [Megan Latshaw](https://www.jhsph.edu/faculty/directory/profile/1708/megan-weil-latshaw) for assisting in framing the major direction of the case study.
 

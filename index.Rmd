@@ -60,6 +60,9 @@ Wright, Carrie and Ontiveros, Michael and Jager, Leah and Taub, Margaret and Hic
 
 ####
 
+To access the GitHub repository for this case study see here: https://github.com//opencasestudies/ocs-bp-co2-emissions.
+This case study is part of a series of public health case studies for the [Bloomberg American Health Initiative](https://americanhealth.jhu.edu/open-case-studies).
+
 # **Motivation**
 *** 
 
@@ -2283,7 +2286,7 @@ Ask students to plot CO2 emissions and other variables (e.g. energy use) on a sc
 sessionInfo()
 ```
 
-## **Acknowledgements**
+## **Acknowledgments**
 ***
 
 We would like to acknowledge [Megan Latshaw](https://www.jhsph.edu/faculty/directory/profile/1708/megan-weil-latshaw) for assisting in framing the major direction of the case study.

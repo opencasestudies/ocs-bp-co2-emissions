@@ -5,6 +5,15 @@ OpenCaseStudies
 [![Build
 Status](https://travis-ci.org/opencasestudies/ocs-bp-co2-emissions.svg?branch=master)](https://travis-ci.org/opencasestudies/ocs-bp-co2-emissions)
 
+### Important links
+
+-   HTML:
+    <a href="https://www.opencasestudies.org/ocs-bp-co2-emissions" class="uri">https://www.opencasestudies.org/ocs-bp-co2-emissions</a>
+-   GitHub:
+    <a href="https://github.com//opencasestudies/ocs-bp-co2-emissions" class="uri">https://github.com//opencasestudies/ocs-bp-co2-emissions</a>
+-   Bloomberg American Health Initiative:
+    <a href="https://americanhealth.jhu.edu/open-case-studies" class="uri">https://americanhealth.jhu.edu/open-case-studies</a>
+
 ### Disclaimer
 
 The purpose of the [Open Case
@@ -33,7 +42,7 @@ and Hicks, Stephanie. (2020).
 <a href="https://github.com/opencasestudies/ocs-bp-co2-emissions" class="uri">https://github.com/opencasestudies/ocs-bp-co2-emissions</a>.
 Exploring CO2 emissions across time (Version v1.0.0).
 
-### Acknowledgements
+### Acknowledgments
 
 We would like to acknowledge [Megan
 Latshaw](https://www.jhsph.edu/faculty/directory/profile/1708/megan-weil-latshaw)
