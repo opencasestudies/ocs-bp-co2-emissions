@@ -3,6 +3,8 @@ title: "Open Case Studies: Exploring CO2 emissions across time"
 css: style.css
 output:
   html_document:
+    includes:
+      in_header: GA_Script.Rhtml
     self_contained: yes
     code_download: yes
     highlight: tango
@@ -2229,7 +2231,7 @@ However, there is quite a bit of scientific evidence to indicate that in fact CO
 
 
 
-# **Homework**
+# **Suggested Homework**
 ***
 
 Ask students to create a plot with labels showing the countries with the lowest CO2 emission levels.
@@ -2292,3 +2294,6 @@ sessionInfo()
 We would like to acknowledge [Megan Latshaw](https://www.jhsph.edu/faculty/directory/profile/1708/megan-weil-latshaw) for assisting in framing the major direction of the case study.
 
 We would also like to acknowledge the [Bloomberg American Health Initiative](https://americanhealth.jhu.edu/) for funding this work. 
+
+
+<script type='text/javascript' id='clustrmaps' src='//cdn.clustrmaps.com/map_v2.js?cl=080808&w=a&t=tt&d=rkeJy7szR2zgko6SzQvOjgSAKPG6aHwfgP338ysqAyE&co=ffffff&cmo=3acc3a&cmn=ff5353&ct=808080'></script>
