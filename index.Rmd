@@ -175,6 +175,9 @@ The skills, methods, and concepts that students will be familiar with by the end
 2. Relationship between correlation and linear regression
 3. Correlation is not causation
 
+```{r, out.width = "20%", echo = FALSE, fig.align = "center"}
+include_graphics("https://tidyverse.tidyverse.org/logo.png")
+```
 
 *** 
 
