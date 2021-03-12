@@ -1227,7 +1227,7 @@ To allow users to skip import and wrangling we will save the data as an RDA file
 
 ```{r, eval = FALSE}
 save(data_long, file = here::here("data", "wrangled", "wrangled_data.rda"))
-readr::write_csv(data_long, path = here::here("data","wrangled","wrangled_data.csv"))
+readr::write_csv(data_long, path = here::here("data","wrangled", "wrangled_data.csv"))
 ```
 
 
@@ -2030,10 +2030,12 @@ wide_US <-
 
 Let's save this data as an rda file for future use and as a csv file, as this is often useful for collaborators.
 We will save this in a "wrangled" subdirectory of our "data" directory of our working directory.
+
 ```{r, eval = FALSE}
-save(wide_US, file = here::here("data", "wrangled_US_data.rda"))
-readr::write_csv(wide_US, path = here::here("data", "wrangled_US_data.csv"))
+save(wide_US, file = here::here("data", "wrangled", "wrangled_US_data.rda"))
+readr::write_csv(wide_US, path = here::here("data", "wrangled", "wrangled_US_data.csv"))
 ```
+
 Now we can specify which indicators we want to look at, so now we can specifically look at emissions and temperature.
 
 ```{r}
@@ -2094,10 +2096,14 @@ Now that we see that there might be a linear relationship between CO2 emissions 
 # **Data Analysis**
 ***
  
+f you are following along and stopped you could load the data you will need like so:
 
-<details> <summary> If you skipped the previous sections click here. </summary>
+```{r}
+load(here::here("data", "wrangled", "wrangled_US_data.rda"))
+```
 
 ***
+<details> <summary> If you skipped the previous sections click here. </summary>
 
 An RDA file (stands for R data) of the data (called `wrangled_US_data.rda`) can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/wrangled) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/wrangled/wrangled_US_data.rda). Download this file and then place it in your current working directory within a subdirectory called "wrangled" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily.
 
