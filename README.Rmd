@@ -147,11 +147,11 @@ In this case study we look at the correaltion between CO2 emissions and annual a
 
 #### For users 
 
-There is a [`Makefile`](Makefile) in this folder that allows you to type `make` to knit the case study contained in the `index.Rmd` to `index.html` and it will also knit the [`README.Rmd`](README.Rmd) to a markdown file (`README.md`). 
+There is a [`Makefile`](Makefile) in this folder that allows you to type `make` to knit the case study contained in the `index.Rmd` to `index.html` and it will also knit the [`README.Rmd`](README.Rmd) to a markdown file (`README.md`). Users can start at any section after the "What are the data?" section, however some aspects about the code may be explained in an earlier section.
 
 #### For instructors
 
-Instructors can start at the data visualization section or the data analysis section. However, if you choose to start at the data analysis section, you will need to remove the code for the main plot.
+Instructors can start at any section after the "What are the data?" section. There is additional data about mortality over time in different countries from the World Bank in the `extra` subdirectory of the `data` directory. This could be used for additional analyses.
 
 #### Target audience 
 
