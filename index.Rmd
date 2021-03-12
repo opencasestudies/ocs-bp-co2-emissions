@@ -27,6 +27,9 @@ output:
 }
 </style>
 
+<!-- Open all links in new tab-->  
+<base target="_blank"/> 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(include = TRUE, comment = NA, echo = TRUE,
                       message = FALSE, warning = FALSE, cache = FALSE,
@@ -378,7 +381,7 @@ gdp_growth    <- readxl::read_xlsx(here("data", "raw", "gdp_per_capita_yearly_gr
 energy_use    <- readxl::read_xlsx(here("data", "raw", "energy_use_per_person.xlsx"))
 ```
 
-If you had trouble downloading these files, you can do so at our [GitHub repo](https://github.com//opencasestudies/ocs-bp-co2-emissions/data/raw) or more directly by clicking [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/yearly_co2_emissions_1000_tonnes.xlsx), [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/gdp_per_capita_yearly_growth.xlsx), and [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/energy_use_per_person.xlsx).
+If you had trouble downloading these files, you can do so at our [GitHub repo](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/raw/) or more directly by clicking [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/yearly_co2_emissions_1000_tonnes.xlsx), [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/gdp_per_capita_yearly_growth.xlsx), and [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/energy_use_per_person.xlsx).
 
 We will use the `read_csv()` function of the `readr` package to import the data from the `.csv` files.
 
@@ -396,7 +399,7 @@ To do this, we can skip rows using the `skip = 2` argument of the `read_csv()` f
 us_disaster <- readr::read_csv(here("data", "raw", "disasters.csv"), skip = 2)
 ```
 
-If you had trouble downloading this file, you can do so at our [GitHub repo](https://github.com//opencasestudies/ocs-bp-co2-emissions/data/raw) or more directly by clicking [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/disasters.csv).
+If you had trouble downloading this file, you can do so at our [GitHub repo](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/raw) or more directly by clicking [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/disasters.csv).
 
 Now looking at the `data/temperature.csv` file, we see that the first four lines do not have the same number of columns as the subsequent lines. 
 
@@ -422,14 +425,19 @@ A variable that is a factor has a set of particular values called levels (this c
 us_temperature <- readr::read_csv(here("data", "raw", "temperature.csv"), skip = 4, na = "-99")
 ```
 
-If you had trouble downloading this file, you can do so at our [GitHub repo](https://github.com//opencasestudies/ocs-bp-co2-emissions/data/raw) or more directly by clicking [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/temperature.csv).
+If you had trouble downloading this file, you can do so at our [GitHub repo](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/raw) or more directly by clicking [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/temperature.csv).
 
 Great! now we have imported all of the data that we will need.
 
 To allow users to skip import we will save the data as an RDA file:
 
 ```{r, eval = FALSE}
-save(CO2_emissions, gdp_growth, energy_use, us_disaster, us_temperature, file = here::here("data", "imported", "co2_data_imported.rda"))
+save(CO2_emissions, 
+     gdp_growth,
+     energy_use, 
+     us_disaster, 
+     us_temperature, 
+     file = here::here("data", "imported", "co2_data_imported.rda"))
 ```
 
 # **Data Wrangling**
@@ -442,7 +450,7 @@ load(here::here("data", "imported", "co2_data_imported.rda"))
 ***
 <details> <summary> If you skipped the data import section click here. </summary>
 
-An RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/imported) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/imported/co2_data_imported.rda). Download this file and then place it in your current working directory within a subdirectory called "imported" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to your file more easily with the `here` package. 
+An RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/imported) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/imported/co2_data_imported.rda). Download this file and then place it in your current working directory within a subdirectory called "imported" within a directory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily.
 
 ```{r}
 load(here::here("data", "imported", "co2_data_imported.rda"))
@@ -1235,7 +1243,7 @@ load(here::here("data", "wrangled", "wrangled_data.rda"))
 ***
 <details> <summary> If you skipped the data wrangling section click here. </summary>
 
-An RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/wrangled) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/wrangled/wrangled_data.rda). Download this file and then place it in your current working directory within a subdirectory called "wrangled" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to your file more easily with the `here` package. 
+An RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/wrangled) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/wrangled/wrangled_data.rda). Download this file and then place it in your current working directory within a subdirectory called "wrangled" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily.
 
 ```{r}
 load(here::here("data", "wrangled", "wrangled_data.rda"))
@@ -1263,7 +1271,7 @@ See [here](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Project
 </details>
 ***
 </details>
-
+***
 
 Now we will create some simple plots to examine the CO2 emissions over time using the `ggplot2` package.
 
@@ -2086,10 +2094,12 @@ Now that we see that there might be a linear relationship between CO2 emissions 
 # **Data Analysis**
 ***
  
- ***
+
 <details> <summary> If you skipped the previous sections click here. </summary>
 
-An RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/wrangled) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/wrangled/wrangled_US_data.rda). Download this file and then place it in your current working directory within a subdirectory called "wrangled" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to your file more easily with the `here` package. 
+***
+
+An RDA file (stands for R data) of the data (called `wrangled_US_data.rda`) can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/wrangled) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/wrangled/wrangled_US_data.rda). Download this file and then place it in your current working directory within a subdirectory called "wrangled" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily.
 
 ```{r}
 load(here::here("data", "wrangled", "wrangled_US_data.rda"))
@@ -2117,10 +2127,7 @@ See [here](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Project
 </details>
 ***
 </details>
-
-
-
-
+***
 
 
 
@@ -2380,14 +2387,14 @@ This is something to keep in mind when you evaluate how two things are related t
 *** 
 
 ## **Summary Plot**
-
+***
 
 The last thing we will do here is to create a plot that summarizes our major findings. 
 We will use the `plot_layout()` function of the `patchwork` R package. The `patchwork` allows you to create a plot layout based on mathematical-like formulas. As you can see in this example we want the `CO2_world` and `Top10t` plot on top and we want another row with the `CO2_temp_US_facet` and  the `CO2_temp_US` plot on the bottom. The plot_layout() function of the `patchwork` package then allows us to specify heights and widths for the plots.
 
 We will also save the figure using the `grDevices` `png()` function. We can specify the name of our plot file and where we want it to be saved using the `here()` function of the `here` package. In this case in the `img` subdirectory of the directory containing our .Rproj file. We can also specify the size of the plot and the resolution using the `res` argument.  The `grDevices` `dev.off()` function is necessary to close the graphics device.
 
-This will include a few plots that we made previously in previous sections. We saved these in the "plots" directory and will load these now for users who stopped and restarted or started at the data analysis section.
+This will include a few plots that we made previously in other sections. We saved these in the "plots" directory and will load these now for users who stopped and restarted or started at the data analysis section.
 
 ```{r}
 load(here::here("plots", "CO2_world.rda"))
@@ -2410,6 +2417,7 @@ knitr::include_graphics(here::here("img", "mainplot.png"))
 
 
 ## **Synopsis**
+***
 
 In this case study we evaluated CO2 emissions from as far back as 1751 for some countries to 2014. We discovered that global levels of CO2 emissions have dramatically increased over time. We also learned that some countries have been responsible for particularly high levels. 
 
