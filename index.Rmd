@@ -2126,7 +2126,7 @@ Now that we see that there might be a linear relationship between CO2 emissions 
 # **Data Analysis**
 ***
  
-f you are following along and stopped you could load the data you will need like so:
+If you are following along and stopped you could load the data you will need like so:
 
 ```{r}
 load(here::here("data", "wrangled", "wrangled_US_data.rda"))
