@@ -1,0 +1,13 @@
+name: ocs-bp-co2-emissions-interactive
+title: ocs-bp-co2-emissions-interactive
+username: qmeng
+account: qmeng
+server: rsconnect.biostat.jhsph.edu
+hostUrl: https://rsconnect.biostat.jhsph.edu/__api__
+appId: 83
+bundleId: 343
+url: https://rsconnect.biostat.jhsph.edu/ocs-bp-co2-emissions-interactive/
+when: 1620853199.01601
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: maintenance_notes.html|maintenance_notes.Rmd|README.md|README.Rmd|site_libs

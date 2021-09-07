@@ -1,10 +1,12 @@
 ---
-title: "Open Case Studies: Exploring CO2 emissions across time"
-css: style.css
+title: |
+  ![](www/img/interactive_logo.png){width=120px align=left style="padding-right: 20px"}
+  Exploring CO2 emissions across time
+css: www/style.css
 output:
   html_document:
     includes:
-      in_header: GA_Script.Rhtml
+       in_header: www/GA_Script.Rhtml
     self_contained: yes
     code_download: yes
     highlight: tango
@@ -16,26 +18,27 @@ output:
     toc: yes
   word_document:
     toc: yes
+runtime: shiny_prerendered
 ---
 
-<style>
-#TOC {
-  background: url("https://opencasestudies.github.io/img/icon-bahi.png");
-  background-size: contain;
-  padding-top: 240px !important;
-  background-repeat: no-repeat;
-}
-</style>
-
-<html lang="en-US">
-<body>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(include = TRUE, comment = NA, echo = TRUE,
+                      message = FALSE, warning = FALSE, cache = FALSE,
+                      fig.align = "center", out.width = '90%')
+library(knitr)
+library(here)
+library(learnr)
+library(gradethis)
+gradethis::gradethis_setup()
+```
 
 <!-- Open all links in new tab-->  
 <base target="_blank"/> 
 
-<p>Translate this page:</p>
 
-<div id="google_translate_element"></div>
+<div align="left" id="google_translate_element",></div>
+
+<script type="text/javascript" src='//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'></script>
 
 <script type="text/javascript">
 function googleTranslateElementInit() {
@@ -43,26 +46,10 @@ function googleTranslateElementInit() {
 }
 </script>
 
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-<p>You can translate the content of this page by selecting a language in the select box.</p>
-
-</body>
-</html>
-
-
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(include = TRUE, comment = NA, echo = TRUE,
-                      message = FALSE, warning = FALSE, cache = FALSE,
-                      fig.align = "center", out.width = '90%')
-library(here)
-library(knitr)
-```
 
 #### {.outline }
 ```{r, echo = FALSE, out.width = "800 px", dpi=300}
-knitr::include_graphics(here::here("img", "mainplot.png"))
+knitr::include_graphics("www/img/mainplot.png")
 ```
 
 ####
@@ -108,7 +95,7 @@ CO2 makes up the largest proportion of greenhouse gas emissions in the United St
 
 
 ```{r, echo = FALSE, out.width="500px"}
-knitr::include_graphics(here::here("img", "emissions.jpg"))
+knitr::include_graphics("www/img/emissions.jpg")
 ```
 
 ##### [[source]](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"}
@@ -117,7 +104,7 @@ A variety of sources and sectors contribute to greenhouse gas emissions:
 
 
 ```{r, echo = FALSE, out.width="500px"}
-knitr::include_graphics(here::here("img", "sector.png"))
+knitr::include_graphics("www/img/sector.png")
 ```
 
 ##### [[source]](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"}
@@ -125,7 +112,7 @@ knitr::include_graphics(here::here("img", "sector.png"))
 Transportation and Electricity contribute the most metric tons of CO2:
 
 ```{r, echo = FALSE, out.width="500px"}
-knitr::include_graphics(here::here("img", "sources_pie.jpg"))
+knitr::include_graphics("www/img/sources_pie.jpg")
 ```
 
 ##### [[source]](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"}
@@ -142,7 +129,7 @@ According to the [US Environmental Protection Agency (EPA) Inventory of U.S. Gre
 In fact, there are many signs that our planet is experiencing warmer temperatures:
 
 ```{r, echo = FALSE, out.width="500px"}
-knitr::include_graphics(here::here("img", "warming.png"))
+knitr::include_graphics("www/img/warming.png")
 ```
 
 ##### [[source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
@@ -266,7 +253,7 @@ Greenhouse gas emissions are due to both natural processes and anthropogenic (hu
 These emissions are one of the contributing factors to rising global temperatures, which can have a great influence on [public health](https://www.epa.gov/climate-indicators/understanding-connections-between-climate-change-and-human-health){target="_blank"}  as illustrated in the following image:
 
 ```{r, echo = FALSE, out.width="800px"}
-knitr::include_graphics(here::here("img", "climate_change_health_impacts.jpg"))
+knitr::include_graphics(here::here("www", "img", "climate_change_health_impacts.jpg"))
 ```
 
 ##### [[source]](https://www.cdc.gov/climateandhealth/effects/default.htm){target="_blank"}
@@ -285,7 +272,7 @@ The **Global Warming Potential (GWP)** compares the **ability of a greenhouse ga
 CO2 is actually the least heat-trapping gas of the greenhouse gases:
 
 ```{r, echo = FALSE, out.width="800px"}
-knitr::include_graphics(here::here("img", "GWP.png"))
+knitr::include_graphics("www/img/GWP.png")
 ```
 
 ##### [[source]](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}
@@ -303,7 +290,7 @@ Furthermore, rising CO2 levels in the ocean also influence ocean acidity:
 
 
 ```{r, echo = FALSE, out.width="500px"}
-knitr::include_graphics(here::here("img", "oceans.png"))
+knitr::include_graphics("www/img/oceans.png")
 ```
 
 ##### [[source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
@@ -317,7 +304,7 @@ Furthermore, greenhouse gas emissions are believed to influence weather patterns
 Indeed, events with high levels of precipitation which can induce flooding and property damage are generally increasing around the country:
 
 ```{r, echo = FALSE, out.width="500px"}
-knitr::include_graphics(here::here("img", "storms.png"))
+knitr::include_graphics("www/img/storms.png")
 ```
 
 ##### [[source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
@@ -352,7 +339,7 @@ Data   | Time span | Source  | Original Source   | Description | Citation
 
 To obtain the temperature data, the annual average temperatures were selected as shown in this image:
 ```{r, echo = FALSE, out.width = "800 px"}
-knitr::include_graphics(here::here("img", "temp.png"))
+knitr::include_graphics("www/img/temp.png")
 ```
 
 ##### [[source]](https://www.ncdc.noaa.gov/cag/national/time-series){target="_blank"}
@@ -388,13 +375,13 @@ You can create a project by going to the File menu of RStudio like so:
 
 
 ```{r, echo = FALSE, out.width="60%"}
-knitr::include_graphics(here::here("img", "New_project.png"))
+knitr::include_graphics("www/img/New_project.png")
 ```
 
 You can also do so by clicking the project button:
 
 ```{r, echo = FALSE, out.width="60%"}
-knitr::include_graphics(here::here("img", "project_button.png"))
+knitr::include_graphics("www/img/project_button.png")
 ```
 
 See [here](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) to learn more about using RStudio projects and [here](https://github.com/jennybc/here_here) to learn more about the `here` package.
@@ -405,10 +392,16 @@ See [here](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Project
 
 To read in the files that were downloaded from the various sources as indicated in the table above, we will use the `read_xlsx()` and `read_xls()` functions of the `readxl` package to import the data from the `.xlsx` and `.xls` files, respectively. We will also use the `here()` function of the `here` package to more easily specify the path to our files relative to the directory where the .Rproj file is located. 
 
-```{r}
+```{r, eval=FALSE}
 CO2_emissions <- readxl::read_xlsx(here("data","raw", "yearly_co2_emissions_1000_tonnes.xlsx"))
 gdp_growth    <- readxl::read_xlsx(here("data", "raw", "gdp_per_capita_yearly_growth.xlsx"))
 energy_use    <- readxl::read_xlsx(here("data", "raw", "energy_use_per_person.xlsx"))
+```
+
+```{r, echo=FALSE}
+CO2_emissions <- readxl::read_xlsx("www/data/raw/yearly_co2_emissions_1000_tonnes.xlsx")
+gdp_growth    <- readxl::read_xlsx("www/data/raw/gdp_per_capita_yearly_growth.xlsx")
+energy_use    <- readxl::read_xlsx("www/data/raw/energy_use_per_person.xlsx")
 ```
 
 If you had trouble downloading these files, you can do so at our [GitHub repo](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/raw/) or more directly by clicking [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/yearly_co2_emissions_1000_tonnes.xlsx), [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/gdp_per_capita_yearly_growth.xlsx), and [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/energy_use_per_person.xlsx).
@@ -420,13 +413,17 @@ However, for these files there are some lines that we would like to not import b
 In the first 5 rows shown below in the `data/disasters.csv` file, you can see that the first two rows does not have the same number of columns as the subsequent rows and are just (sub)titles. 
 
 ```{r, echo = FALSE, out.width = "600 px"}
-knitr::include_graphics(here::here("img", "Disasters.png"))
+knitr::include_graphics("www/img/Disasters.png")
 ```
 
 To do this, we can skip rows using the `skip = 2` argument of the `read_csv()` function. 
 
-```{r}
+```{r, eval=FALSE}
 us_disaster <- readr::read_csv(here("data", "raw", "disasters.csv"), skip = 2)
+```
+
+```{r, echo=FALSE}
+us_disaster <- readr::read_csv("www/data/raw/disasters.csv", skip = 2)
 ```
 
 If you had trouble downloading this file, you can do so at our [GitHub repo](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/raw) or more directly by clicking [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/disasters.csv).
@@ -434,7 +431,7 @@ If you had trouble downloading this file, you can do so at our [GitHub repo](htt
 Now looking at the `data/temperature.csv` file, we see that the first four lines do not have the same number of columns as the subsequent lines. 
 
 ```{r, echo = FALSE, out.width = "600 px"}
-knitr::include_graphics(here::here("img", "tempdata.png"))
+knitr::include_graphics("www/img/tempdata.png")
 ```
 
 We will skip importing all 4 lines by using `skip = 4`. 
@@ -451,8 +448,12 @@ A variable that is a factor has a set of particular values called levels (this c
 </details> 
 ***
 
-```{r}
+```{r, eval=FALSE}
 us_temperature <- readr::read_csv(here("data", "raw", "temperature.csv"), skip = 4, na = "-99")
+```
+
+```{r, echo=FALSE}
+us_temperature <- readr::read_csv("www/data/raw/temperature.csv", skip = 4, na = "-99")
 ```
 
 If you had trouble downloading this file, you can do so at our [GitHub repo](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/raw) or more directly by clicking [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/temperature.csv).
@@ -473,8 +474,12 @@ save(CO2_emissions,
 # **Data Wrangling**
 *** 
 If you have been following along but stopped, we could load our imported data like so:
-```{r}
+```{r, eval=FALSE}
 load(here::here("data", "imported", "co2_data_imported.rda"))
+```
+
+```{r, echo=FALSE}
+load("www/data/imported/co2_data_imported.rda")
 ```
 
 ***
@@ -482,7 +487,7 @@ load(here::here("data", "imported", "co2_data_imported.rda"))
 
 An RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/imported) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/imported/co2_data_imported.rda). Download this file and then place it in your current working directory within a subdirectory called "imported" within a directory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily.
 
-```{r}
+```{r, eval=FALSE}
 load(here::here("data", "imported", "co2_data_imported.rda"))
 ```
 
@@ -493,13 +498,13 @@ You can create a project by going to the File menu of RStudio like so:
 
 
 ```{r, echo = FALSE, out.width="60%"}
-knitr::include_graphics(here::here("img", "New_project.png"))
+knitr::include_graphics("www/img/New_project.png")
 ```
 
 You can also do so by clicking the project button:
 
 ```{r, echo = FALSE, out.width="60%"}
-knitr::include_graphics(here::here("img", "project_button.png"))
+knitr::include_graphics("www/img/project_button.png")
 ```
 
 See [here](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) to learn more about using RStudio projects and [here](https://github.com/jennybc/here_here) to learn more about the `here` package.
@@ -544,6 +549,21 @@ CO2_emissions %>%
 Try setting a different seed to see the difference in the output.
 
 ####
+
+```{r DW_Code1-setup}
+library(tidyverse)
+load(here("www", "data", "imported", "co2_data_imported.rda"))
+```
+
+```{r DW_Code1, exercise=TRUE}
+set.seed()
+```
+
+```{r DW_Code1-solution}
+set.seed(100)
+CO2_emissions %>%
+  slice_sample(n = 3)
+```
 
 OK, we see each country is represented along one row and each column contains yearly CO2 emissions. 
 We also see that there are a lot of `NA` values.
@@ -602,7 +622,6 @@ See [here](https://en.wikipedia.org/wiki/Wide_and_narrow_data){target="_blank"} 
 We want to collapse all of the values for the emission data across the different individual year variables into one new `Emissions` variable. We will identify what year they are from by creating a new `Year` variable. The `cols =` argument allows us to specify which columns we want to pivot (or not pivot) to create these new columns. We want to keep our `country` data as an ID variable so we will exclude it using the `-` sign, by default all other columns will be used.
 
 ```{r}
-
 CO2_emissions  %<>%
   pivot_longer(cols = -country,
                names_to = "Year",
@@ -624,6 +643,24 @@ Think a moment about what the dimensions of the  `CO2_emissions` tibble are now 
 
 ####
 
+```{r DW_Code2-setup}
+library(tidyverse)
+library(magrittr)
+load(here("www", "data", "imported", "co2_data_imported.rda"))
+
+CO2_emissions  %<>%
+  pivot_longer(cols = -country,
+               names_to = "Year",
+               values_to = "Emissions")
+```
+
+```{r DW_Code2, exercise=TRUE}
+# Write some code to check this
+```
+
+```{r DW_Code2-hint}
+dim(CO2_emissions)
+```
 
 Let's say we also want to rename the `country` variable to be capitalized.
 To do this, we can use the `rename()` function of the `dplyr` package to rename this variable. 
@@ -700,6 +737,42 @@ We will also again change the `country` variable to be `Country` by using the `r
 Using what you just learned about `pivot_longer()`, `rename()`, and `mutate()` and without scrolling up, try to come up with the code to do the wrangling for this data.
 
 ####
+
+```{r DW_Code3-setup}
+library(tidyverse)
+library(magrittr)
+load(here("www", "data", "imported", "co2_data_imported.rda"))
+```
+
+```{r DW_Code3, exercise=TRUE}
+# Try this out!
+```
+
+```{r DW_Code3-hint-1}
+gdp_growth %<>%
+  pivot_longer(cols = -country,
+               names_to = "Year",
+               values_to = "gdp_growth")
+```
+
+```{r DW_Code3-hint-2}
+gdp_growth %<>%
+  pivot_longer(cols = -country,
+               names_to = "Year",
+               values_to = "gdp_growth") %>%
+  rename(Country = country)
+```
+
+```{r DW_Code3-solution}
+gdp_growth %<>%
+  pivot_longer(cols = -country,
+               names_to = "Year",
+               values_to = "gdp_growth") %>%
+  rename(Country = country) %>%
+  mutate(Year = as.numeric(Year),
+         Label = "GDP Growth/Capita (%)") %>%
+  rename(GDP = gdp_growth)
+```
 
 ***
 <details> <summary> Click here to reveal the code. </summary>
@@ -778,6 +851,35 @@ To wrangle the `energy_use` data, we will again convert the data to long format,
 Again try to come up with the code on your own to wrangle the data.
 
 ####
+
+```{r DW_Code4-setup}
+library(tidyverse)
+library(magrittr)
+load(here("www", "data", "imported", "co2_data_imported.rda"))
+```
+
+```{r DW_Code4, exercise=TRUE}
+# Try this out!
+```
+
+```{r DW_Code4-hint-1}
+energy_use %<>%
+  pivot_longer(cols = -country,
+               names_to = "Year",
+               values_to = "energy_use") %>%
+  rename(Country = country)
+```
+
+```{r DW_Code4-hint-2}
+energy_use %<>%
+  pivot_longer(cols = -country,
+               names_to = "Year",
+               values_to = "energy_use") %>%
+  rename(Country = country) %>%
+  mutate(Year = as.numeric(Year),
+         Label = "Energy Use (kg, oil-eq./capita)") %>%
+  rename(Energy = energy_use)
+```
 
 ***
 <details> <summary> Click here to reveal the code. </summary>
@@ -913,6 +1015,20 @@ What would happen if we did not exclude `Year`?
 
 ####
 
+```{r DW_Code5-setup}
+library(tidyverse)
+library(magrittr)
+load(here("www", "data", "imported", "co2_data_imported.rda"))
+
+us_disaster %<>%
+  select(Year, contains("Count")) %>%
+  mutate(Disasters = rowSums(select(., -Year)))
+```
+
+```{r DW_Code5, exercise=TRUE}
+# Try this out!
+```
+
 ### **Temperature**
 ***
 
@@ -999,7 +1115,7 @@ Before we begin though, we will need to make sure that there is at least one var
 These are the `by="x1"` arguments below where `x1` is the name of the column in both the `a` and `b` datasets that we will join together. 
 
 ```{r, echo = FALSE, out.width = "500 px"}
-knitr::include_graphics(here::here("img", "join.png"))
+knitr::include_graphics("www/img/join.png")
 ```
 
 ##### [[source]](https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf){target="_blank"}
@@ -1066,6 +1182,10 @@ data_wide %>%
   slice_sample(n = 6)
 ```
 
+```{r, eval=FALSE}
+save(data_wide, file = here::here("www", "data", "exercise", "wide_data.rda"))
+```
+
 </details> 
 </details>
 ***
@@ -1086,6 +1206,23 @@ We will also make a long version of this data, where we will create an new varia
 Try to come up with the code to do this.
 
 ####
+
+```{r DW_Code6-setup}
+library(tidyverse)
+library(magrittr)
+load(here::here("www", "data", "exercise", "wide_data.rda"))
+```
+
+```{r DW_Code6, exercise=TRUE}
+# Try this out!
+```
+
+```{r DW_Code6-solution}
+data_long <- data_wide %>%
+  pivot_longer(cols = c(-Country, -Year, -Label),
+               names_to = "Indicator",
+               values_to = "Value")
+```
 
 ***
 <details> <summary> Click here to reveal the code. </summary>
@@ -1253,6 +1390,16 @@ Using only data from the US, calculate the first and last year that a value was 
 
 ####
 
+```{r DW_Code7-setup}
+library(tidyverse)
+library(magrittr)
+load(here::here("www", "data", "wrangled", "wrangled_data.rda"))
+```
+
+```{r DW_Code7, exercise=TRUE}
+# Try this out!
+```
+
 To allow users to skip import and wrangling we will save the data as an RDA file as well as a CSV file as this is often useful to send our data to collaborators. We will save this in a "wrangled" subdirectory of our "data" directory of our working directory.
 
 ```{r, eval = FALSE}
@@ -1260,14 +1407,173 @@ save(data_long, file = here::here("data", "wrangled", "wrangled_data.rda"))
 readr::write_csv(data_long, path = here::here("data","wrangled", "wrangled_data.csv"))
 ```
 
+## **Exercise**
+***
+
+```{r DW_Quiz, echo = FALSE}
+quiz(caption = "",
+  question("Which one of the following functions in the `dplyr` package allows us to see all of the variables (columns) at once, where several values of those columns are shown on the right of the variable names?",
+    answer("`slice_head()`", message = "This function allows us to see just the first rows of the data."),
+    answer("`slice_sample()`", message = "This function allows us to see a selection of random rows of the data."),
+    answer("`slice_tail()`", message = "This function allows us to see the rows at the end of the data."),
+    answer("`glimpse()`", correct = TRUE),
+    allow_retry = TRUE,
+    random_answer_order = TRUE
+  ),
+  question("Which one of the pipe operators (from the `magrittr` package) should be used right after a variable name if we want to perform a sequence of operations on that variable, and meanwhile, assign the final output to that variable (without redefining that variable using `<-` or `=`)?",
+    answer("`%>%`", message = "This operator cannot assign the final output to that variable."),
+    answer("`%<%`", message = "This is not a valie pipe operator."),
+    answer("`%T>%`", message = "This is the side-effects operator."),
+    answer("`%<>%`", correct = TRUE),
+    allow_retry = TRUE,
+    random_answer_order = TRUE
+  ),
+  question("Which of the following can the `mutate()` function in the `dplyr` package do? (more than one correct answers)",
+    answer("Select certain variables(columns) of the data.", message = "Selecting certain variables(columns) of the data is the function of the `select()` function."),
+    answer("Rename a variable.", message = "Renaming a variable is the function of the `rename()` function."),
+    answer("Create a new variable.", correct = TRUE),
+    answer("Modify an existing variable.", correct = TRUE),
+    allow_retry = TRUE,
+    random_answer_order = TRUE
+  )
+)
+```
+
+#### {.exercise_block}
+
+We have created a dataset called `wide_format` that is in "wide" format. Write some code to convert it to "long" format. (We want 3 columns with names "ID", "Variable", and "Value".)
+
+```{r DW_Exercise1-setup}
+ID <- c(1, 2, 3)
+Year <- c(2015, 2018, 2019)
+Length <- c(20, 21.5, 19)
+wide_format <- data.frame(ID, Year, Length)
+```
+
+```{r DW_Exercise1, exercise=TRUE, exercise.eval=TRUE, exercise.lines = 5}
+wide_format
+```
+
+```{r DW_Exercise1-hint}
+wide_format %>%
+  pivot_longer()
+```
+
+```{r DW_Exercise1-solution}
+wide_format %>%
+  pivot_longer(cols = -ID, names_to = "Variable", values_to = "Value")
+```
+
+####
+
+<p>&nbsp;</p>
+
+#### {.exercise_block}
+
+`mtcars` is a built-in R dataset as shown below. Use this dataset to complete the following exercise.
+
+```{r}
+mtcars
+```
+
+Write some code that will:
+
+1. Create a new dataset called `new.mtcars` from `mtcars`.
+2. Create a new column called `car` in `new.mtcars` that uses the values from the row names of `mtcars`. (Use the `rownames_to_column` function from the `tibble` package. See documentation [here](https://tibble.tidyverse.org/reference/rownames.html){target="_blank"}.)
+3. Only keep the `car`, `mpg`, and `cyl` columns of this `new.mtcars` dataset.
+4. Only keep the cars that have `cyl` = 4.
+5. Rearrange the dataset by `mpg` in descending order.
+
+*Note: replace the underscores("\_") with your code with one character per "\_". Click "Submit Answer" to check your answer. *
+
+```{r DW_Exercise2-setup}
+library(tidyverse)
+```
+
+```{r DW_Exercise2, exercise=TRUE, eval=FALSE}
+# step 1
+new.mtcars <- mtcars %>%
+  # step 2
+  rownames_to_column(var = "___") %>%
+  # step 3
+  ______(___, ___, ___) %>%
+  # step 4
+  ______(___ == _) %>%
+  # step 5
+  _______(____(mpg))
+
+# view data (Do NOT include this part when submitting your answer!)
+# new.mtcars
+```
+
+```{r DW_Exercise2-hint-1}
+# step 2:
+# The "var" argument is the name of the new column that will use the values from the row names. What is the column name?
+```
+
+```{r DW_Exercise2-hint-2}
+# step 2:
+# The "var" argument is the name of the new column that will use the values from the row names. What is the column name?
+
+# step 3:
+# Which function of the "dplyr" package select columns?
+```
+
+```{r DW_Exercise2-hint-3}
+# step 2:
+# The "var" argument is the name of the new column that will use the values from the row names. What is the column name?
+
+# step 3:
+# Which function of the "dplyr" package select columns?
+
+# step 4:
+# Which function of the "dplyr" package subset rows?
+```
+
+```{r DW_Exercise2-hint-4}
+# step 2:
+# The "var" argument is the name of the new column that will use the values from the row names. What is the column name?
+
+# step 3:
+# Which function of the "dplyr" package select columns?
+
+# step 4:
+# Which function of the "dplyr" package subset rows?
+
+# step 5:
+# Which function of the "dplyr" package will reorder the data?
+# What argument do we need to reorder in descending order?
+```
+
+```{r DW_Exercise2-hint-5}
+# Next hint will show you the solution
+```
+
+```{r DW_Exercise2-solution}
+new.mtcars <- mtcars %>%
+  rownames_to_column(var = "car") %>%
+  select(car, mpg, cyl) %>%
+  filter(cyl == 4) %>%
+  arrange(desc(mpg))
+```
+
+```{r DW_Exercise2-check, eval=FALSE}
+grade_code()
+```
+
+####
 
 # **Data Visualization**
 *** 
 
 If you have been following along but stopped, we could load our imported data like so:
 
-```{r}
+```{r, eval=FALSE}
 load(here::here("data", "wrangled", "wrangled_data.rda"))
+```
+
+```{r, echo=FALSE}
+load("www/data/wrangled/wrangled_data.rda")
 ```
 
 ***
@@ -1275,7 +1581,7 @@ load(here::here("data", "wrangled", "wrangled_data.rda"))
 
 An RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/wrangled) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/wrangled/wrangled_data.rda). Download this file and then place it in your current working directory within a subdirectory called "wrangled" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily.
 
-```{r}
+```{r, eval=FALSE}
 load(here::here("data", "wrangled", "wrangled_data.rda"))
 ```
 
@@ -1287,13 +1593,13 @@ You can create a project by going to the File menu of RStudio like so:
 
 
 ```{r, echo = FALSE, out.width="60%"}
-knitr::include_graphics(here::here("img", "New_project.png"))
+knitr::include_graphics("www/img/New_project.png")
 ```
 
 You can also do so by clicking the project button:
 
 ```{r, echo = FALSE, out.width="60%"}
-knitr::include_graphics(here::here("img", "project_button.png"))
+knitr::include_graphics("www/img/project_button.png")
 ```
 
 See [here](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) to learn more about using RStudio projects and [here](https://github.com/jennybc/here_here) to learn more about the `here` package.
@@ -1396,7 +1702,7 @@ To add a type of plot, we can use one of the many `geom_*` functions in `ggplot2
 For example, type `geom` into the RStudio console and you will see many options to scroll through.
 
 ```{r, echo = FALSE, out.width = "800 px"}
-knitr::include_graphics(here::here("img", "geom_.png"))
+knitr::include_graphics("www/img/geom_.png")
 ```
 
 Here, we will use the `geom_line()` function because we would like to create a line plot.
@@ -1461,7 +1767,7 @@ Notice, we used the function `theme_linedraw()` of `ggplot2` to change the gener
 **Useful tip**: You can type `theme_` in the RStudio console to see the various plot theme options available.
 
 ```{r, echo = FALSE, out.width = "800 px"}
-knitr::include_graphics(here::here("img", "themes.png"))
+knitr::include_graphics("www/img/themes.png")
 ```
 
 Great! We've created our first plot. 
@@ -1505,7 +1811,7 @@ Now let's say we wanted to save this plot.
 
 We could do so using the using the  `save()` function to save this to a "plot" directory in our working directory as an RDA file and we can use the `png()` function to save a png for collaborators. We need to use `dev.off()` function to close the graphical device that we will use to create the png version of the plot so that we are ready to make another plot like this.
 
-```{r}
+```{r, eval=FALSE}
 save(CO2_world, file =here::here("plots", "CO2_world.rda"))
 png(here::here("plots", "CO2_world.png"))
 CO2_world
@@ -1537,6 +1843,16 @@ We can see that many countries show a dramatic increase in emissions over time w
 - What other aesthetic  (i.e. `aes()` arguments) can be changed?
 
 ####
+
+```{r DV_Code1-setup}
+library(tidyverse)
+library(magrittr)
+load(here::here("www", "data", "wrangled", "wrangled_data.rda"))
+```
+
+```{r DV_Code1, exercise=TRUE}
+# Find out yourself!
+```
 
 Since we have many overlapping lines, we will make our lines slightly transparent by using the `alpha` argument. 
 
@@ -1597,7 +1913,7 @@ The difference in the rank functions mostly has to do with how to deal with ties
 We will use `dense_rank()`, as we do not want gaps between ranks.
 
 ```{r, echo = FALSE, out.width = "600 px"}
-knitr::include_graphics(here::here("img", "rank.png"))
+knitr::include_graphics("www/img/rank.png")
 ```
 
 We want to do this in descending order because we want to rank by largest to smallest, so we will use the `desc()` function of the `dplyr` package. 
@@ -1622,6 +1938,50 @@ We can see that China is now the top emission producing country.
 What are the bottom 10 emission producing countries in 2014?
 
 ####
+
+```{r DV_Code2-setup}
+library(tidyverse)
+library(magrittr)
+load(here::here("www", "data", "wrangled", "wrangled_data.rda"))
+```
+
+```{r DV_Code2, exercise=TRUE}
+# Write some code to find out
+```
+
+```{r DV_Code2-hint-1}
+# 1st way: rank in descending order as we did before 
+# 2nd way: rank in ascending order
+```
+
+```{r DV_Code2-hint-2}
+bottom_10_count <-
+  data_long %>%
+  filter(Indicator == "Emissions", Year == 2014)
+```
+
+```{r DV_Code2-hint-3}
+# 1st way of doing this
+bottom_10_count <-
+  data_long %>%
+  filter(Indicator == "Emissions", Year == 2014) %>%
+  mutate(rank = dense_rank(desc(Value))) %>%
+  filter(rank >= max(rank) - 9) %>%
+  arrange(rank)
+bottom_10_count
+```
+
+```{r DV_Code2-hint-4}
+# 2nd way of doing this
+bottom_10_count <-
+  data_long %>%
+  filter(Indicator == "Emissions", Year == 2014) %>%
+  mutate(rank = dense_rank(Value)) %>%
+  filter(rank <= 10) %>%
+  arrange(rank)
+bottom_10_count
+# Can you think of other ways? Try them out!
+```
 
 Let's make a plot of *just these top ten countries*. 
 
@@ -1755,7 +2115,7 @@ You can see that this package creates segments that connect the label to the lin
 There are many arguments to use to style your labels just the way that you want:
 
 ```{r, echo = FALSE, out.width = "600 px"}
-knitr::include_graphics(here::here("img", "ggrepel.png"))
+knitr::include_graphics("www/img/ggrepel.png")
 ```
 
 ##### [[source]](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"}
@@ -1839,7 +2199,7 @@ Now let's say we wanted to save this plot.
 
 We could do so using the using the  `save()` function to save this to a "plot" directory in our working directory as an RDA file and we can use the `png()` function to save a png for collaborators. We need to use `dev.off()` function to close the graphical device that we will use to create the png version of the plot so that we are ready to make another plot like this.
 
-```{r}
+```{r, eval=FALSE}
 save(Top10t, file =here::here("plots", "Top10t.rda"))
 png(here::here("plots", "Top10t.png"))
 Top10t
@@ -1923,6 +2283,24 @@ Why might this be preferable in certain cases?
 
 ####
 
+```{r DV_Code3-setup}
+library(tidyverse)
+library(magrittr)
+load(here::here("www", "data", "wrangled", "wrangled_data.rda"))
+my_theme <-
+  theme_linedraw() +
+  theme(axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+       axis.title.x = element_text(size = 12),
+       axis.title.y = element_text(size = 12),
+       plot.caption = element_text(size = 12),
+         plot.title = element_text(size = 16))
+```
+
+```{r DV_Code3, exercise=TRUE}
+# Try this out!
+```
+
 #### {.recall_code_question_block}
 <b><u> Question Opportunity </u></b>
 
@@ -1933,6 +2311,16 @@ What do you see?
 <b><u> Hint </u></b>: Use the `tally()` function in the `dplyr` package. 
 
 ####
+
+```{r DV_Code4-setup}
+library(tidyverse)
+library(magrittr)
+load(here::here("www", "data", "wrangled", "wrangled_data.rda"))
+```
+
+```{r DV_Code4, exercise=TRUE}
+# Your code here
+```
 
 ### Line segment plots
 
@@ -2031,7 +2419,7 @@ Note, we are showing a different `theme` here, namely the `theme_classic()` them
 We can see that there are similar patterns of CO2 emission levels and average annual temperatures.
 
 We will save this plot now like so to our "plots" directory:
-```{r}
+```{r, eval=FALSE}
 save(CO2_temp_US_facet, file =here::here("plots", "CO2_temp_US_facet.rda"))
 png(here::here("plots", "CO2_temp_US_facet.png"))
 CO2_temp_US_facet
@@ -2045,6 +2433,16 @@ dev.off()
 - Try using a different smoother in `geom_smooth()`. 
 
 ####
+
+```{r DV_Code5-setup}
+library(tidyverse)
+library(magrittr)
+load(here::here("www", "data", "wrangled", "wrangled_data.rda"))
+```
+
+```{r DV_Code5, exercise=TRUE}
+# Your code here
+```
 
 Next, instead of looking at the variables separately in faceted plots, let's look at the relationship between CO2 emissions and other variables directly. Thus, it is useful to have each of these indicators as their own variable.
 
@@ -2101,7 +2499,7 @@ Indeed, it does look like there is a positive, linear trend.
 
 We will also save this plot:
 
-```{r}
+```{r, eval=FALSE}
 save(CO2_temp_US, file =here::here("plots", "CO2_temp_US.rda"))
 png(here::here("plots", "CO2_temp_US.png"))
 CO2_temp_US
@@ -2118,18 +2516,107 @@ dev.off()
 
 ####
 
+```{r DV_Code6-setup}
+library(tidyverse)
+library(magrittr)
+load(here::here("www", "data", "wrangled", "wrangled_data.rda"))
+wide_US <-
+  data_long %>%
+  filter(Country == "United States", Year >= 1980, Year <= 2014) %>%
+  select(-Label) %>%
+  pivot_wider(names_from = Indicator, values_from = Value)
+```
+
+```{r DV_Code6, exercise=TRUE}
+# Your code here
+```
+
 Now that we see that there might be a linear relationship between CO2 emissions and temperature, let's learn about some statistical techniques to measure the strength of that relationship. 
 
+## **Exercise**
+***
 
+``` {r DV_Quiz, echo = FALSE}
+quiz(caption = "",
+  question("Which one of the following terms in the `ggplot()` function is used to define the shape, transparency, color, fill, and line types of the plot?",
+    answer("geom", message = "Geoms define geometric objects."),
+    answer("scale", message = "Scales define how your data will be plotted. For example, continuous, discrete, etc."),
+    answer("labs", message = "`labs()` function defines title, caption, and the axis labels."),
+    answer("aes", correct = TRUE),
+    allow_retry = TRUE,
+    random_answer_order = TRUE
+  ),
+  question("What does the `filter()` function do?",
+    answer("Selects specified columns.", message = "This is the function of `select()`."),
+    answer("Groups the data by a variable.", message = "This is the function of `group_by()`."),
+    answer("Reorders rows of data by a specified variable.", message = "This is the function of `arrange()`"),
+    answer("Extracts all rows that satisfy a condition.", correct = TRUE),
+    allow_retry = TRUE,
+    random_answer_order = TRUE
+  ),
+  question("Inside the `facet_grid()` function, `A ~ B` tells you to facet by A (columns) and B (rows).",
+    answer("True", message = "Variable on the left side of `~` tells you to facet by rows. Variable on the right side tells you to facet by columns."),
+    answer("False", correct = TRUE),
+    allow_retry = TRUE,
+    random_answer_order = TRUE
+  )
+)
+```
 
+#### {.exercise_block}
+
+Suppose that we have a dataset called `weight`. Write some code to plot weight change by individual.\
+We want the plot to:
+
+* have title as "Weight Change"
+* have $x$ axis as "Time_day" and $y$ axis be "Weight_lb"
+* be a line plot
+* have different colors representing IDs 1, 2, and 3
+* have legend on the right of the plot
+
+*Note: first we need to use `as.character()` to convert "ID" from number to character.*
+
+```{r, DV_Exercise1-setup}
+weight <- data.frame("ID" = c(1, 1, 1, 2, 2, 2, 3, 3, 3),
+                     "Time_day" = c(0, 15, 30, 0, 15, 30, 0, 15, 30),
+                     "Weight_lb" = c(120, 128, 122, 172, 176, 180, 155, 154, 155))
+```
+
+```{r DV_Exercise1, exercise=TRUE, exercise.eval=TRUE, exercise.lines = 5}
+weight
+```
+
+```{r DV_Exercise1-hint-1}
+weight$ID <- as.character(weight$ID)
+```
+
+```{r DV_Exercise1-hint-2}
+weight$ID <- as.character(weight$ID)
+weight %>%
+  ggplot(aes())
+```
+
+```{r DV_Exercise1-solution}
+weight$ID <- as.character(weight$ID)
+weight %>%
+  ggplot(aes(x = Time_day, y = Weight_lb, color = ID)) +
+  geom_line() +
+  labs(title = "Weight Change")
+```
+
+####
 
 # **Data Analysis**
 ***
  
 If you are following along and stopped you could load the data you will need like so:
 
-```{r}
+```{r, eval=FALSE}
 load(here::here("data", "wrangled", "wrangled_US_data.rda"))
+```
+
+```{r, echo=FALSE}
+load("www/data/wrangled/wrangled_US_data.rda")
 ```
 
 ***
@@ -2137,7 +2624,7 @@ load(here::here("data", "wrangled", "wrangled_US_data.rda"))
 
 An RDA file (stands for R data) of the data (called `wrangled_US_data.rda`) can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/wrangled) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/wrangled/wrangled_US_data.rda). Download this file and then place it in your current working directory within a subdirectory called "wrangled" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily.
 
-```{r}
+```{r, eval=FALSE}
 load(here::here("data", "wrangled", "wrangled_US_data.rda"))
 ```
 
@@ -2149,13 +2636,13 @@ You can create a project by going to the File menu of RStudio like so:
 
 
 ```{r, echo = FALSE, out.width="60%"}
-knitr::include_graphics(here::here("img", "New_project.png"))
+knitr::include_graphics("www/img/New_project.png")
 ```
 
 You can also do so by clicking the project button:
 
 ```{r, echo = FALSE, out.width="60%"}
-knitr::include_graphics(here::here("img", "project_button.png"))
+knitr::include_graphics("www/img/project_button.png")
 ```
 
 See [here](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects) to learn more about using RStudio projects and [here](https://github.com/jennybc/here_here) to learn more about the `here` package.
@@ -2219,8 +2706,14 @@ If the sign is positive, then the variables increase similarly.
 
 We previously made this plot:
 
-```{r}
+```{r, eval=FALSE}
 load(here::here("plots", "CO2_temp_US.rda"))
+CO2_temp_US
+
+```
+
+```{r, echo=FALSE}
+load("www/plots/CO2_temp_US.rda")
 CO2_temp_US
 
 ```
@@ -2384,6 +2877,11 @@ Notice that we also use the `geom_smooth(method = "lm")` function that we previo
 What does `se = FALSE` mean? Try turning it to TRUE. What happens? 
 
 ####
+
+```{r DA_Code1, exercise=TRUE}
+# Try this out!
+```
+
 ***
 <details> <summary> Click here for the answer.</summary>
 `se` stands for standard error. The gray shading shows the [confidence interval](https://stattrek.com/regression/slope-confidence-interval.aspx){target="_blank"} of the smooth line.
@@ -2403,7 +2901,7 @@ As you can see from this plot, often data may show a similar pattern over time b
 See this [website](https://www.tylervigen.com/spurious-correlations){target="_blank"} for more examples.
 
 ```{r, echo = FALSE, out.width="600px"}
-knitr::include_graphics(here::here("img", "causation.png"))
+knitr::include_graphics("www/img/causation.png")
 ```
 
 ##### [[source]](http://tylervigen.com/spurious-correlations){target="_blank"}
@@ -2419,6 +2917,34 @@ hist(replicate(5000, { cor(rnorm(100),rnorm(100)) }), breaks=100, main="Correlat
 
 This is something to keep in mind when you evaluate how two things are related to one another over time. There are [methods](https://online.stat.psu.edu/stat462/node/188/) that have been developed to account for this in [time series](https://en.wikipedia.org/wiki/Time_series) analysis (analyzing data over time). This does not mean that two variables (such as CO2 and temperature) may not be in fact correlated, it just means that we need to account for the autocorrelation within each variable, however this is beyond the scope of this case study.
 
+### **Exercise**
+***
+
+``` {r DA_Quiz, echo = FALSE}
+quiz(caption = "",
+  question("Refer to the plot above, what kind of correlation is this?",
+    answer("No correlation"),
+    answer("Positive correlation", correct = TRUE),
+    answer("Negative correlation"),
+    allow_retry = TRUE,
+    random_answer_order = TRUE
+  ),
+  question("Correlation coefficient can be used to measure strength of a nonlinear relationship.",
+    answer("True", message = "We can use the correlation coefficient to measure the strength of a linear relationship between two variables, but not nonlinear relationship."),
+    answer("False", correct = TRUE),
+    allow_retry = TRUE,
+    random_answer_order = TRUE
+  ),
+  question("Correlation between two variables implies a causal relationship.",
+    answer("True", message = "Correlation does not imply causation."),
+    answer("False", correct = TRUE),
+    allow_retry = TRUE,
+    random_answer_order = TRUE
+  )
+)
+```
+
+
 # **Summary**
 *** 
 
@@ -2432,10 +2958,16 @@ We will also save the figure using the `grDevices` `png()` function. We can spec
 
 This will include a few plots that we made previously in other sections. We saved these in the "plots" directory and will load these now for users who stopped and restarted or started at the data analysis section.
 
-```{r}
+```{r, eval=FALSE}
 load(here::here("plots", "CO2_world.rda"))
 load(here::here("plots", "Top10t.rda"))
 load(here::here("plots", "CO2_temp_US_facet.rda"))
+```
+
+```{r, echo=FALSE}
+load("www/plots/CO2_world.rda")
+load("www/plots/Top10t.rda")
+load("www/plots/CO2_temp_US_facet.rda")
 ```
 
 ```{r, eval = FALSE}
@@ -2447,7 +2979,7 @@ dev.off()
 ```
 
 ```{r, echo = FALSE, out.width = "800 px", dpi=300}
-knitr::include_graphics(here::here("img", "mainplot.png"))
+knitr::include_graphics("www/img/mainplot.png")
 ```
 
 
