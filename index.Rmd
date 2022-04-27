@@ -51,6 +51,14 @@ knitr::opts_chunk$set(include = TRUE, comment = NA, echo = TRUE,
                       fig.align = "center", out.width = '90%')
 library(here)
 library(knitr)
+library(magrittr)
+remotes::install_github("benmarwick/wordcountaddin", type = "source", dependencies = TRUE)
+remotes::install_github("alistaire47/read.so")
+library(wordcountaddin)
+library(read.so)
+
+rmarkdown:::perf_timer_reset_all()
+rmarkdown:::perf_timer_start("render")
 ```
 
 #### {.outline }
@@ -81,14 +89,49 @@ Wright, Carrie and Ontiveros, Michael and Jager, Leah and Taub, Margaret and Hic
 ####
 
 To access the GitHub repository for this case study see here: https://github.com//opencasestudies/ocs-bp-co2-emissions.
+
+You may also access and download the data using our `OCSdata` package. To learn more about this package including examples, see this [link](https://github.com/opencasestudies/OCSdata). Here is how you would install this package:
+
+```{r, eval=FALSE}
+install.packages("OCSdata")
+```
+
 This case study is part of a series of public health case studies for the [Bloomberg American Health Initiative](https://americanhealth.jhu.edu/open-case-studies).
 
+***
+
+The total reading time for this case study is calculated via [koRpus](https://github.com/unDocUMeantIt/koRpus) and shown below: 
+
+```{r, echo=FALSE}
+readtable = text_stats("index.Rmd") # producing reading time markdown table
+readtime = read.so::read.md(readtable) %>% dplyr::select(Method, koRpus) %>% # reading table into dataframe, selecting relevant factors
+  dplyr::filter(Method == "Reading time") %>% # dropping unnecessary rows
+  dplyr::mutate(koRpus = paste(round(as.numeric(stringr::str_split(koRpus, " ")[[1]][1])), "minutes")) %>% # rounding reading time estimate
+  dplyr::mutate(Method = "koRpus") %>% dplyr::relocate(koRpus, .before = Method) %>% dplyr::rename(`Reading Time` = koRpus) # reorganizing table
+knitr::kable(readtime, format="markdown")
+```
+
+***
+
+**Readability Score: **
+
+A readability index estimates the reading difficulty level of a particular text. Flesch-Kincaid, FORCAST, and SMOG are three common readability indices that were calculated for this case study via [koRpus](https://github.com/unDocUMeantIt/koRpus). These indices provide an estimation of the minimum reading level required to comprehend this case study by grade and age. 
+
+```{r, echo=FALSE}
+rt = wordcountaddin::readability("index.Rmd", quiet=TRUE) # producing readability markdown table
+df = read.so::read.md(rt) %>% dplyr::select(index, grade, age) %>%  # reading table into dataframe, selecting relevant factors
+  tidyr::drop_na() %>% dplyr::mutate(grade = round(as.numeric(grade)), # dropping rows with missing values, rounding age and grade columns
+                                     age = round(as.numeric(age))
+                                     )
+knitr::kable(df, format="markdown")
+```
+
+***
 
 Please help us by filling out our survey.
 
 
 <div style="display: flex; justify-content: center;"><iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfpN4FN3KELqBNEgf2Atpi7Wy7Nqy2beSkFQINL7Y5sAMV5_w/viewform?embedded=true" width="1200" height="700" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe></div>
-
 
 
 # **Motivation**
@@ -225,6 +268,7 @@ library(directlabels)
 library(ggrepel)
 library(broom)
 library(patchwork)
+library(OCSdata)
 ```
 
 <u>**Packages used in this case study:** </u>
@@ -246,6 +290,8 @@ library(patchwork)
 [`ggrepel`](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"} | to add labels that don't overlap to plots
 [`broom`](https://www.tidyverse.org/blog/2018/07/broom-0-5-0/) | to make the output form statistical tests easier to work with
 [`patchwork`](https://github.com/thomasp85/patchwork){target="_blank"}  | to combine plots
+[`OCSdata`](https://github.com/opencasestudies/OCSdata){target="_blank"} | to access and download OCS data files
+
 The first time we use a function, we will use the `::` to indicate which package we are using. Unless we have overlapping function names, this is not necessary, but we will include it here to be informative about where the functions we will use come from.
 
 
@@ -406,6 +452,16 @@ energy_use    <- readxl::read_xlsx(here("data", "raw", "energy_use_per_person.xl
 
 If you had trouble downloading these files, you can do so at our [GitHub repo](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/raw/) or more directly by clicking [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/yearly_co2_emissions_1000_tonnes.xlsx), [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/gdp_per_capita_yearly_growth.xlsx), and [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/raw/energy_use_per_person.xlsx).
 
+You may also download these files using the `OCSdata` package:
+
+```{r, eval=FALSE}
+# install.packages("OCSdata")
+library(OCSdata)
+raw_data("ocs-bp-co2-emissions", outpath = getwd())
+# This will save the raw data files in a "OCSdata/data/raw/" subfolder 
+# in your current working directory
+```
+
 We will use the `read_csv()` function of the `readr` package to import the data from the `.csv` files.
 
 However, for these files there are some lines that we would like to not import because the number of columns differ for some rows. If we don't account for this, then we may end up importing fewer columns of the data that we would like.
@@ -466,6 +522,7 @@ save(CO2_emissions,
 # **Data Wrangling**
 *** 
 If you have been following along but stopped, we could load our imported data like so:
+
 ```{r}
 load(here::here("data", "imported", "co2_data_imported.rda"))
 ```
@@ -473,7 +530,21 @@ load(here::here("data", "imported", "co2_data_imported.rda"))
 ***
 <details> <summary> If you skipped the data import section click here. </summary>
 
-An RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/imported) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/imported/co2_data_imported.rda). Download this file and then place it in your current working directory within a subdirectory called "imported" within a directory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily.
+First you need to install and load the `OCSdata` package:
+
+```{r, eval=FALSE}
+install.packages("OCSdata")
+library(OCSdata)
+```
+
+Then, you may load the imported data using the following code:
+
+```{r, eval=FALSE}
+imported_data("ocs-bp-co2-emissions", outpath = getwd())
+load(here::here("OCSdata", "data", "imported", "co2_data_imported.rda"))
+```
+
+If the package does not work for you, alternatively, an RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/imported) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/imported/co2_data_imported.rda). Download this file and then place it in your current working directory within a subdirectory called "imported" within a directory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily.
 
 ```{r}
 load(here::here("data", "imported", "co2_data_imported.rda"))
@@ -1257,7 +1328,7 @@ readr::write_csv(data_long, path = here::here("data","wrangled", "wrangled_data.
 # **Data Visualization**
 *** 
 
-If you have been following along but stopped, we could load our imported data like so:
+If you have been following along but stopped, we could load our wrangled data like so:
 
 ```{r}
 load(here::here("data", "wrangled", "wrangled_data.rda"))
@@ -1266,12 +1337,25 @@ load(here::here("data", "wrangled", "wrangled_data.rda"))
 ***
 <details> <summary> If you skipped the data wrangling section click here. </summary>
 
-An RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/wrangled) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/wrangled/wrangled_data.rda). Download this file and then place it in your current working directory within a subdirectory called "wrangled" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily.
+First you need to install and load the `OCSdata` package:
+
+```{r, eval=FALSE}
+install.packages("OCSdata")
+library(OCSdata)
+```
+
+Then, you may load the wrangled data using the following code:
+
+```{r, eval=FALSE}
+wrangled_rda("ocs-bp-co2-emissions", outpath = getwd())
+load(here::here("OCSdata", "data", "wrangled", "wrangled_data.rda"))
+```
+
+If the package does not work for you, alternatively, an RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/wrangled) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/wrangled/wrangled_data.rda). Download this file and then place it in your current working directory within a subdirectory called "wrangled" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily.
 
 ```{r}
 load(here::here("data", "wrangled", "wrangled_data.rda"))
 ```
-
 
 ***
 <details> <summary> Click here to see more about creating new projects in RStudio. </summary>
@@ -2129,7 +2213,21 @@ load(here::here("data", "wrangled", "wrangled_US_data.rda"))
 ***
 <details> <summary> If you skipped the previous sections click here. </summary>
 
-An RDA file (stands for R data) of the data (called `wrangled_US_data.rda`) can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/wrangled) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/wrangled/wrangled_US_data.rda). Download this file and then place it in your current working directory within a subdirectory called "wrangled" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily.
+First you need to install and load the `OCSdata` package:
+
+```{r, eval=FALSE}
+install.packages("OCSdata")
+library(OCSdata)
+```
+
+Then, you may load the wrangled data using the following code:
+
+```{r, eval=FALSE}
+wrangled_rda("ocs-bp-co2-emissions", outpath = getwd())
+load(here::here("OCSdata", "data", "wrangled", "wrangled_US_data.rda"))
+```
+
+If the package does not work for you, alternatively, an RDA file (stands for R data) of the data (called `wrangled_US_data.rda`) can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/wrangled) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/wrangled/wrangled_US_data.rda). Download this file and then place it in your current working directory within a subdirectory called "wrangled" within a subdirectory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily.
 
 ```{r}
 load(here::here("data", "wrangled", "wrangled_US_data.rda"))
@@ -2514,10 +2612,22 @@ Ask students to plot CO2 emissions and other variables (e.g. energy use) on a sc
 sessionInfo()
 ```
 
+**Estimate of RMarkdown Compilation Time: **
+
+```{r, echo=FALSE}
+rmarkdown:::perf_timer_stop("render")
+pts = rmarkdown:::perf_timer_summary()
+cat("About", round(pts$time[1]/1000 + 5), "-", round(pts$time[1]/1000 + 15),"seconds")
+```
+
+This compilation time was measured on a PC machine operating on Windows 10. This range should only be used as an estimate as compilation time will vary with different machines and operating systems. 
+
 ## **Acknowledgments**
 ***
 
 We would like to acknowledge [Megan Latshaw](https://www.jhsph.edu/faculty/directory/profile/1708/megan-weil-latshaw) for assisting in framing the major direction of the case study.
+
+We would like to acknowledge [Qier Meng](https://www.opencasestudies.org/authors/qmeng/) and [Michael Breshock](https://mbreshock.github.io/) for their contributions to this case study. 
 
 We would also like to acknowledge the [Bloomberg American Health Initiative](https://americanhealth.jhu.edu/) for funding this work. 
 
