@@ -1583,7 +1583,7 @@ Now let's say we wanted to save this plot.
 
 We could do so using the using the  `save()` function to save this to a "plot" directory in our working directory as an RDA file and we can use the `png()` function to save a png for collaborators. We need to use `dev.off()` function to close the graphical device that we will use to create the png version of the plot so that we are ready to make another plot like this.
 
-```{r}
+```{r, eval = FALSE}
 save(CO2_world, file =here::here("plots", "CO2_world.rda"))
 png(here::here("plots", "CO2_world.png"))
 CO2_world
@@ -1917,7 +1917,7 @@ Now let's say we wanted to save this plot.
 
 We could do so using the using the  `save()` function to save this to a "plot" directory in our working directory as an RDA file and we can use the `png()` function to save a png for collaborators. We need to use `dev.off()` function to close the graphical device that we will use to create the png version of the plot so that we are ready to make another plot like this.
 
-```{r}
+```{r, eval = FALSE}
 save(Top10t, file =here::here("plots", "Top10t.rda"))
 png(here::here("plots", "Top10t.png"))
 Top10t
@@ -2109,7 +2109,7 @@ Note, we are showing a different `theme` here, namely the `theme_classic()` them
 We can see that there are similar patterns of CO2 emission levels and average annual temperatures.
 
 We will save this plot now like so to our "plots" directory:
-```{r}
+```{r, eval = FALSE}
 save(CO2_temp_US_facet, file =here::here("plots", "CO2_temp_US_facet.rda"))
 png(here::here("plots", "CO2_temp_US_facet.png"))
 CO2_temp_US_facet
@@ -2179,7 +2179,7 @@ Indeed, it does look like there is a positive, linear trend.
 
 We will also save this plot:
 
-```{r}
+```{r, eval = FALSE}
 save(CO2_temp_US, file =here::here("plots", "CO2_temp_US.rda"))
 png(here::here("plots", "CO2_temp_US.png"))
 CO2_temp_US
@@ -2311,10 +2311,8 @@ If the sign is positive, then the variables increase similarly.
 
 We previously made this plot:
 
-```{r}
-load(here::here("plots", "CO2_temp_US.rda"))
-CO2_temp_US
-
+```{r, echo = FALSE}
+knitr::include_graphics(here::here("plots", "CO2_temp_US.png"))
 ```
 
 Let's calculate the Pearson's correlation coefficient called "Rho" $\rho$ between CO2 emissions and temperature in the US. There are a few ways to calculate a correlation coefficient and this is one of the most common.
