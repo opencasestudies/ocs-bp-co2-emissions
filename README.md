@@ -1,19 +1,13 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-OpenCaseStudies
-===============
-
-[![Build
-Status](https://travis-ci.org/opencasestudies/ocs-bp-co2-emissions.svg?branch=master)](https://travis-ci.org/opencasestudies/ocs-bp-co2-emissions)
+# OpenCaseStudies
 
 ### Important links
 
--   HTML:
-    <a href="https://www.opencasestudies.org/ocs-bp-co2-emissions" class="uri">https://www.opencasestudies.org/ocs-bp-co2-emissions</a>
--   GitHub:
-    <a href="https://github.com//opencasestudies/ocs-bp-co2-emissions" class="uri">https://github.com//opencasestudies/ocs-bp-co2-emissions</a>
+-   HTML: <https://www.opencasestudies.org/ocs-bp-co2-emissions>
+-   GitHub: <https://github.com//opencasestudies/ocs-bp-co2-emissions>
 -   Bloomberg American Health Initiative:
-    <a href="https://americanhealth.jhu.edu/open-case-studies" class="uri">https://americanhealth.jhu.edu/open-case-studies</a>
+    <https://americanhealth.jhu.edu/open-case-studies>
 
 ### Disclaimer
 
@@ -40,8 +34,8 @@ To cite this case study:
 
 Wright, Carrie and Ontiveros, Michael and Jager, Leah and Taub, Margaret
 and Hicks, Stephanie. (2020).
-<a href="https://github.com/opencasestudies/ocs-bp-co2-emissions" class="uri">https://github.com/opencasestudies/ocs-bp-co2-emissions</a>.
-Exploring CO2 emissions across time (Version v1.0.0).
+<https://github.com/opencasestudies/ocs-bp-co2-emissions>. Exploring CO2
+emissions across time (Version v1.0.0).
 
 ### Acknowledgments
 
@@ -49,8 +43,21 @@ We would like to acknowledge [Megan
 Latshaw](https://www.jhsph.edu/faculty/directory/profile/1708/megan-weil-latshaw)
 for assisting in framing the major direction of the case study.
 
+We would like to acknowledge [Qier
+Meng](https://www.opencasestudies.org/authors/qmeng/) and [Michael
+Breshock](https://mbreshock.github.io/) for their contributions to this
+case study.
+
 We would also like to acknowledge the [Bloomberg American Health
 Initiative](https://americanhealth.jhu.edu/) for funding this work.
+
+### Reading Metrics
+
+The total reading time for this case study was calculated with
+[koRpus](https://github.com/unDocUMeantIt/koRpus): **About 70 minutes**
+
+The Flesch-Kincaid Readability Index was also calculated with
+[koRpus](https://github.com/unDocUMeantIt/koRpus): **Grade 9, Age 14**
 
 ### Title
 
@@ -83,12 +90,14 @@ emissions.
 This case study uses data from
 <a href="https://www.gapminder.org/data/" target="_blank">Gapminder</a>
 that was originally obtained from the
-<a href="https://www.worldbank.org/en/what-we-do" target="_blank">World Bank</a>.
+<a href="https://www.worldbank.org/en/what-we-do" target="_blank">World
+Bank</a>.
 
 In addition, we will use some data that is specific to the United States
 from the
-<a href="https://www.noaa.gov/" target="_blank">National Oceanic and Atmospheric Administration (NOAA)</a>,
-which is an agency that collects weather and climate data.
+<a href="https://www.noaa.gov/" target="_blank">National Oceanic and
+Atmospheric Administration (NOAA)</a>, which is an agency that collects
+weather and climate data.
 
 #### Learning Objectives
 
@@ -150,20 +159,37 @@ findings.
 ### Other notes and resources
 
 <a href="https://www.tidyverse.org/" target="_blank">Tidyverse</a>  
-<a href="https://rstudio.com/resources/cheatsheets/" target="_blank">RStudio cheatsheets</a>
-<a href="https://www.mathsisfun.com/data/correlation.html" target="_blank">Introduction to correlation</a>
-<a href="https://rafalab.github.io/dsbook/regression.html#corr-coefl" target="_blank">Correlation coefficient</a>  
-<a href="https://dfrieds.com/math/correlation-does-not-imply-causation.html" target="_blank">Correlation does not imply causation</a>  
-<a href="https://rafalab.github.io/dsbook/regression.html" target="_blank">Regression</a>  
-<a href="https://en.wikipedia.org/wiki/Local_regression" target="_blank">Locally estimated scatterplot smoothing</a>  
-<a href="https://en.wikipedia.org/wiki/Local_regression" target="_blank">Local polynomial regression</a>  
-<a href="https://en.wikipedia.org/wiki/Autocorrelation" target="_blank">Autocorrleation</a>  
-<a href="https://en.wikipedia.org/wiki/Time_series" target="_blank">Time series</a>  
-<a href="https://online.stat.psu.edu/stat462/node/188/" target="_blank">Methods to account for autocorrelation</a>  
-<a href="https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf" target="_blank">US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report</a>  
-<a href="https://data.globalchange.gov/report/nca3-overview" target="_blank">National Climate Assessment Report</a>  
-<a href="https://www.epa.gov/report-environment/greenhouse-gases" target="_blank">Greenhouse gases</a>
-<a href="https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations" target="_blank">Climate change</a>
+<a href="https://rstudio.com/resources/cheatsheets/"
+target="_blank">RStudio cheatsheets</a>
+<a href="https://www.mathsisfun.com/data/correlation.html"
+target="_blank">Introduction to correlation</a>
+<a href="https://rafalab.github.io/dsbook/regression.html#corr-coefl"
+target="_blank">Correlation coefficient</a>  
+<a
+href="https://dfrieds.com/math/correlation-does-not-imply-causation.html"
+target="_blank">Correlation does not imply causation</a>  
+<a href="https://rafalab.github.io/dsbook/regression.html"
+target="_blank">Regression</a>  
+<a href="https://en.wikipedia.org/wiki/Local_regression"
+target="_blank">Locally estimated scatterplot smoothing</a>  
+<a href="https://en.wikipedia.org/wiki/Local_regression"
+target="_blank">Local polynomial regression</a>  
+<a href="https://en.wikipedia.org/wiki/Autocorrelation"
+target="_blank">Autocorrleation</a>  
+<a href="https://en.wikipedia.org/wiki/Time_series" target="_blank">Time
+series</a>  
+<a href="https://online.stat.psu.edu/stat462/node/188/"
+target="_blank">Methods to account for autocorrelation</a>  
+<a
+href="https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf"
+target="_blank">US Environmental Protection Agency (EPA) Inventory of
+U.S. Greenhouse Gas Emissions and Sinks 2020 Report</a>  
+<a href="https://data.globalchange.gov/report/nca3-overview"
+target="_blank">National Climate Assessment Report</a>  
+<a href="https://www.epa.gov/report-environment/greenhouse-gases"
+target="_blank">Greenhouse gases</a> <a
+href="https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations"
+target="_blank">Climate change</a>
 
 <u>**Packages used in this case study:** </u>
 
@@ -180,59 +206,79 @@ findings.
 </thead>
 <tbody>
 <tr class="odd">
-<td><a href="https://github.com/jennybc/here_here" target="_blank">here</a></td>
+<td><a href="https://github.com/jennybc/here_here"
+target="_blank">here</a></td>
 <td>to easily load and save data</td>
 </tr>
 <tr class="even">
-<td><a href="https://readxl.tidyverse.org/" target="_blank">readxl</a></td>
+<td><a href="https://readxl.tidyverse.org/"
+target="_blank">readxl</a></td>
 <td>to import the excel file data</td>
 </tr>
 <tr class="odd">
-<td><a href="https://readr.tidyverse.org/" target="_blank">readr</a></td>
+<td><a href="https://readr.tidyverse.org/"
+target="_blank">readr</a></td>
 <td>to import the csv file data</td>
 </tr>
 <tr class="even">
-<td><a href="https://dplyr.tidyverse.org/" target="_blank">dplyr</a></td>
-<td>o view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a variable</td>
+<td><a href="https://dplyr.tidyverse.org/"
+target="_blank">dplyr</a></td>
+<td>o view and wrangle the data, by modifying variables, renaming
+variables, selecting variables, creating variables, and arranging values
+within a variable</td>
 </tr>
 <tr class="odd">
-<td><a href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html" target="_blank">magrittr</a></td>
-<td>to use and reassign data objects using the <code>%&lt;&gt;%</code>pipe operator</td>
+<td><a
+href="https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html"
+target="_blank">magrittr</a></td>
+<td>to use and reassign data objects using the
+<code>%&lt;&gt;%</code>pipe operator</td>
 </tr>
 <tr class="even">
-<td><a href="https://stringr.tidyverse.org/" target="_blank">stringr</a></td>
+<td><a href="https://stringr.tidyverse.org/"
+target="_blank">stringr</a></td>
 <td>to select only the first 4 characters of date data</td>
 </tr>
 <tr class="odd">
-<td><a href="https://purrr.tidyverse.org/" target="_blank">purrr</a></td>
-<td>to apply a function on a list of tibbles (tibbles are the tidyverse version of a data frame)</td>
+<td><a href="https://purrr.tidyverse.org/"
+target="_blank">purrr</a></td>
+<td>to apply a function on a list of tibbles (tibbles are the tidyverse
+version of a data frame)</td>
 </tr>
 <tr class="even">
-<td><a href="https://tidyr.tidyverse.org/" target="_blank">tidyr</a></td>
+<td><a href="https://tidyr.tidyverse.org/"
+target="_blank">tidyr</a></td>
 <td>to drop rows with <code>NA</code> values from a tibble</td>
 </tr>
 <tr class="odd">
-<td><a href="https://forcats.tidyverse.org/" target="_blank">forcats</a></td>
+<td><a href="https://forcats.tidyverse.org/"
+target="_blank">forcats</a></td>
 <td>to reorder the levels of a factor</td>
 </tr>
 <tr class="even">
-<td><a href="https://ggplot2.tidyverse.org/" target="_blank">ggplot2</a></td>
+<td><a href="https://ggplot2.tidyverse.org/"
+target="_blank">ggplot2</a></td>
 <td>to make visualizations</td>
 </tr>
 <tr class="odd">
-<td><a href="http://directlabels.r-forge.r-project.org/docs/index.html" target="_blank">directlabels</a></td>
+<td><a href="http://directlabels.r-forge.r-project.org/docs/index.html"
+target="_blank">directlabels</a></td>
 <td>to add labels to plots easily</td>
 </tr>
 <tr class="even">
-<td><a href="https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html" target="_blank">ggrepel</a></td>
+<td><a
+href="https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html"
+target="_blank">ggrepel</a></td>
 <td>to add labels that don’t overlap to plots</td>
 </tr>
 <tr class="odd">
-<td><a href="https://www.tidyverse.org/blog/2018/07/broom-0-5-0/">broom</a></td>
+<td><a
+href="https://www.tidyverse.org/blog/2018/07/broom-0-5-0/">broom</a></td>
 <td>to make the output form statistical tests easier to work with</td>
 </tr>
 <tr class="even">
-<td><a href="https://github.com/thomasp85/patchwork" target="_blank">patchwork</a></td>
+<td><a href="https://github.com/thomasp85/patchwork"
+target="_blank">patchwork</a></td>
 <td>to combine plots</td>
 </tr>
 </tbody>
@@ -268,3 +314,11 @@ lowest CO2 emission levels.
 Ask students to plot CO2 emissions and other variables (e.g. energy use)
 on a scatter plot, calculate the Pearson’s correlation coefficient, and
 discuss results.
+
+#### Estimate of RMarkdown Compilation Time:
+
+~ About 36 - 46 seconds
+
+This compilation time was measured on a PC machine operating on Windows
+10. This range should only be used as an estimate as compilation time
+will vary with different machines and operating systems.
