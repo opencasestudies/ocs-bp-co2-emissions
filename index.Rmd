@@ -146,7 +146,7 @@ CO2 makes up the largest proportion of greenhouse gas emissions in the United St
 knitr::include_graphics(here::here("img", "emissions.jpg"))
 ```
 
-##### [[source]](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"}
+##### [[source]](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"} 
 
 A variety of sources and sectors contribute to greenhouse gas emissions:
 
