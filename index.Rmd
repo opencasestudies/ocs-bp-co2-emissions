@@ -27,8 +27,7 @@ output:
 }
 </style>
 
-<html lang="en-US">
-<body>
+
 
 <!-- Open all links in new tab-->  
 <base target="_blank"/> 
@@ -1488,6 +1487,7 @@ data_long %>%
   ggplot(aes(x = Year, y = Emissions)) +
     geom_line(size = 1.5)
 ```
+
 Wow, the CO2 is really rising sharply!
 
 Finally, let's make this plot really nice by adding a few final touches. 
