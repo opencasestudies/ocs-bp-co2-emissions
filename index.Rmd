@@ -531,7 +531,9 @@ load(here::here("data", "imported", "co2_data_imported.rda"))
 First you need to install and load the `OCSdata` package:
 
 ```{r, eval=FALSE}
-install.packages("OCSdata")
+if (!requireNamespace("OCSdata", quietly = TRUE)) {
+  install.packages("OCSdata")
+}
 library(OCSdata)
 ```
 
@@ -539,7 +541,7 @@ Then, you may load the imported data using the following code:
 
 ```{r, eval=FALSE}
 imported_data("ocs-bp-co2-emissions", outpath = getwd())
-load(here::here("OCSdata", "data", "imported", "co2_data_imported.rda"))
+load(here::here("OCS_data", "data", "imported", "co2_data_imported.rda"))
 ```
 
 If the package does not work for you, alternatively, an RDA file (stands for R data) of the data can be found [here](https://github.com//opencasestudies/ocs-bp-co2-emissions/tree/master/data/imported) or slightly more directly [here](https://raw.githubusercontent.com/opencasestudies/ocs-bp-co2-emissions/master/data/imported/co2_data_imported.rda). Download this file and then place it in your current working directory within a subdirectory called "imported" within a directory called "data" to copy and paste our code. We used an RStudio project and the [`here` package](https://github.com/jennybc/here_here) to navigate to the file more easily.
