@@ -454,6 +454,7 @@ You may also download these files using the `OCSdata` package:
 
 ```{r, eval=FALSE}
 # install.packages("OCSdata")
+# You will need to install the package if you haven't already done so.
 library(OCSdata)
 raw_data("ocs-bp-co2-emissions", outpath = getwd())
 # This will save the raw data files in a "OCSdata/data/raw/" subfolder 
@@ -531,9 +532,8 @@ load(here::here("data", "imported", "co2_data_imported.rda"))
 First you need to install and load the `OCSdata` package:
 
 ```{r, eval=FALSE}
-if (!requireNamespace("OCSdata", quietly = TRUE)) {
-  install.packages("OCSdata")
-}
+# install.packages("OCSdata")
+# You will need to install the package if you haven't already done so.
 library(OCSdata)
 ```
 
@@ -1340,7 +1340,8 @@ load(here::here("data", "wrangled", "wrangled_data.rda"))
 First you need to install and load the `OCSdata` package:
 
 ```{r, eval=FALSE}
-install.packages("OCSdata")
+# install.packages("OCSdata")
+# You will need to install the package if you haven't already done so.
 library(OCSdata)
 ```
 
@@ -2217,7 +2218,8 @@ load(here::here("data", "wrangled", "wrangled_US_data.rda"))
 First you need to install and load the `OCSdata` package:
 
 ```{r, eval=FALSE}
-install.packages("OCSdata")
+# install.packages("OCSdata")
+# You will need to install the package if you haven't already done so.
 library(OCSdata)
 ```
 
