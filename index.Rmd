@@ -697,6 +697,8 @@ When renaming variables the syntax is `new-name = old-name`, where the new name 
  
 You may also note that the `Year` variable is currently of class type character. We would like to change it to be numeric. To do this we will use the `mutate()` function, which is also part of the `dplyr` package. This function allows us to create and modify variables. We will also use this function to create a variable called `Label` which will have `"CO2 Emissions (Metric Tons)"` as the value for every row, to be used when we create plots later.
 
+Note that here we are now using multiple steps with our `%>%` pipe operator. So the CO2_emissions data is used to rename Contry to country and then the out put of this is taken to be mutated to have Year as a numeric variable .
+
 
 ```{r}
 CO2_emissions  <- CO2_emissions %>% 
