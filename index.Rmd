@@ -50,7 +50,7 @@ knitr::opts_chunk$set(include = TRUE, comment = NA, echo = TRUE,
                       fig.align = "center", out.width = '90%')
 library(here)
 library(knitr)
-library(magrittr)
+library(dplyr)
 remotes::install_github("benmarwick/wordcountaddin", type = "source", dependencies = TRUE)
 remotes::install_github("alistaire47/read.so")
 library(wordcountaddin)
@@ -256,7 +256,6 @@ library(here)
 library(readxl)
 library(readr)
 library(dplyr)
-library(magrittr)
 library(stringr)
 library(purrr)
 library(tidyr)
@@ -278,7 +277,6 @@ library(OCSdata)
 [`readxl`](https://readxl.tidyverse.org/){target="_blank"}  | to import the Excel file data
 [`readr`](https://readr.tidyverse.org/){target="_blank"}  | to import the csv file data
 [`dplyr`](https://dplyr.tidyverse.org/){target="_blank"}  |  to view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a variable   
-[`magrittr`](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use data objects using the `%>%` pipe operator
 [`stringr`](https://stringr.tidyverse.org/){target="_blank"}  | to select only the first 4 characters of date data
 [`purrr`](https://purrr.tidyverse.org/){target="_blank"}  | to apply a function on a list of tibbles (tibbles are the tidyverse version of a data frame)  
 [`tidyr`](https://tidyr.tidyverse.org/){target="_blank"}  | to drop rows with `NA` values from a tibble
@@ -585,7 +583,7 @@ First, let's take a look at the CO2 data (`CO2_emissions`).
 We can use the `slice_head()` function of the `dplyr` package to see just the first rows of our data. 
 We can specify how many rows we would like to see by using the `n =` argument. 
 
-We will use the `%>%` pipe from the `magrittr` package (although it is also imported by other `tidyverse` packages, like `dplyr`), which can be used to define the input for later sequential steps. 
+We will use the `%>%` pipe from the `dplyr` package, which can be used to define the input for later sequential steps. 
 This will make more sense when we have multiple sequential steps using the same data object. 
 
 ```{r}
@@ -651,7 +649,7 @@ names(CO2_emissions)
 Recall, the values are emissions in metric tons, also called tonnes.
 Scrolling through the `glimpse()` function above, we can also see that there are fewer `NA` values for later years.
 
-In this next code chunk, we will introduce the `%>%` operator from the `magrittr` package. 
+In this next code chunk, we will introduce the `%>%` operator from the `dplyr` package. 
 This allows us to use our `CO2_emissions` data and modify it sequentially using  multiple steps. We will start with just one step however, but we will see the utility of this soon where we will have multiple steps each having a %>% at the end into the next step. We can think of this as a "take this data and then" statement". So in this case. Take the CO2_emissions data and then pivot it into the long format. 
 
 The `<-` assignment operator can as usual be used to reassign the object to the modified version after all the steps after the `%>%` are completed. 
@@ -2598,7 +2596,6 @@ Ask students to plot CO2 emissions and other variables (e.g. energy use) on a sc
 [`readxl`](https://readxl.tidyverse.org/){target="_blank"}  | to import the excel file data
 [`readr`](https://readr.tidyverse.org/){target="_blank"}  | to import the csv file data
 [`dplyr`](https://dplyr.tidyverse.org/){target="_blank"}  |  o view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a variable   
-[`magrittr`](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use data objects using the `%>%` pipe operator
 [`stringr`](https://stringr.tidyverse.org/){target="_blank"}  | to select only the first 4 characters of date data
 [`purrr`](https://purrr.tidyverse.org/){target="_blank"}  | to apply a function on a list of tibbles (tibbles are the tidyverse version of a data frame)  
 [`tidyr`](https://tidyr.tidyverse.org/){target="_blank"}  | to drop rows with `NA` values from a tibble
