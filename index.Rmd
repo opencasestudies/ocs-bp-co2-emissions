@@ -278,7 +278,7 @@ library(OCSdata)
 [`readxl`](https://readxl.tidyverse.org/){target="_blank"}  | to import the Excel file data
 [`readr`](https://readr.tidyverse.org/){target="_blank"}  | to import the csv file data
 [`dplyr`](https://dplyr.tidyverse.org/){target="_blank"}  |  to view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a variable   
-[`magrittr`](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use and reassign data objects using the `%<>%`pipe operator
+[`magrittr`](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use data objects using the `%>%` pipe operator
 [`stringr`](https://stringr.tidyverse.org/){target="_blank"}  | to select only the first 4 characters of date data
 [`purrr`](https://purrr.tidyverse.org/){target="_blank"}  | to apply a function on a list of tibbles (tibbles are the tidyverse version of a data frame)  
 [`tidyr`](https://tidyr.tidyverse.org/){target="_blank"}  | to drop rows with `NA` values from a tibble
@@ -651,8 +651,8 @@ names(CO2_emissions)
 Recall, the values are emissions in metric tons, also called tonnes.
 Scrolling through the `glimpse()` function above, we can also see that there are fewer `NA` values for later years.
 
-In this next code chunk, we will introduce the `%<>%` operator from the `magrittr` package. 
-This allows us to use our `CO2_emissions` data and reassign it to a modified version at the same time. 
+In this next code chunk, we will introduce the `%>%` operator from the `magrittr` package. 
+This allows us to use our `CO2_emissions` data and use it in combination with the `<-` assignment operator to reassign it to a modified version of the object. 
 Let's modify `CO2_emissions` to make it more usable for making visualizations. 
 Specifically, we will use the `pivot_longer()` function of the `dplyr` package to convert our data into what is called **"long"** format. This is also sometimes referred to as **"narrow"** format.
 
@@ -667,7 +667,7 @@ We want to collapse all of the values for the emission data across the different
 
 ```{r}
 
-CO2_emissions  %<>%
+CO2_emissions <- CO2_emissions %>% 
   pivot_longer(cols = -country,
                names_to = "Year",
                values_to = "Emissions")
@@ -697,7 +697,7 @@ You may also note that the `Year` variable is currently of class type character.
 
 
 ```{r}
-CO2_emissions  %<>%
+CO2_emissions  <- CO2_emissions %>% 
    dplyr::rename(Country = country) %>%
    dplyr::mutate(Year = as.numeric(Year),
                  Label = "CO2 Emissions (Metric Tons)")
@@ -769,7 +769,7 @@ Using what you just learned about `pivot_longer()`, `rename()`, and `mutate()` a
 <details> <summary> Click here to reveal the code. </summary>
 
 ```{r, eval = FALSE}
-gdp_growth %<>%
+gdp_growth <- gdp_growth %>% 
   pivot_longer(cols = -country,
                names_to = "Year",
                values_to = "gdp_growth") %>%
@@ -783,7 +783,7 @@ gdp_growth %<>%
 ***
 
 ```{r, echo = FALSE}
-gdp_growth %<>%
+gdp_growth <- gdp_growth %>% 
   pivot_longer(cols = -country,
            names_to = "Year",
           values_to = "gdp_growth") %>%
@@ -847,7 +847,7 @@ Again try to come up with the code on your own to wrangle the data.
 <details> <summary> Click here to reveal the code. </summary>
 
 ```{r, eval = FALSE}
-energy_use %<>%
+energy_use <- energy_use %>% 
   pivot_longer(cols = -country,
                names_to = "Year",
                values_to = "energy_use") %>%
@@ -860,7 +860,7 @@ energy_use %<>%
 ***
 
 ```{r, echo = FALSE}
-energy_use %<>%
+energy_use <- energy_use %>% 
   pivot_longer(cols = -country,
                names_to = "Year",
                values_to = "energy_use") %>%
@@ -913,7 +913,7 @@ Selecting for the variable `Year` does not require quotes because it is the full
 
 
 ```{r}
-us_disaster %<>%
+us_disaster <- us_disaster %>% 
            select(Year, contains("Count"))
 
 us_disaster %>%
@@ -943,7 +943,7 @@ However, we can actually create and add this new variable directly to the `us_di
 We need to use the `.` notation to indicate that we are using the data that we already used as input (on the left side of the pipe) to our `mutate()` function (on the right side of our pipe), which in this case is the entire `us_disaster` tibble for our `select()` function. The output from the `select()` function will be used for the `rowSums()` function. 
 
 ```{r}
-us_disaster %<>%
+us_disaster <- us_disaster %>% 
   mutate(Disasters = rowSums(select(., -Year)))
 
 us_disaster %>%
@@ -955,7 +955,7 @@ Great, now we are going to remove some of these variables and just keep the vari
 We are also going to add a new variable called `Country` to indicate that this data is from the United States. Again this will create a new variable where every value is `United States`.
 
 ```{r}
-us_disaster %<>%
+us_disaster <- us_disaster %>% 
   dplyr::select(Year, Disasters) %>%
   mutate(Country = "United States") %>%
   pivot_longer(cols = c(-Country, -Year),
@@ -1023,7 +1023,7 @@ We just need to indicate the start and stop characters.
 In this case the start would be 1 and the 4th character would be where we want to stop, so we would use `start = 1, stop = 4`. We can do this inside of the `mutate()` function to modify the `Date` variable. In doing so, we will not need to use `pull()` to pull the values for the `Date` variable.
 
 ```{r}
-us_temperature %<>%
+us_temperature <- us_temperature %>% 
   mutate(Date = str_sub(Date, start = 1, end = 4))
 
 us_temperature
@@ -1039,7 +1039,7 @@ We also want to create an `Indicator` variable so that we can later tell what da
 Finally, we remove the `Date` variable and also order the columns just like the other us data using the `select()` function.
 
 ```{r}
-us_temperature %<>%
+us_temperature <- us_temperature %>% 
   dplyr::select(-Anomaly) %>%
   mutate(Country = "United States",
          Year = as.numeric(Date),
@@ -1120,7 +1120,7 @@ For example we will use a list of tibbles and the `full_join()` function which r
 You can see that this is a great option if you have many datasets to combine!
 
 ```{r}
-data_wide <-
+data_wide <- data_wide %>% 
   list(CO2_emissions, gdp_growth, energy_use) %>%
   reduce(full_join, by = c("Country", "Year", "Label"))
 
@@ -1186,7 +1186,7 @@ us_temperature %>%
 We will now use the `bind_rows()` function of the `dplyr` package which will just append the `us_temperature` data and the `us_disaster` data after the `data_long` data. 
 
 ```{r}
-data_long <-
+data_long <- data_long %>% 
   list(data_long, us_disaster, us_temperature) %>%
   bind_rows() %>%
   mutate(Country = as.factor(Country))
@@ -1235,7 +1235,7 @@ We see that we have three rows of data.
 Now we will use the `full_join()` function two ways. First we will combine by `Country` and `Year` and `Label`. 
 
 ```{r}
-data_wide_fj_label <-
+data_wide_fj_label <- 
   list(CO2_emissions, gdp_growth, energy_use) %>%
   reduce(full_join, by = c("Country", "Year", "Label"))
 
@@ -1254,7 +1254,7 @@ setequal(data_wide_fj_label, data_wide_br)
 However, now we will join by only `Country` and `Year`:
 
 ```{r}
-data_wide_fj <-
+data_wide_fj <- 
   list(CO2_emissions, gdp_growth, energy_use) %>%
   reduce(full_join, by = c("Country", "Year"))
 
@@ -1280,7 +1280,7 @@ The new values for the new variable `Region` are indicated after the specific co
 
 
 ```{r}
-data_long %<>%
+data_long <- data_long %>% 
   mutate(Region = case_when(Country == "United States" ~ "United States",
                             Country != "United States" ~ "Rest of the World"))
 
@@ -1292,11 +1292,11 @@ data_long  %>%
 We can also remove rows for countries with `NA` values using the `drop_na()` function of the `tidyr` package to drop all years with missing data.
 
 ```{r}
-data_long_with_miss <-
+data_long_with_miss <- 
   data_long %>%
   arrange(Country)
 
-data_long %<>%
+data_long <- data_long %>% 
   drop_na() %>%
   arrange(Country)
 ```
@@ -2592,7 +2592,7 @@ Ask students to plot CO2 emissions and other variables (e.g. energy use) on a sc
 [`readxl`](https://readxl.tidyverse.org/){target="_blank"}  | to import the excel file data
 [`readr`](https://readr.tidyverse.org/){target="_blank"}  | to import the csv file data
 [`dplyr`](https://dplyr.tidyverse.org/){target="_blank"}  |  o view and wrangle the data, by modifying variables, renaming variables, selecting variables, creating variables, and arranging values within a variable   
-[`magrittr`](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use and reassign data objects using the `%<>%`pipe operator
+[`magrittr`](https://cran.r-project.org/web/packages/magrittr/vignettes/magrittr.html){target="_blank"}  |  to use data objects using the `%>%` pipe operator
 [`stringr`](https://stringr.tidyverse.org/){target="_blank"}  | to select only the first 4 characters of date data
 [`purrr`](https://purrr.tidyverse.org/){target="_blank"}  | to apply a function on a list of tibbles (tibbles are the tidyverse version of a data frame)  
 [`tidyr`](https://tidyr.tidyverse.org/){target="_blank"}  | to drop rows with `NA` values from a tibble
