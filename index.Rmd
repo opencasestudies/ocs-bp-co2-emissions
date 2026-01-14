@@ -652,7 +652,9 @@ Recall, the values are emissions in metric tons, also called tonnes.
 Scrolling through the `glimpse()` function above, we can also see that there are fewer `NA` values for later years.
 
 In this next code chunk, we will introduce the `%>%` operator from the `magrittr` package. 
-This allows us to use our `CO2_emissions` data and use it in combination with the `<-` assignment operator to reassign it to a modified version of the object. 
+This allows us to use our `CO2_emissions` data and modify it sequentially using  multiple steps. We will start with just one step however, but we will see the utility of this soon where we will have multiple steps each having a %>% at the end into the next step. We can think of this as a "take this data and then" statement". So in this case. Take the CO2_emissions data and then pivot it into the long format. 
+
+The `<-` assignment operator can as usual be used to reassign the object to the modified version after all the steps after the `%>%` are completed. 
 Let's modify `CO2_emissions` to make it more usable for making visualizations. 
 Specifically, we will use the `pivot_longer()` function of the `dplyr` package to convert our data into what is called **"long"** format. This is also sometimes referred to as **"narrow"** format.
 
