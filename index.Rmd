@@ -148,7 +148,7 @@ knitr::include_graphics(here::here("img", "emissions.jpg"))
 
 ##### [[source]](https://www.epa.gov/ghgemissions/inventory-us-greenhouse-gas-emissions-and-sinks){target="_blank"} 
 
-A variety of sources and sectors contribute to greenhouse gas emissions:
+A variety of sources and sectors contribute to greenhouse gas emissions including:
 
 
 ```{r, echo = FALSE, out.width="500px"}
