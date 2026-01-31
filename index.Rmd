@@ -332,7 +332,7 @@ See [here](https://www.ucsusa.org/resources/why-does-co2-get-more-attention-othe
 
 It is also important to keep in mind that there is a [lag](https://earthobservatory.nasa.gov/blogs/climateqa/would-gw-stop-with-greenhouse-gases/) between greenhouse gas emissions and temperature changes that we experience because much of Earth's thermal energy (and CO2) gets stored in the ocean. 
 
-Due to a process called [thermal inertia](https://en.wikipedia.org/wiki/Volumetric_heat_capacity#Thermal_inertia), the heat stored in the ocean will eventually be transfered to the surface of the Earth long after the gases were emitted that resulted in the increased ocean temperature.
+Due to a process called [thermal inertia](https://en.wikipedia.org/wiki/Volumetric_heat_capacity#Thermal_inertia), the heat stored in the ocean will eventually be transferred to the surface of the Earth long after the gases were emitted that resulted in the increased ocean temperature.
 
 See [here](https://earthobservatory.nasa.gov/blogs/climateqa/would-gw-stop-with-greenhouse-gases/) for more explanation.
 
@@ -697,7 +697,7 @@ When renaming variables the syntax is `new-name = old-name`, where the new name 
  
 You may also note that the `Year` variable is currently of class type character. We would like to change it to be numeric. To do this we will use the `mutate()` function, which is also part of the `dplyr` package. This function allows us to create and modify variables. We will also use this function to create a variable called `Label` which will have `"CO2 Emissions (Metric Tons)"` as the value for every row, to be used when we create plots later.
 
-Note that here we are now using multiple steps with our `%>%` pipe operator. So the CO2_emissions data is used to rename Contry to country and then the out put of this is taken to be mutated to have Year as a numeric variable .
+Note that here we are now using multiple steps with our `%>%` pipe operator. So the CO2_emissions data is used to rename country to Country and then the out put of this is taken to be mutated to have Year as a numeric variable .
 
 
 ```{r}
@@ -2505,7 +2505,7 @@ knitr::include_graphics(here::here("img", "causation.png"))
 
 ##### [[source]](http://tylervigen.com/spurious-correlations){target="_blank"}
 
-In this example and in our case study, data was collected over time. This type of data will often have what is called [autocorrleation](https://en.wikipedia.org/wiki/Autocorrelation){target="_blank"} or serial correlation. This means that data points from one year to the next may be similar to one another or have some sort of internal structure related to time (such as seasonality). Let's think about our CO2 emission and temperature data. You may be able to see how one year of CO2 emissions might be fairly similar to next year, because the number of sources (such as industrial factories and cars) in the US will change slightly from year to year, but they will be related to that of the previous years. Anytime we look at correlation between two variables that each have autocorrelation, this can result in a higher likelihood of correlation between these variables. 
+In this example and in our case study, data was collected over time. This type of data will often have what is called [autocorrelation](https://en.wikipedia.org/wiki/Autocorrelation){target="_blank"} or serial correlation. This means that data points from one year to the next may be similar to one another or have some sort of internal structure related to time (such as seasonality). Let's think about our CO2 emission and temperature data. You may be able to see how one year of CO2 emissions might be fairly similar to next year, because the number of sources (such as industrial factories and cars) in the US will change slightly from year to year, but they will be related to that of the previous years. Anytime we look at correlation between two variables that each have autocorrelation, this can result in a higher likelihood of correlation between these variables. 
 
 Indeed if we look at correlation between two random variables with autocorrelation we can see an inflation in the correlation rho values between the two variables, as compared to that of variables that do not have autocorrelation.
 
@@ -2581,7 +2581,7 @@ Ask students to plot CO2 emissions and other variables (e.g. energy use) on a sc
 [Regression](https://rafalab.github.io/dsbook/regression.html){target="_blank"}  
 [Locally estimated scatterplot smoothing](https://en.wikipedia.org/wiki/Local_regression){target="_blank"}  
 [Local polynomial regression](https://en.wikipedia.org/wiki/Local_regression){target="_blank"}  
-[Autocorrleation](https://en.wikipedia.org/wiki/Autocorrelation){target="_blank"}  
+[Autocorrelation](https://en.wikipedia.org/wiki/Autocorrelation){target="_blank"}  
 [Time series](https://en.wikipedia.org/wiki/Time_series){target="_blank"}   
 [Methods to account for autocorrelation](https://online.stat.psu.edu/stat462/node/188/){target="_blank"}  
 [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}   
