@@ -54,6 +54,7 @@ library(dplyr)
 remotes::install_github("benmarwick/wordcountaddin", type = "source", dependencies = TRUE)
 remotes::install_github("alistaire47/read.so")
 remotes::install_github("tdhock/directlabels", type = "source", dependencies = TRUE)
+remotes::install_github("slowkow/ggrepel", type = "source", dependencies = TRUE")
 library(wordcountaddin)
 library(read.so)
 
@@ -250,7 +251,7 @@ include_graphics("https://tidyverse.tidyverse.org/logo.png")
 
 *** 
 
-We will begin by loading the packages that we will need:
+We will begin by loading the packages that we will need. If you haven't yet installed any of the packages, you will need to do that first:
 
 ```{r}
 library(here)
