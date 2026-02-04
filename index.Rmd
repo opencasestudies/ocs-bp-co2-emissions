@@ -54,7 +54,7 @@ library(dplyr)
 remotes::install_github("benmarwick/wordcountaddin", type = "source", dependencies = TRUE)
 remotes::install_github("alistaire47/read.so")
 remotes::install_github("tdhock/directlabels", type = "source", dependencies = TRUE)
-install.packages("devtools", repos="https://cloud.r-project.org/", dependencies=TRUE)
+install.packages("ggrepel", repos="https://cloud.r-project.org/", dependencies=TRUE)
 library(wordcountaddin)
 library(read.so)
 
