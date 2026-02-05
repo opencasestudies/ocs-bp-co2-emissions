@@ -189,7 +189,7 @@ In fact, there are many signs that our planet is experiencing warmer temperature
 knitr::include_graphics(here::here("img", "warming.png"))
 ```
 
-##### [[source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
+##### [[source]](https://web.archive.org/web/20250323011220/https://web.archive.org/web/20250323011220/https://data.globalchange.gov/report/nca3-overview){target="_blank"}
 
 The connection between greenhouse gas levels and global temperatures and the influence of increased global temperatures on human health are motivated by these reports:
 
@@ -202,13 +202,13 @@ The connection between greenhouse gas levels and global temperatures and the inf
 
 ####
 
-The [National Climate Assessment Report](https://data.globalchange.gov/report/nca3-overview){target="_blank"} states that:
+The [National Climate Assessment Report](https://web.archive.org/web/20250323011220/https://data.globalchange.gov/report/nca3-overview){target="_blank"} states that:
 
 > Heat-trapping gases already in the atmosphere have committed us to a hotter future with more climate-related impacts over the next few decades. The magnitude of climate change beyond the next few decades depends primarily on the amount of heat-trapping gases that human activities emit globally, now and in the future.
 
 See the following links for more information about how greenhouse gases have influenced global temperatures:
 1) The EPA [report](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"} on green house gases  
-2) The National Climate Assessment (NCA) [summary from 2014](https://nca2014.globalchange.gov/){target="_blank"}) 
+2) The National Climate Assessment (NCA) [summary from 2014](https://web.archive.org/web/20250101083212/https://nca2014.globalchange.gov/){target="_blank"}) 
 3) The [World101 website](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"} about how countries are adapting to climate change
 
 # **Main Questions**
@@ -350,13 +350,13 @@ Furthermore, rising CO2 levels in the ocean also influence ocean acidity:
 knitr::include_graphics(here::here("img", "oceans.png"))
 ```
 
-##### [[source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
+##### [[source]](https://web.archive.org/web/20250323011220/https://data.globalchange.gov/report/nca3-overview){target="_blank"}
 
 
 As CO2 levels rise in the ocean, the pH becomes more acidic, which makes it difficult for organisms to maintain their shells or skeletons that are made of calcium carbonate, thus making it more difficult for these organisms to survive and impacting their role in the ecosystem and food chain. 
 
 
-Furthermore, greenhouse gas emissions are believed to influence weather patterns as shown in this [report](https://data.globalchange.gov/report/nca3-overview){target="_blank"}. 
+Furthermore, greenhouse gas emissions are believed to influence weather patterns as shown in this [report](https://web.archive.org/web/20250323011220/https://data.globalchange.gov/report/nca3-overview){target="_blank"}. 
 
 Indeed, events with high levels of precipitation which can induce flooding and property damage are generally increasing around the country:
 
@@ -364,7 +364,7 @@ Indeed, events with high levels of precipitation which can induce flooding and p
 knitr::include_graphics(here::here("img", "storms.png"))
 ```
 
-##### [[source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
+##### [[source]](https://web.archive.org/web/20250323011220/https://data.globalchange.gov/report/nca3-overview){target="_blank"}
 
 
 # **Limitations**
@@ -2592,7 +2592,7 @@ Ask students to plot CO2 emissions and other variables (e.g. energy use) on a sc
 [Time series](https://en.wikipedia.org/wiki/Time_series){target="_blank"}   
 [Methods to account for autocorrelation](https://online.stat.psu.edu/stat462/node/188/){target="_blank"}  
 [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}   
-[National Climate Assessment Report](https://data.globalchange.gov/report/nca3-overview){target="_blank"}    
+[National Climate Assessment Report](https://web.archive.org/web/20250323011220/https://data.globalchange.gov/report/nca3-overview){target="_blank"}    
 [Greenhouse gases](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"} 
 [Climate change](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"}
 
