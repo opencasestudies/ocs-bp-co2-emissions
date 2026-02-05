@@ -99,7 +99,9 @@ To access the GitHub repository for this case study see here: https://github.com
 You may also access and download the data using our `OCSdata` package. To learn more about this package including examples, see this [link](https://github.com/opencasestudies/OCSdata). Here is how you would install this package:
 
 ```{r, eval=FALSE}
-install.packages("OCSdata")
+# install.packages("OCSdata")
+# install.packages("devtools")
+devtools::install_github("opencasestudies/OCSdata")
 ```
 
 This case study is part of a series of public health case studies for the [Bloomberg American Health Initiative](https://americanhealth.jhu.edu/open-case-studies).
