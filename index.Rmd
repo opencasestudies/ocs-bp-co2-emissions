@@ -98,7 +98,7 @@ To access the GitHub repository for this case study see here: https://github.com
 
 You may also access and download the data using our `OCSdata` package. To learn more about this package including examples, see this [link](https://github.com/opencasestudies/OCSdata). Here is how you would install this package:
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 # install.packages("OCSdata")
 # install.packages("devtools")
 devtools::install_github("opencasestudies/OCSdata")
