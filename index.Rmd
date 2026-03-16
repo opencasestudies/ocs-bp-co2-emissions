@@ -2565,6 +2565,11 @@ Ask students to create a plot with labels showing the countries with the lowest 
 
 Ask students to plot CO2 emissions and other variables (e.g. energy use) on a scatter plot, calculate the Pearson's correlation coefficient, and discuss results. 
 
+# **More Case Studies**
+***
+
+Interested in exploring more open case studies? Visit **[opencasestudies.org](https://opencasestudies.org)** to access additional studies and open educational resources.
+
 # **Additional information**
 ***
 
