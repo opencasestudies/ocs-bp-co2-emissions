@@ -12,10 +12,10 @@ output:
     theme: cosmo
     toc: yes
     toc_float: yes
-  pdf_document:
-    toc: yes
-  word_document:
-    toc: yes
+  # pdf_document:
+  #   toc: yes
+  # word_document:
+  #   toc: yes
 ---
 
 <style>
@@ -53,6 +53,13 @@ library(knitr)
 library(dplyr)
 remotes::install_github("benmarwick/wordcountaddin", type = "source", dependencies = TRUE)
 remotes::install_github("alistaire47/read.so")
+remotes::install_github("tdhock/directlabels", type = "source", dependencies = TRUE)
+install.packages("ggplot2", repos="https://cloud.r-project.org/", dependencies=TRUE)
+install.packages("ggrepel", repos="https://cloud.r-project.org/", dependencies=TRUE)
+devtools::install_github("thomasp85/patchwork")
+library(ggplot2)
+library(ggrepel)
+library(patchwork)
 library(wordcountaddin)
 library(read.so)
 
@@ -91,8 +98,10 @@ To access the GitHub repository for this case study see here: https://github.com
 
 You may also access and download the data using our `OCSdata` package. To learn more about this package including examples, see this [link](https://github.com/opencasestudies/OCSdata). Here is how you would install this package:
 
-```{r, eval=FALSE}
-install.packages("OCSdata")
+```{r, eval=TRUE}
+# install.packages("OCSdata")
+# install.packages("devtools")
+devtools::install_github("opencasestudies/OCSdata")
 ```
 
 This case study is part of a series of public health case studies for the [Bloomberg American Health Initiative](https://americanhealth.jhu.edu/open-case-studies).
@@ -180,7 +189,7 @@ In fact, there are many signs that our planet is experiencing warmer temperature
 knitr::include_graphics(here::here("img", "warming.png"))
 ```
 
-##### [[source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
+##### [[source]](https://web.archive.org/web/20250323011220/https://web.archive.org/web/20250323011220/https://data.globalchange.gov/report/nca3-overview){target="_blank"}
 
 The connection between greenhouse gas levels and global temperatures and the influence of increased global temperatures on human health are motivated by these reports:
 
@@ -193,13 +202,13 @@ The connection between greenhouse gas levels and global temperatures and the inf
 
 ####
 
-The [National Climate Assessment Report](https://data.globalchange.gov/report/nca3-overview){target="_blank"} states that:
+The [National Climate Assessment Report](https://web.archive.org/web/20250323011220/https://data.globalchange.gov/report/nca3-overview){target="_blank"} states that:
 
 > Heat-trapping gases already in the atmosphere have committed us to a hotter future with more climate-related impacts over the next few decades. The magnitude of climate change beyond the next few decades depends primarily on the amount of heat-trapping gases that human activities emit globally, now and in the future.
 
 See the following links for more information about how greenhouse gases have influenced global temperatures:
 1) The EPA [report](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"} on green house gases  
-2) The National Climate Assessment (NCA) [summary from 2014](https://nca2014.globalchange.gov/){target="_blank"}) 
+2) The National Climate Assessment (NCA) [summary from 2014](https://web.archive.org/web/20250101083212/https://nca2014.globalchange.gov/){target="_blank"}) 
 3) The [World101 website](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"} about how countries are adapting to climate change
 
 # **Main Questions**
@@ -249,7 +258,7 @@ include_graphics("https://tidyverse.tidyverse.org/logo.png")
 
 *** 
 
-We will begin by loading the packages that we will need:
+We will begin by loading the packages that we will need. If you haven't yet installed any of the packages, you will need to do that first:
 
 ```{r}
 library(here)
@@ -282,7 +291,7 @@ library(OCSdata)
 [`tidyr`](https://tidyr.tidyverse.org/){target="_blank"}  | to drop rows with `NA` values from a tibble
 [`forcats`](https://forcats.tidyverse.org/){target="_blank"}  | to reorder the levels of a factor
 [`ggplot2`](https://ggplot2.tidyverse.org/){target="_blank"} | to make visualizations
-[`directlabels`](http://directlabels.r-forge.r-project.org/docs/index.html){target="_blank"} | to add labels to plots easily
+[`directlabels`](https://cran.r-project.org/web/packages/directlabels/refman/directlabels.html){target="_blank"} | to add labels to plots easily
 [`ggrepel`](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"} | to add labels that don't overlap to plots
 [`broom`](https://www.tidyverse.org/blog/2018/07/broom-0-5-0/) | to make the output form statistical tests easier to work with
 [`patchwork`](https://github.com/thomasp85/patchwork){target="_blank"}  | to combine plots
@@ -298,7 +307,7 @@ Now we will describe a bit more background about greenhouse gas emissions and th
 
 Greenhouse gas emissions are due to both natural processes and anthropogenic (human-derived) activities. 
 
-These emissions are one of the contributing factors to rising global temperatures, which can have a great influence on [public health](https://www.epa.gov/climate-indicators/understanding-connections-between-climate-change-and-human-health){target="_blank"}  as illustrated in the following image:
+These emissions are one of the contributing factors to rising global temperatures, which can have a great influence on [public health](https://www.epa.gov/climate-research/human-health-and-climate-change-research){target="_blank"}  as illustrated in the following image:
 
 ```{r, echo = FALSE, out.width="800px"}
 knitr::include_graphics(here::here("img", "climate_change_health_impacts.jpg"))
@@ -330,7 +339,7 @@ See [here](https://www.ucsusa.org/resources/why-does-co2-get-more-attention-othe
 
 It is also important to keep in mind that there is a [lag](https://earthobservatory.nasa.gov/blogs/climateqa/would-gw-stop-with-greenhouse-gases/) between greenhouse gas emissions and temperature changes that we experience because much of Earth's thermal energy (and CO2) gets stored in the ocean. 
 
-Due to a process called [thermal inertia](https://en.wikipedia.org/wiki/Volumetric_heat_capacity#Thermal_inertia), the heat stored in the ocean will eventually be transfered to the surface of the Earth long after the gases were emitted that resulted in the increased ocean temperature.
+Due to a process called [thermal inertia](https://en.wikipedia.org/wiki/Volumetric_heat_capacity#Thermal_inertia), the heat stored in the ocean will eventually be transferred to the surface of the Earth long after the gases were emitted that resulted in the increased ocean temperature.
 
 See [here](https://earthobservatory.nasa.gov/blogs/climateqa/would-gw-stop-with-greenhouse-gases/) for more explanation.
 
@@ -341,13 +350,13 @@ Furthermore, rising CO2 levels in the ocean also influence ocean acidity:
 knitr::include_graphics(here::here("img", "oceans.png"))
 ```
 
-##### [[source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
+##### [[source]](https://web.archive.org/web/20250323011220/https://data.globalchange.gov/report/nca3-overview){target="_blank"}
 
 
 As CO2 levels rise in the ocean, the pH becomes more acidic, which makes it difficult for organisms to maintain their shells or skeletons that are made of calcium carbonate, thus making it more difficult for these organisms to survive and impacting their role in the ecosystem and food chain. 
 
 
-Furthermore, greenhouse gas emissions are believed to influence weather patterns as shown in this [report](https://data.globalchange.gov/report/nca3-overview){target="_blank"}. 
+Furthermore, greenhouse gas emissions are believed to influence weather patterns as shown in this [report](https://web.archive.org/web/20250323011220/https://data.globalchange.gov/report/nca3-overview){target="_blank"}. 
 
 Indeed, events with high levels of precipitation which can induce flooding and property damage are generally increasing around the country:
 
@@ -355,7 +364,7 @@ Indeed, events with high levels of precipitation which can induce flooding and p
 knitr::include_graphics(here::here("img", "storms.png"))
 ```
 
-##### [[source]](https://data.globalchange.gov/report/nca3-overview){target="_blank"}
+##### [[source]](https://web.archive.org/web/20250323011220/https://data.globalchange.gov/report/nca3-overview){target="_blank"}
 
 
 # **Limitations**
@@ -695,7 +704,7 @@ When renaming variables the syntax is `new-name = old-name`, where the new name 
  
 You may also note that the `Year` variable is currently of class type character. We would like to change it to be numeric. To do this we will use the `mutate()` function, which is also part of the `dplyr` package. This function allows us to create and modify variables. We will also use this function to create a variable called `Label` which will have `"CO2 Emissions (Metric Tons)"` as the value for every row, to be used when we create plots later.
 
-Note that here we are now using multiple steps with our `%>%` pipe operator. So the CO2_emissions data is used to rename Contry to country and then the out put of this is taken to be mutated to have Year as a numeric variable .
+Note that here we are now using multiple steps with our `%>%` pipe operator. So the CO2_emissions data is used to rename country to Country and then the out put of this is taken to be mutated to have Year as a numeric variable .
 
 
 ```{r}
@@ -1799,7 +1808,7 @@ This is more legible now.
 We have all 10 countries names listed and they are in order of the last data point and they are relatively close to the lines that they correspond to. 
 
 Another option is to use a different method in the `directlables` package. 
-[Here](http://directlabels.r-forge.r-project.org/docs/index.html){target="_blank"} is a list of options.
+[Here](https://cran.r-project.org/web/packages/directlabels/refman/directlabels.html){target="_blank"} is a list of options.
 
 For example, the `"angled.boxes"` method looks nice for some plots but does not work very well for our plot:
 
@@ -2296,7 +2305,7 @@ If we plot one variable on the x-axis and the other variable on the y-axis, we c
 If the variables point upward in a very clear line, then there is a strong positive relationship. 
 If the points do not really form a line, then there is a weak linear relationship or no linear relationship. There may however be a nonlinear relationship if the points create a different but defined shape. 
 
-See [here](https://towardsdatascience.com/estimating-non-linear-correlation-in-r-62c6571cb1db){target="_blank"} for more information on nonlinear relationships.
+See [here](https://medium.com/data-science/estimating-non-linear-correlation-in-r-62c6571cb1db){target="_blank"} for more information on nonlinear relationships.
 
 If the points form a downward sloping line, then there is a negative relationship.
 
@@ -2362,7 +2371,7 @@ wide_US %>%
   pull(r)
 ```
 
-If you want to learn more about why this is the calculation to determine the strength of the relationship between two variables, see this [link](https://bcheggeseth.github.io/Stat155Notes/two-quantitative-variables.html). 
+If you want to learn more about why this is the calculation to determine the strength of the relationship between two variables, see this [link](https://mac-stat.github.io/Stat155Notes/discrete-random-variables.html). 
 
 #### {.recall_code_question_block}
 <b><u> Question Opportunity </u></b>
@@ -2503,7 +2512,7 @@ knitr::include_graphics(here::here("img", "causation.png"))
 
 ##### [[source]](http://tylervigen.com/spurious-correlations){target="_blank"}
 
-In this example and in our case study, data was collected over time. This type of data will often have what is called [autocorrleation](https://en.wikipedia.org/wiki/Autocorrelation){target="_blank"} or serial correlation. This means that data points from one year to the next may be similar to one another or have some sort of internal structure related to time (such as seasonality). Let's think about our CO2 emission and temperature data. You may be able to see how one year of CO2 emissions might be fairly similar to next year, because the number of sources (such as industrial factories and cars) in the US will change slightly from year to year, but they will be related to that of the previous years. Anytime we look at correlation between two variables that each have autocorrelation, this can result in a higher likelihood of correlation between these variables. 
+In this example and in our case study, data was collected over time. This type of data will often have what is called [autocorrelation](https://en.wikipedia.org/wiki/Autocorrelation){target="_blank"} or serial correlation. This means that data points from one year to the next may be similar to one another or have some sort of internal structure related to time (such as seasonality). Let's think about our CO2 emission and temperature data. You may be able to see how one year of CO2 emissions might be fairly similar to next year, because the number of sources (such as industrial factories and cars) in the US will change slightly from year to year, but they will be related to that of the previous years. Anytime we look at correlation between two variables that each have autocorrelation, this can result in a higher likelihood of correlation between these variables. 
 
 Indeed if we look at correlation between two random variables with autocorrelation we can see an inflation in the correlation rho values between the two variables, as compared to that of variables that do not have autocorrelation.
 
@@ -2579,11 +2588,11 @@ Ask students to plot CO2 emissions and other variables (e.g. energy use) on a sc
 [Regression](https://rafalab.github.io/dsbook/regression.html){target="_blank"}  
 [Locally estimated scatterplot smoothing](https://en.wikipedia.org/wiki/Local_regression){target="_blank"}  
 [Local polynomial regression](https://en.wikipedia.org/wiki/Local_regression){target="_blank"}  
-[Autocorrleation](https://en.wikipedia.org/wiki/Autocorrelation){target="_blank"}  
+[Autocorrelation](https://en.wikipedia.org/wiki/Autocorrelation){target="_blank"}  
 [Time series](https://en.wikipedia.org/wiki/Time_series){target="_blank"}   
 [Methods to account for autocorrelation](https://online.stat.psu.edu/stat462/node/188/){target="_blank"}  
 [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}   
-[National Climate Assessment Report](https://data.globalchange.gov/report/nca3-overview){target="_blank"}    
+[National Climate Assessment Report](https://web.archive.org/web/20250323011220/https://data.globalchange.gov/report/nca3-overview){target="_blank"}    
 [Greenhouse gases](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"} 
 [Climate change](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"}
 
@@ -2601,7 +2610,7 @@ Ask students to plot CO2 emissions and other variables (e.g. energy use) on a sc
 [`tidyr`](https://tidyr.tidyverse.org/){target="_blank"}  | to drop rows with `NA` values from a tibble
 [`forcats`](https://forcats.tidyverse.org/){target="_blank"}  | to reorder the levels of a factor
 [`ggplot2`](https://ggplot2.tidyverse.org/){target="_blank"} | to make visualizations
-[`directlabels`](http://directlabels.r-forge.r-project.org/docs/index.html){target="_blank"} | to add labels to plots easily
+[`directlabels`](https://cran.r-project.org/web/packages/directlabels/refman/directlabels.html){target="_blank"} | to add labels to plots easily
 [`ggrepel`](https://cran.r-project.org/web/packages/ggrepel/vignettes/ggrepel.html){target="_blank"} | to add labels that don't overlap to plots
 [`broom`](https://www.tidyverse.org/blog/2018/07/broom-0-5-0/) | to make the output form statistical tests easier to work with
 [`patchwork`](https://github.com/thomasp85/patchwork){target="_blank"}  | to combine plots
