@@ -207,6 +207,7 @@ The [National Climate Assessment Report](https://web.archive.org/web/20250323011
 > Heat-trapping gases already in the atmosphere have committed us to a hotter future with more climate-related impacts over the next few decades. The magnitude of climate change beyond the next few decades depends primarily on the amount of heat-trapping gases that human activities emit globally, now and in the future.
 
 See the following links for more information about how greenhouse gases have influenced global temperatures:
+
 1) The EPA [report](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"} on green house gases  
 2) The National Climate Assessment (NCA) [summary from 2014](https://web.archive.org/web/20250101083212/https://nca2014.globalchange.gov/){target="_blank"}) 
 3) The [World101 website](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"} about how countries are adapting to climate change
