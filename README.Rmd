@@ -39,7 +39,7 @@ Wright, Carrie and Ontiveros, Michael and Jager, Leah and Taub, Margaret and Hic
 
 We would like to acknowledge [Megan Latshaw](https://www.jhsph.edu/faculty/directory/profile/1708/megan-weil-latshaw) for assisting in framing the major direction of the case study.
 
-We would like to acknowledge [Qier Meng](https://www.opencasestudies.org/authors/qmeng/) and [Michael Breshock](https://mbreshock.github.io/) for their contributions to this case study. 
+We would like to acknowledge [Qier Meng](https://scholar.google.com/citations?user=EVGygAwAAAAJ&hl=en) and [Michael Breshock](https://mbreshock.github.io/) for their contributions to this case study. 
 
 We would also like to acknowledge the [Bloomberg American Health Initiative](https://americanhealth.jhu.edu/) for funding this work.
 
@@ -127,9 +127,9 @@ In this case study we look at the correlation between CO2 emissions and annual a
 [Time series](https://en.wikipedia.org/wiki/Time_series){target="_blank"}   
 [Methods to account for autocorrelation](https://online.stat.psu.edu/stat462/node/188/){target="_blank"}  
 [US Environmental Protection Agency (EPA) Inventory of U.S. Greenhouse Gas Emissions and Sinks 2020 Report](https://www.epa.gov/sites/production/files/2020-04/documents/us-ghg-inventory-2020-main-text.pdf){target="_blank"}   
-[National Climate Assessment Report](https://data.globalchange.gov/report/nca3-overview){target="_blank"}    
+[National Climate Assessment Report](https://toolkit.climate.gov/sites/default/files/2025-07/NCA5_2023_FullReport.pdf){target="_blank"}    
 [Greenhouse gases](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"} 
-[Climate change](https://world101.cfr.org/global-era-issues/climate-change/climate-change-adaptations){target="_blank"}
+[Climate change](https://gca.org/){target="_blank"}
 
 <u>**Packages used in this case study:** </u>
 
