@@ -1,6 +1,7 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # OpenCaseStudies
+[![Render website](https://github.com/opencasestudies/ocs-bp-co2-emissions/actions/workflows/render-site.yml/badge.svg)](https://github.com/opencasestudies/ocs-bp-co2-emissions/actions/workflows/render-site.yml)
 
 ### Important links
 
