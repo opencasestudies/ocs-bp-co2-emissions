@@ -1792,7 +1792,7 @@ The most simple option is to use the `direct.label()` function, which will autom
 However, it is a bit difficult to see some of our labels as they get automatically sized to fit the plot.
 
 ```{r}
-direct.label(Top10b) +
+direct.label(Top10b, method = list("last.points")) +
   scale_x_continuous(expand = c(0.3, 0))
 ```
 
