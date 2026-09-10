@@ -308,7 +308,7 @@ Now we will describe a bit more background about greenhouse gas emissions and th
 
 Greenhouse gas emissions are due to both natural processes and anthropogenic (human-derived) activities. 
 
-These emissions are one of the contributing factors to rising global temperatures, which can have a great influence on [public health](https://www.epa.gov/climate-research/human-health-and-climate-change-research){target="_blank"}  as illustrated in the following image:
+These emissions are one of the contributing factors to rising global temperatures, which can have a great influence on [public health](https://www.epa.gov/report-environment/greenhouse-gases){target="_blank"}  as illustrated in the following image:
 
 ```{r, echo = FALSE, out.width="800px"}
 knitr::include_graphics(here::here("img", "climate_change_health_impacts.jpg"))
